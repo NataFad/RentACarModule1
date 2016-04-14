@@ -29,9 +29,14 @@ public class CarDAO extends DAO {
 	private final String COLUMN_NAME_REGNUMBER = "registrationNumber";
 	private final String COLUMN_NAME_TRANSMISSION = "transmission";
 	private final String COLUMN_NAME_RATING_ID = "ratings_id";
+	private final String COLUMN_NAME_RATING = "rating";
 	private final String COLUMN_NAME_TYPE_ID = "types_id";
+	private final String COLUMN_NAME_TYPE_NAME = "type_name";
 	private final String COLUMN_NAME_MODEL_ID = "modelsAndMarks_id";
+	private final String COLUMN_NAME_MODEL = "model";
+	private final String COLUMN_NAME_MARKA = "marka";
 	private final String COLUMN_NAME_FUEL_ID = "fuels_id";
+	private final String COLUMN_NAME_FUEL = "fuel";
 	private final String COLUMN_NAME_PRICE_ID = "price_id";
 	private final String COLUMN_NAME_DESCRIPTION = "description";
 	private final String COLUMN_NAME_COSTOFDAY = "costOfDay";
@@ -97,9 +102,13 @@ public class CarDAO extends DAO {
 			car.setRegistrationNumber(result.getString(COLUMN_NAME_REGNUMBER));
 			car.setTransmission(Transmission.valueOf(result.getString(COLUMN_NAME_TRANSMISSION).trim().toUpperCase()));
 			car.setRatingId(result.getInt(COLUMN_NAME_RATING_ID));
+			car.setRatingName(result.getString(COLUMN_NAME_RATING));
 			car.setTypeId(result.getInt(COLUMN_NAME_TYPE_ID));
+			car.setTypeName(result.getString(COLUMN_NAME_TYPE_NAME));
 			car.setModelAndMarkId(result.getInt(COLUMN_NAME_MODEL_ID));
+			car.setModelName(result.getString(COLUMN_NAME_MARKA)+", " +result.getString(COLUMN_NAME_MODEL));
 			car.setFuelId(result.getInt(COLUMN_NAME_FUEL_ID));
+			car.setFuelName(result.getString(COLUMN_NAME_FUEL));
 			car.setPriceId(result.getInt(COLUMN_NAME_PRICE_ID));
 			car.setDescription(result.getString(COLUMN_NAME_DESCRIPTION));
 			car.setCostOfDay(result.getBigDecimal(COLUMN_NAME_COSTOFDAY));
@@ -141,7 +150,13 @@ public class CarDAO extends DAO {
      */
 	public ArrayList<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws SQLException {
 		// query text writing
-		String query = "SELECT * FROM cars WHERE NOT EXISTS (SELECT cars_id FROM orders "
+		String query = "SELECT cars.*, ratings.name as rating, fuels.name as fuel, types.name as type_name, "
+				+ " modelsandmarks.mark as marka, modelsandmarks.model as model FROM cars "
+				+ "left join ratings on ratings.id = cars.ratings_id "
+				+ "left join types on types.id = cars.types_id "
+				+ "left join modelsandmarks on modelsandmarks.id = cars.modelsandmarks_id "
+				+ "left join fuels on fuels.id = cars.fuels_id "
+				+ "WHERE NOT EXISTS (SELECT cars_id FROM orders "
 				+ "WHERE NOT (fromdate > '" + byDate + "' OR bydate < '" + fromDate + "') AND cars_id = cars.id)";
 		String transmission = filterValues.get("transmission");
 		if (transmission != null) {

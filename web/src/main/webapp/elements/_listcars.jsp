@@ -21,7 +21,7 @@
 					<tr>
 						<td align="center"><c:out value="${car.registrationNumber}" /></td>
 						<td>
-						  <c:out value="${car.modelAndMarkName}" />,
+						  <c:out value="${car.modelName}" />,
 						  <c:out value="${car.transmission}" />, 
 						  <c:out value="${car.fuelName}" />,
 							<c:out value="${car.typeName}" />, 
