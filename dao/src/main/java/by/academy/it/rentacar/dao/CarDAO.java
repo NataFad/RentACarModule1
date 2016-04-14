@@ -79,7 +79,7 @@ public class CarDAO extends DAO {
 		ps.setBigDecimal(9, car.getDiscount());
 		ps.setString(10, car.getDescription());
 		ps.executeUpdate();
-		
+		ps.close();
 		poolInstance.freeConnection(connection);
 	}
 
@@ -134,6 +134,8 @@ public class CarDAO extends DAO {
 
 		ArrayList<Car> list = getListCarFromResult(result, 1);
 
+		result.close();
+		ps.close();
 		poolInstance.freeConnection(connection);
 		return list;
 	}
@@ -184,6 +186,8 @@ public class CarDAO extends DAO {
 
 		ArrayList<Car> list = getListCarFromResult(result, days);
 
+		result.close();
+		ps.close();
 		poolInstance.freeConnection(connection);
 		return list;
 	}
@@ -191,7 +195,20 @@ public class CarDAO extends DAO {
 	public void update(Object o) throws SQLException {
 	}
 
+	/**
+	 * Method delete() car from the table
+	 * @param o
+	 * @throws SQLException
+     */
 	public void delete(Object o) throws SQLException {
+		Car car = (Car) o;
+		Connection connection = poolInstance.getConnection();
+		String query = sqlManager.getProperty(sqlManager.SQL_DELETE_CAR);
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setInt(1, car.getId());
+		ps.executeUpdate();
+		ps.close();
+		poolInstance.freeConnection(connection);
 	}
 
 	public int count() throws SQLException {

@@ -40,6 +40,7 @@ public class DBSqlManager {
 	// CAR DAO
 	public static final String SQL_GET_ALL_CARS = "SQL_GET_ALL_CARS";
 	public static final String SQL_ADD_CAR = "SQL_ADD_CAR";
+	public static final String SQL_DELETE_CAR = "SQL_DELETE_CAR";
 	
 	// RATING DAO
 	public static final String SQL_GET_RATINGS_BY_ID = "SQL_GET_RATINGS_BY_ID";
