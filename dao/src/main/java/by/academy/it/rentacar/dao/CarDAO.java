@@ -4,8 +4,12 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.Car;
+import by.academy.it.rentacar.connectionpool.DBConnectionPool;
 import by.academy.it.rentacar.enums.Transmission;
+import org.apache.log4j.Logger;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -64,23 +68,42 @@ public class CarDAO extends DAO {
 	 */
 	public void add(Object o) throws SQLException {
 		Car car = (Car) o;
-		Connection connection = poolInstance.getConnection();
-		String query = sqlManager.getProperty(sqlManager.SQL_ADD_CAR);
-		PreparedStatement ps = connection.prepareStatement(query);
+		Connection connection = null;
+		PreparedStatement ps = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			String query = sqlManager.getProperty(sqlManager.SQL_ADD_CAR);
+			ps = connection.prepareStatement(query);
 		
-		ps.setString(1, car.getRegistrationNumber());
-		ps.setString(2, car.getTransmission().value().toLowerCase());
-		ps.setInt(3, car.getRatingId());
-		ps.setInt(4, car.getTypeId());
-		ps.setInt(5, car.getModelAndMarkId());
-		ps.setInt(6, car.getPriceId());
-		ps.setInt(7, car.getFuelId());
-		ps.setBigDecimal(8, car.getCostOfDay());
-		ps.setBigDecimal(9, car.getDiscount());
-		ps.setString(10, car.getDescription());
-		ps.executeUpdate();
-		ps.close();
-		poolInstance.freeConnection(connection);
+			ps.setString(1, car.getRegistrationNumber());
+			ps.setString(2, car.getTransmission().value().toLowerCase());
+			ps.setInt(3, car.getRatingId());
+			ps.setInt(4, car.getTypeId());
+			ps.setInt(5, car.getModelAndMarkId());
+			ps.setInt(6, car.getPriceId());
+			ps.setInt(7, car.getFuelId());
+			ps.setBigDecimal(8, car.getCostOfDay());
+			ps.setBigDecimal(9, car.getDiscount());
+			ps.setString(10, car.getDescription());
+			ps.executeUpdate();
+
+		} catch (IOException| PropertyVetoException e) {
+			Logger.getLogger(CarDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -128,15 +151,39 @@ public class CarDAO extends DAO {
 	 */
 	public ArrayList<Car> getAll() throws SQLException {
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_CARS);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ResultSet result = ps.executeQuery();
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		ArrayList<Car> list = new ArrayList<Car>();
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			result = ps.executeQuery();
+			list = getListCarFromResult(result, 1);
+		} catch (IOException| PropertyVetoException e) {
+			Logger.getLogger(CarDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e){
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
 
-		ArrayList<Car> list = getListCarFromResult(result, 1);
-
-		result.close();
-		ps.close();
-		poolInstance.freeConnection(connection);
 		return list;
 	}
 
@@ -176,19 +223,43 @@ public class CarDAO extends DAO {
 		if (ratingId != null) {
 			query = query + " AND ratings_id=" + Integer.parseInt(ratingId);
 		}
-		
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ResultSet result = ps.executeQuery();
-		
-		long difference = byDate.getTime() - fromDate.getTime();
-		int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
 
-		ArrayList<Car> list = getListCarFromResult(result, days);
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		ArrayList<Car> list = new ArrayList<Car>();
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			result = ps.executeQuery();
+		
+			long difference = byDate.getTime() - fromDate.getTime();
+			int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
 
-		result.close();
-		ps.close();
-		poolInstance.freeConnection(connection);
+			list = getListCarFromResult(result, days);
+		} catch (IOException| PropertyVetoException e) {
+			Logger.getLogger(CarDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e){
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
 		return list;
 	}
 
@@ -202,13 +273,31 @@ public class CarDAO extends DAO {
      */
 	public void delete(Object o) throws SQLException {
 		Car car = (Car) o;
-		Connection connection = poolInstance.getConnection();
-		String query = sqlManager.getProperty(sqlManager.SQL_DELETE_CAR);
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setInt(1, car.getId());
-		ps.executeUpdate();
-		ps.close();
-		poolInstance.freeConnection(connection);
+		Connection connection = null;
+		PreparedStatement ps = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			String query = sqlManager.getProperty(sqlManager.SQL_DELETE_CAR);
+			ps = connection.prepareStatement(query);
+			ps.setInt(1, car.getId());
+			ps.executeUpdate();
+		} catch (IOException| PropertyVetoException e) {
+			Logger.getLogger(CarDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(CarDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public int count() throws SQLException {

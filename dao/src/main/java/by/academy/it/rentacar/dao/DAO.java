@@ -3,7 +3,6 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.connectionpool.DBConnectionPool;
 import by.academy.it.rentacar.managers.DBSqlManager;
 
 /**Abstract class DAO
@@ -14,11 +13,9 @@ import by.academy.it.rentacar.managers.DBSqlManager;
  *
  */
 public abstract class DAO implements IDAO {
-    protected static DBConnectionPool poolInstance;
     protected static DBSqlManager sqlManager;
     
     protected DAO() {
-        poolInstance = DBConnectionPool.getInstance();
         sqlManager = DBSqlManager.getInstance();
     }
 

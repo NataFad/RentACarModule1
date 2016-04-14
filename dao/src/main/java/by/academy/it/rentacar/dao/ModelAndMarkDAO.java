@@ -4,7 +4,11 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.ModelAndMark;
+import by.academy.it.rentacar.connectionpool.DBConnectionPool;
+import org.apache.log4j.Logger;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,19 +57,43 @@ public class ModelAndMarkDAO extends DAO {
 	public ModelAndMark getById(int id) throws SQLException {
 		ModelAndMark model = null;
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_MODELS_BY_ID);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setInt(1, id);
-		ResultSet result = ps.executeQuery();
-
-		if (result.next()) {
-			model = new ModelAndMark();
-
-			model.setId(result.getInt(COLUMN_NAME_ID));
-			model.setMark(result.getString(COLUMN_NAME_MARK));
-			model.setModel(result.getString(COLUMN_NAME_MODEL));
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			ps.setInt(1, id);
+			result = ps.executeQuery();
+			if (result.next()) {
+				model = new ModelAndMark();
+				model.setId(result.getInt(COLUMN_NAME_ID));
+				model.setMark(result.getString(COLUMN_NAME_MARK));
+				model.setModel(result.getString(COLUMN_NAME_MODEL));
+			}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(ModelAndMarkDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e){
+				Logger.getLogger(ModelAndMarkDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(ModelAndMarkDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(ModelAndMarkDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-		poolInstance.freeConnection(connection);
 		return model;
 	}
 	 
@@ -77,21 +105,44 @@ public class ModelAndMarkDAO extends DAO {
     public ArrayList<ModelAndMark> getAll() throws SQLException {
         ArrayList<ModelAndMark> list = new ArrayList<ModelAndMark>();
         String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_MODELS);
-        Connection connection = poolInstance.getConnection();
-          
-        PreparedStatement ps = connection.prepareStatement(query);
-        ResultSet result = ps.executeQuery();
-        while (result.next()) {
-        	ModelAndMark model = new ModelAndMark();
-            
-        	model.setId(result.getInt(COLUMN_NAME_ID));
-        	model.setMark(result.getString(COLUMN_NAME_MARK));
-			model.setModel(result.getString(COLUMN_NAME_MODEL));
-           
-            list.add(model);
-        }
-        poolInstance.freeConnection(connection);
-        return list;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			result = ps.executeQuery();
+   		    while (result.next()) {
+        		ModelAndMark model = new ModelAndMark();
+               	model.setId(result.getInt(COLUMN_NAME_ID));
+    	    	model.setMark(result.getString(COLUMN_NAME_MARK));
+				model.setModel(result.getString(COLUMN_NAME_MODEL));
+                list.add(model);
+        	}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(ModelAndMarkDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e){
+				Logger.getLogger(ModelAndMarkDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(ModelAndMarkDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(ModelAndMarkDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		return list;
     }
 
 	public void add(Object o) throws SQLException {

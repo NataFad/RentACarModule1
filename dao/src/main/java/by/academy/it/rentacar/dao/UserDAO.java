@@ -4,9 +4,13 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.User;
+import by.academy.it.rentacar.connectionpool.DBConnectionPool;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.managers.CoderManager;
+import org.apache.log4j.Logger;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -63,33 +67,50 @@ public class UserDAO extends DAO {
 	 */
 	public void add(Object o) throws SQLException {
 		User user = (User) o;
-		Connection connection = poolInstance.getConnection();
+		Connection connection = null;
 		String query = sqlManager.getProperty(sqlManager.SQL_ADD_USER);
-		PreparedStatement ps = connection.prepareStatement(query);
-
-		ps.setString(1, user.getName());
-		ps.setString(2, user.getSurname());
-		ps.setString(3, user.getLogin());
-		ps.setString(4, CoderManager.getHashCode(user.getPassword()));
-		ps.setInt(5, user.getAccess());
-		ps.setString(6, user.getPhone());
-		if ((user.getPassportNumber() == null) || (user.getPassportIssue() == null) ||
-				(user.getPassportNumber() == null) || (user.getPassportAuthority() == null)){
-			ps.setString(7, "");
-			ps.setDate(8, null);
-			ps.setDate(9, null);
-			ps.setString(10, "");		
-		}else{
-			ps.setString(7, user.getPassportNumber());
-			ps.setDate(8, getCurrentSQLDate(user.getPassportIssue()));
-			ps.setDate(9, getCurrentSQLDate(user.getPassportExpire()));
-			ps.setString(10, user.getPassportAuthority());
+		PreparedStatement ps = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			ps.setString(1, user.getName());
+			ps.setString(2, user.getSurname());
+			ps.setString(3, user.getLogin());
+			ps.setString(4, CoderManager.getHashCode(user.getPassword()));
+			ps.setInt(5, user.getAccess());
+			ps.setString(6, user.getPhone());
+			if ((user.getPassportNumber() == null) || (user.getPassportIssue() == null) ||
+					(user.getPassportNumber() == null) || (user.getPassportAuthority() == null)){
+				ps.setString(7, "");
+				ps.setDate(8, null);
+				ps.setDate(9, null);
+				ps.setString(10, "");
+			}else{
+				ps.setString(7, user.getPassportNumber());
+				ps.setDate(8, getCurrentSQLDate(user.getPassportIssue()));
+				ps.setDate(9, getCurrentSQLDate(user.getPassportExpire()));
+				ps.setString(10, user.getPassportAuthority());
+			}
+			ps.setDate(11, getCurrentSQLDate(user.getBirthday()));
+			ps.setString(12, user.getEmail());
+			ps.executeUpdate();
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-		ps.setDate(11, getCurrentSQLDate(user.getBirthday()));
-		ps.setString(12, user.getEmail());
-		ps.executeUpdate();
-		
-		poolInstance.freeConnection(connection);
 	}
 
 	/**
@@ -99,18 +120,35 @@ public class UserDAO extends DAO {
 	 */
 	public void update(Object o) throws SQLException {
 		User user = (User) o;
-		Connection connection = poolInstance.getConnection();
+		Connection connection = null;
 		String query = sqlManager.getProperty(sqlManager.SQL_UPDATE_USER);
-		PreparedStatement ps = connection.prepareStatement(query);
-
-		ps.setString(1, user.getPassportNumber());
-		ps.setDate(2, getCurrentSQLDate(user.getPassportIssue()));
-		ps.setDate(3, getCurrentSQLDate(user.getPassportExpire()));
-		ps.setString(4, user.getPassportAuthority());
-		ps.setInt(5, user.getId());
-		ps.executeUpdate();
-
-		poolInstance.freeConnection(connection);
+		PreparedStatement ps = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			ps.setString(1, user.getPassportNumber());
+			ps.setDate(2, getCurrentSQLDate(user.getPassportIssue()));
+			ps.setDate(3, getCurrentSQLDate(user.getPassportExpire()));
+			ps.setString(4, user.getPassportAuthority());
+			ps.setInt(5, user.getId());
+			ps.executeUpdate();
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -161,12 +199,38 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<User> getAll() throws SQLException {
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_USERS);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ResultSet result = ps.executeQuery();
-
-		ArrayList<User> list = getListUserFromResult(result);
-		poolInstance.freeConnection(connection);
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		ArrayList<User> list = new ArrayList<User>();
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			result = ps.executeQuery();
+			list = getListUserFromResult(result);
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
 		return list;
 	}
 
@@ -179,17 +243,42 @@ public class UserDAO extends DAO {
 		User user = null;
 		String pass = CoderManager.getHashCode(password);
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_USER);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setString(1, login);
-		ps.setString(2, pass);
-		ResultSet result = ps.executeQuery();
-
-		ArrayList<User> list = getListUserFromResult(result);
-		if (list.size() > 0){
-			user = list.get(0);
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			ps.setString(1, login);
+			ps.setString(2, pass);
+			result = ps.executeQuery();
+			ArrayList<User> list = getListUserFromResult(result);
+			if (list.size() > 0){
+				user = list.get(0);
+			}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-		poolInstance.freeConnection(connection);
 		return user;
 	}
 
@@ -201,16 +290,41 @@ public class UserDAO extends DAO {
 	public User getById(int id) throws SQLException {
 		User user = null;
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_USER_BY_ID);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setInt(1, id);
-		ResultSet result = ps.executeQuery();
-
-		ArrayList<User> list = getListUserFromResult(result);
-		if (list.size() > 0){
-			user = list.get(0);
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			ps.setInt(1, id);
+			result = ps.executeQuery();
+			ArrayList<User> list = getListUserFromResult(result);
+			if (list.size() > 0){
+				user = list.get(0);
+			}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-		poolInstance.freeConnection(connection);
 		return user;
 	}
 
@@ -221,16 +335,42 @@ public class UserDAO extends DAO {
       */
   	public boolean checkLogin(String login) throws SQLException {
     	String query =  sqlManager.getProperty(sqlManager.SQL_CHECK_LOGIN);
-        Connection connection = poolInstance.getConnection();
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setString(1, login);
-        ResultSet result = ps.executeQuery();
-        if(result.next()) {
-        	poolInstance.freeConnection(connection);
-        	return false;
-        }
-        poolInstance.freeConnection(connection);
-        return true;
+        Connection connection = null;
+        PreparedStatement ps = null;
+		ResultSet result = null;
+		boolean checkResult = false;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+		    ps.setString(1, login);
+    	    result = ps.executeQuery();
+			if(!result.next()) {
+        		checkResult = true;
+        	}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+        return checkResult;
     }
     
     /**
@@ -240,21 +380,43 @@ public class UserDAO extends DAO {
      */
 	public int getAccess(String id) throws SQLException {
         int access = -1;
-    
         String query =  sqlManager.getProperty(sqlManager.SQL_SET_ACCESS);
-        Connection connection = poolInstance.getConnection();
-        PreparedStatement ps = connection.prepareStatement(query);
-
-		ps.setInt(1, Integer.parseInt(id));
-        ResultSet result = ps.executeQuery();
-        
-        if(result.next()) {
-            access = result.getInt(COLUMN_NAME_ACCESS);
-        } else {
-            throw new RuntimeException("UserDAO: no such user");
-        }
-        poolInstance.freeConnection(connection);
-        
+        Connection connection = null;
+        PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			ps.setInt(1, Integer.parseInt(id));
+    	    result = ps.executeQuery();
+       		if(result.next()) {
+    	        access = result.getInt(COLUMN_NAME_ACCESS);
+    	    } else {
+    	        throw new RuntimeException("UserDAO: no such user");
+        	}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
         return access;
     }
     
@@ -267,15 +429,32 @@ public class UserDAO extends DAO {
         if(access < 0 || access > 2) {
             throw new IllegalArgumentException("Unknown Access Level");
         }
-        
         String query =  sqlManager.getProperty(sqlManager.SQL_UPDATE_ACCESS);
-        Connection connection = poolInstance.getConnection();
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setInt(1, access);
-        ps.setInt(2, id);
-        ps.executeUpdate();
-      
-        poolInstance.freeConnection(connection);
+        Connection connection = null;
+        PreparedStatement ps = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+       		ps.setInt(1, access);
+     	    ps.setInt(2, id);
+    	    ps.executeUpdate();
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
     }
 
 	/**
@@ -284,18 +463,41 @@ public class UserDAO extends DAO {
 	 * Implements #SQL_COUNT_USERS
 	 */
 	public int count() throws SQLException {
-		Connection connection = poolInstance.getConnection();
 		String query = sqlManager.getProperty(sqlManager.SQL_COUNT_USERS);
 		int count = -1;
-
-		PreparedStatement ps = connection.prepareStatement(query);
-		ResultSet result = ps.executeQuery();
-
-		if (result.next()) {
-			count = result.getInt("COUNT(*)");
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			result = ps.executeQuery();
+			if (result.next()) {
+				count = result.getInt("COUNT(*)");
+			}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-
-		poolInstance.freeConnection(connection);
 		return count;
 	}
 

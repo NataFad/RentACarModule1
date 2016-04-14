@@ -4,7 +4,11 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.Rating;
+import by.academy.it.rentacar.connectionpool.DBConnectionPool;
+import org.apache.log4j.Logger;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -52,23 +56,44 @@ public class RatingDAO extends DAO {
 	public Rating getById(int id) throws SQLException {
 		Rating rating = null;
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_RATINGS_BY_ID);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		
-		ps.setInt(1, id);
-		ResultSet result = ps.executeQuery();
-
-		if (result.next()) {
-			rating = new Rating();
-
-			rating.setId(result.getInt(COLUMN_NAME_ID));
-			rating.setName(result.getString(COLUMN_NAME_NAME));
-			rating.setRateCost(result.getBigDecimal(COLUMN_NAME_RATECOST));
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			ps.setInt(1, id);
+			result = ps.executeQuery();
+			if (result.next()) {
+				rating = new Rating();
+				rating.setId(result.getInt(COLUMN_NAME_ID));
+				rating.setName(result.getString(COLUMN_NAME_NAME));
+				rating.setRateCost(result.getBigDecimal(COLUMN_NAME_RATECOST));
+			}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(RatingDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e){
+				Logger.getLogger(RatingDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(RatingDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(RatingDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-
-		poolInstance.freeConnection(connection);
 		return rating;
-
 	}
 
 	/**
@@ -79,21 +104,43 @@ public class RatingDAO extends DAO {
 	public ArrayList<Rating> getAll() throws SQLException {
 		ArrayList<Rating> ratingList = new ArrayList<Rating>();
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_RATINGS);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ResultSet result = ps.executeQuery();
-
-		while (result.next()) {
-			Rating rating = new Rating();
-          
-			rating.setId(result.getInt(COLUMN_NAME_ID));
-			rating.setName(result.getString(COLUMN_NAME_NAME));
-			rating.setRateCost(result.getBigDecimal(COLUMN_NAME_RATECOST));
-			
-			ratingList.add(rating);
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			result = ps.executeQuery();
+			while (result.next()) {
+				Rating rating = new Rating();
+        		rating.setId(result.getInt(COLUMN_NAME_ID));
+				rating.setName(result.getString(COLUMN_NAME_NAME));
+				rating.setRateCost(result.getBigDecimal(COLUMN_NAME_RATECOST));
+				ratingList.add(rating);
+			}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(RatingDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e){
+				Logger.getLogger(RatingDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(RatingDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(RatingDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-
-		poolInstance.freeConnection(connection);
 		return ratingList;
 	}
 

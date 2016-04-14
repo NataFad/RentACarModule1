@@ -4,7 +4,11 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.Type;
+import by.academy.it.rentacar.connectionpool.DBConnectionPool;
+import org.apache.log4j.Logger;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,21 +57,45 @@ public class TypeDAO extends DAO {
 	public Type getById(int id) throws SQLException {
 		Type type = null;
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_TYPES_BY_ID);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setInt(1, id);
-		ResultSet result = ps.executeQuery();
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			ps.setInt(1, id);
+			result = ps.executeQuery();
 
-		if (result.next()) {
-			type = new Type();
-
-			type.setId(result.getInt(COLUMN_NAME_ID));
-			type.setName(result.getString(COLUMN_NAME_NAME));
-			type.setRatecost(result.getBigDecimal(COLUMN_NAME_RATECOST));
-			type.setRateDiscount(result.getBigDecimal(COLUMN_NAME_RATEDISCOUNT));
+			if (result.next()) {
+				type = new Type();
+				type.setId(result.getInt(COLUMN_NAME_ID));
+				type.setName(result.getString(COLUMN_NAME_NAME));
+				type.setRatecost(result.getBigDecimal(COLUMN_NAME_RATECOST));
+				type.setRateDiscount(result.getBigDecimal(COLUMN_NAME_RATEDISCOUNT));
+			}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(TypeDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e) {
+				Logger.getLogger(TypeDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(TypeDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(TypeDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-
-		poolInstance.freeConnection(connection);
 		return type;
 	}
 
@@ -79,22 +107,45 @@ public class TypeDAO extends DAO {
 	public ArrayList<Type> getAll() throws SQLException {
 		ArrayList<Type> typeList = new ArrayList<Type>();
 		String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_TYPES);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ResultSet result = ps.executeQuery();
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		try {
+			connection = DBConnectionPool.getInstance().getConnection();
+			ps = connection.prepareStatement(query);
+			result = ps.executeQuery();
 
-		while (result.next()) {
-			Type type = new Type();
-          
-			type.setId(result.getInt(COLUMN_NAME_ID));
-			type.setName(result.getString(COLUMN_NAME_NAME));
-			type.setRatecost(result.getBigDecimal(COLUMN_NAME_RATECOST));
-			type.setRateDiscount(result.getBigDecimal(COLUMN_NAME_RATEDISCOUNT));
-			
-			typeList.add(type);
+			while (result.next()) {
+				Type type = new Type();
+          		type.setId(result.getInt(COLUMN_NAME_ID));
+				type.setName(result.getString(COLUMN_NAME_NAME));
+				type.setRatecost(result.getBigDecimal(COLUMN_NAME_RATECOST));
+				type.setRateDiscount(result.getBigDecimal(COLUMN_NAME_RATEDISCOUNT));
+				typeList.add(type);
+			}
+		} catch (IOException | PropertyVetoException e) {
+			Logger.getLogger(TypeDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+			e.printStackTrace();
+		} finally {
+			if (result != null) try {
+				result.close();
+			} catch (SQLException e) {
+				Logger.getLogger(TypeDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (ps != null) try {
+				ps.close();
+			} catch (SQLException e) {
+				Logger.getLogger(TypeDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+			if (connection != null) try {
+				connection.close();
+			} catch (SQLException e) {
+				Logger.getLogger(TypeDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-
-		poolInstance.freeConnection(connection);
 		return typeList;
 	}
 

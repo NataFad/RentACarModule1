@@ -3,10 +3,7 @@ package by.academy.it;
 import by.academy.it.rentacar.beans.Car;
 import by.academy.it.rentacar.dao.CarDAO;
 import by.academy.it.rentacar.enums.Transmission;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,22 +22,23 @@ public class CarDAOTest {
 
     @Before
     public void setUp() throws Exception {
+        int foreign_id = 1;
         carDAO  = CarDAO.getInstance();
         testCar = new Car();
         testCar.setRegistrationNumber("00-00 TE");
         testCar.setTransmission(Transmission.AUTO);
-        testCar.setRatingId(1);
-        testCar.setModelAndMarkId(1);
-        testCar.setPriceId(1);
-        testCar.setFuelId(1);
-        testCar.setCostOfDay(BigDecimal.valueOf(10.));
-        testCar.setDiscount(BigDecimal.valueOf(1.2));
-        testCar.setTypeId(1);
+        testCar.setRatingId(foreign_id);
+        testCar.setModelAndMarkId(foreign_id);
+        testCar.setPriceId(foreign_id);
+        testCar.setFuelId(foreign_id);
+        testCar.setCostOfDay(new BigDecimal(10));
+        testCar.setDiscount(new BigDecimal(1.2));
+        testCar.setTypeId(foreign_id);
         testCar.setDescription("test");
     }
 
     @Test
-    public void addClient() throws Exception {
+    public void addCarTest() throws Exception {
         carDAO.add(testCar);
         carList = carDAO.getAll();
         expectedCar = carList.get(carList.size()-1);
@@ -54,11 +52,13 @@ public class CarDAOTest {
         Assert.assertEquals("Add car: discount", testCar.getDiscount(), expectedCar.getDiscount());
         Assert.assertEquals("Add car: description", testCar.getDescription(), expectedCar.getDescription());
         Assert.assertEquals("Add car: types id", testCar.getTypeId(), expectedCar.getTypeId());
+
+        testCar.setId(expectedCar.getId());
     }
 
-    @After
+    @Ignore
     public void tearDown() throws Exception {
-        carDAO.delete(expectedCar);
+        carDAO.delete(testCar);
     }
 
 
