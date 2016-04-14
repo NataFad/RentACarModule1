@@ -1,0 +1,25 @@
+<<<<<<< HEAD
+
+#Eclipse
+**/bin/
+.settings
+.classpath
+.project
+
+#IDEA
+/.idea
+*.iml
+**/out
+**/build
+**/target
+=======
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+# Created by .ignore support plugin (hsz.mobi)
+>>>>>>> d3c1194e3a4b56c8a3a177eec81e5f77983092ff
