@@ -3,6 +3,7 @@ package by.academy.it.rentacar.actions.user;
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.beans.User;
 import by.academy.it.rentacar.enums.TypeUser;
+import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
