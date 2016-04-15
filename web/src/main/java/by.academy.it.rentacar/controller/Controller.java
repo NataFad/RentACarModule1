@@ -3,7 +3,6 @@ package by.academy.it.rentacar.controller;
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.actions.factory.ActionFactory;
 import by.academy.it.rentacar.exceptions.ActionNotFoundException;
-import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

@@ -1,20 +1,23 @@
 package by.academy.it.rentacar.dao;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by Nata on 13.04.2016.
+ * Interface IDAO
+ * initializes methods add(), update(), delete(), getAll().
+ *
+ * @author Fadeeva Natallia
+ * @version 1.1
+ * @since 2016-04
+ *
  */
 public interface IDAO<T> {
 
-    void add(T t) throws SQLException;
+    void add(T t);
 
-    void update(T t) throws SQLException ;
+    void update(T t);
 
-    void delete(T t) throws SQLException ;
+    void delete(T t);
 
-    ArrayList<T> getAll() throws SQLException;
-
-    int count() throws SQLException;
+    ArrayList<T> getAll();
 }

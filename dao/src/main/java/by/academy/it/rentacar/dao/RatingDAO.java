@@ -5,6 +5,7 @@ package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.Rating;
 import by.academy.it.rentacar.connectionpool.DBConnectionPool;
+import by.academy.it.rentacar.constants.ISqlQuery;
 import org.apache.log4j.Logger;
 
 import java.beans.PropertyVetoException;
@@ -51,47 +52,27 @@ public class RatingDAO extends DAO {
 	/**
 	 * Method getById() searches object rating by id
 	 *
-	 * Implements #SQL_GET_RATINGS_BY_ID
+	 * Implements #GET_RATING_BY_ID
 	 */
-	public Rating getById(int id) throws SQLException {
+	public Rating getById(int id){
 		Rating rating = null;
-		String query = sqlManager.getProperty(sqlManager.SQL_GET_RATINGS_BY_ID);
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet result = null;
-		try {
-			connection = DBConnectionPool.getInstance().getConnection();
-			ps = connection.prepareStatement(query);
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_RATING_BY_ID)){
 			ps.setInt(1, id);
-			result = ps.executeQuery();
-			if (result.next()) {
-				rating = new Rating();
-				rating.setId(result.getInt(COLUMN_NAME_ID));
-				rating.setName(result.getString(COLUMN_NAME_NAME));
-				rating.setRateCost(result.getBigDecimal(COLUMN_NAME_RATECOST));
-			}
-		} catch (IOException | PropertyVetoException e) {
-			Logger.getLogger(RatingDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
-			e.printStackTrace();
-		} finally {
-			if (result != null) try {
-				result.close();
+		  try (ResultSet result = ps.executeQuery()) {
+				if (result.next()) {
+					rating = new Rating();
+					rating.setId(result.getInt(COLUMN_NAME_ID));
+					rating.setName(result.getString(COLUMN_NAME_NAME));
+					rating.setRateCost(result.getBigDecimal(COLUMN_NAME_RATECOST));
+				}
 			} catch (SQLException e){
 				Logger.getLogger(RatingDAO.class).error(e.getMessage());
 				e.printStackTrace();
 			}
-			if (ps != null) try {
-				ps.close();
-			} catch (SQLException e) {
-				Logger.getLogger(RatingDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (connection != null) try {
-				connection.close();
-			} catch (SQLException e) {
-				Logger.getLogger(RatingDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(RatingDAO.class).error(e.getMessage());
+			e.printStackTrace();
 		}
 		return rating;
 	}
@@ -99,61 +80,64 @@ public class RatingDAO extends DAO {
 	/**
 	 * Method getAll() gets data about all ratings
 	 *
-	 * Implements #SQL_GET_ALL_RATINGS
+	 * Implements #GET_ALL_RATINGS
 	 */
-	public ArrayList<Rating> getAll() throws SQLException {
+	public ArrayList<Rating> getAll(){
 		ArrayList<Rating> ratingList = new ArrayList<Rating>();
-		String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_RATINGS);
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet result = null;
-		try {
-			connection = DBConnectionPool.getInstance().getConnection();
-			ps = connection.prepareStatement(query);
-			result = ps.executeQuery();
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_ALL_RATINGS);
+				ResultSet result = ps.executeQuery()){
 			while (result.next()) {
 				Rating rating = new Rating();
-        		rating.setId(result.getInt(COLUMN_NAME_ID));
+				rating.setId(result.getInt(COLUMN_NAME_ID));
 				rating.setName(result.getString(COLUMN_NAME_NAME));
 				rating.setRateCost(result.getBigDecimal(COLUMN_NAME_RATECOST));
 				ratingList.add(rating);
 			}
-		} catch (IOException | PropertyVetoException e) {
-			Logger.getLogger(RatingDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(RatingDAO.class).error(e.getMessage());
 			e.printStackTrace();
-		} finally {
-			if (result != null) try {
-				result.close();
-			} catch (SQLException e){
-				Logger.getLogger(RatingDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (ps != null) try {
-				ps.close();
-			} catch (SQLException e) {
-				Logger.getLogger(RatingDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (connection != null) try {
-				connection.close();
-			} catch (SQLException e) {
-				Logger.getLogger(RatingDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
 		}
 		return ratingList;
 	}
 
-	public void add(Object o) throws SQLException {
+	/**
+	 * Method add() writes object rating into the table
+	 * Implements #ADD_RATINGS
+	 *
+	 * @param o
+   */
+	public void add(Object o){
+		Rating rating = (Rating) o;
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.ADD_RATING)) {
+			ps.setString(1, rating.getName());
+			ps.setBigDecimal(2, rating.getRateCost());
+			ps.executeUpdate();
+		}catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(RatingDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
-	public void update(Object o) throws SQLException {
+	public void update(Object o) {
 	}
 
-	public void delete(Object o) throws SQLException {
-	}
-
-	public int count() throws SQLException {
-		return 0;
+	/**
+	 * Method delete() deletes object rating from the table
+	 * Implements #DELETE_RATINGS
+	 *
+	 * @param o
+   */
+	public void delete(Object o) {
+		Rating rating = (Rating) o;
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.DELETE_RATING)) {
+			ps.setInt(1, rating.getId());
+			ps.executeUpdate();
+		}catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(RatingDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }

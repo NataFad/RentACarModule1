@@ -3,9 +3,7 @@ package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.beans.Rating;
 import by.academy.it.rentacar.dao.RatingDAO;
-import org.apache.log4j.Logger;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -41,11 +39,7 @@ public class RatingService {
     public ArrayList<Rating> getListRating(){
         // List of ratings
         ArrayList<Rating> ratingList = new ArrayList<Rating>();
-        try {
-            ratingList = RatingDAO.getInstance().getAll();
-        } catch (SQLException e) {
-            Logger.getLogger(RatingDAO.class).error(e.getMessage());
-        }
+        ratingList = RatingDAO.getInstance().getAll();
         return ratingList;
     }
 
@@ -57,11 +51,7 @@ public class RatingService {
      */
     public Rating getById(int id){
         Rating rating = null;
-        try {
-            rating = RatingDAO.getInstance().getById(id);
-        } catch (SQLException e) {
-            Logger.getLogger(RatingDAO.class).error(e.getMessage());
-        }
+        rating = RatingDAO.getInstance().getById(id);
         return rating;
     }
 

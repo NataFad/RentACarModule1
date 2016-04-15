@@ -34,9 +34,13 @@ public class DBConnectionPool {
     cpds.setAcquireIncrement(5);
     cpds.setMaxPoolSize(20);
     cpds.setMaxStatements(180);
-
   }
 
+  /**
+   * Method getInstance() creates an object
+   *
+   * @return
+   */
   public static DBConnectionPool getInstance() throws IOException, SQLException, PropertyVetoException {
     if (connectionPool == null) {
       connectionPool = new DBConnectionPool();
@@ -46,6 +50,12 @@ public class DBConnectionPool {
     }
   }
 
+  /**
+   * Method getConnection() takes connection
+   *
+   * @return
+   * @throws SQLException
+   */
   public Connection getConnection() throws SQLException {
     return this.cpds.getConnection();
   }

@@ -4,7 +4,6 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.managers.ConfigurationManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

@@ -2,7 +2,6 @@ package by.academy.it.rentacar.filters;
 
 import by.academy.it.rentacar.beans.User;
 import by.academy.it.rentacar.enums.TypeUser;
-import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

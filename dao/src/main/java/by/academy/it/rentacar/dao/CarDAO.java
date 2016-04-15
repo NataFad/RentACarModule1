@@ -5,6 +5,7 @@ package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.Car;
 import by.academy.it.rentacar.connectionpool.DBConnectionPool;
+import by.academy.it.rentacar.constants.ISqlQuery;
 import by.academy.it.rentacar.enums.Transmission;
 import org.apache.log4j.Logger;
 
@@ -64,16 +65,12 @@ public class CarDAO extends DAO {
 	/**
 	 * Method add() writes object car in the table
 	 *
-	 * Implements #SQL_ADD_CAR
+	 * Implements #ADD_CAR
 	 */
-	public void add(Object o) throws SQLException {
+	public void add(Object o){
 		Car car = (Car) o;
-		Connection connection = null;
-		PreparedStatement ps = null;
-		try {
-			connection = DBConnectionPool.getInstance().getConnection();
-			String query = sqlManager.getProperty(sqlManager.SQL_ADD_CAR);
-			ps = connection.prepareStatement(query);
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+			PreparedStatement	ps = connection.prepareStatement(ISqlQuery.ADD_CAR)){
 		
 			ps.setString(1, car.getRegistrationNumber());
 			ps.setString(2, car.getTransmission().value().toLowerCase());
@@ -86,23 +83,9 @@ public class CarDAO extends DAO {
 			ps.setBigDecimal(9, car.getDiscount());
 			ps.setString(10, car.getDescription());
 			ps.executeUpdate();
-
-		} catch (IOException| PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(CarDAO.class).error(e.getMessage());
 			e.printStackTrace();
-		} finally {
-			if (ps != null) try {
-				ps.close();
-			} catch (SQLException e) {
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (connection != null) try {
-				connection.close();
-			} catch (SQLException e) {
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -115,12 +98,11 @@ public class CarDAO extends DAO {
 	 * @return ArrayList<Car>
 	 * @throws SQLException
      */
-	private ArrayList<Car> getListCarFromResult(ResultSet result, int countDays) throws SQLException {
+	private ArrayList<Car> getListCarFromResult(ResultSet result, int countDays) throws SQLException{
 		ArrayList<Car> list = new ArrayList<Car>();
 
 		while (result.next()) {
 			Car car = new Car();
-
 			car.setId(result.getInt(COLUMN_NAME_ID));
 			car.setRegistrationNumber(result.getString(COLUMN_NAME_REGNUMBER));
 			car.setTransmission(Transmission.valueOf(result.getString(COLUMN_NAME_TRANSMISSION).trim().toUpperCase()));
@@ -147,43 +129,18 @@ public class CarDAO extends DAO {
 	/**
 	 * Method getAllCars() reads from the table Car and add in the list
 	 *
-	 * Implements #SQL_GET_ALL_CARS
+	 * Implements #GET_ALL_CARS
 	 */
-	public ArrayList<Car> getAll() throws SQLException {
-		String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_CARS);
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet result = null;
+	public ArrayList<Car> getAll() {
 		ArrayList<Car> list = new ArrayList<Car>();
-		try {
-			connection = DBConnectionPool.getInstance().getConnection();
-			ps = connection.prepareStatement(query);
-			result = ps.executeQuery();
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+			PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_ALL_CARS);
+			ResultSet result = ps.executeQuery()){
 			list = getListCarFromResult(result, 1);
-		} catch (IOException| PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(CarDAO.class).error(e.getMessage());
 			e.printStackTrace();
-		} finally {
-			if (result != null) try {
-				result.close();
-			} catch (SQLException e){
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (ps != null) try {
-				ps.close();
-			} catch (SQLException e) {
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (connection != null) try {
-				connection.close();
-			} catch (SQLException e) {
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
 		}
-
 		return list;
 	}
 
@@ -197,7 +154,7 @@ public class CarDAO extends DAO {
 	 * @return
 	 * @throws SQLException
      */
-	public ArrayList<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws SQLException {
+	public ArrayList<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues){
 		// query text writing
 		String query = "SELECT cars.*, ratings.name as rating, fuels.name as fuel, types.name as type_name, "
 				+ " modelsandmarks.mark as marka, modelsandmarks.model as model FROM cars "
@@ -224,83 +181,38 @@ public class CarDAO extends DAO {
 			query = query + " AND ratings_id=" + Integer.parseInt(ratingId);
 		}
 
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet result = null;
 		ArrayList<Car> list = new ArrayList<Car>();
-		try {
-			connection = DBConnectionPool.getInstance().getConnection();
-			ps = connection.prepareStatement(query);
-			result = ps.executeQuery();
-		
-			long difference = byDate.getTime() - fromDate.getTime();
-			int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
-
-			list = getListCarFromResult(result, days);
-		} catch (IOException| PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+			PreparedStatement ps = connection.prepareStatement(query);
+			ResultSet result = ps.executeQuery()){
+				long difference = byDate.getTime() - fromDate.getTime();
+				int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
+				list = getListCarFromResult(result, days);
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(CarDAO.class).error(e.getMessage());
 			e.printStackTrace();
-		} finally {
-			if (result != null) try {
-				result.close();
-			} catch (SQLException e){
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (ps != null) try {
-				ps.close();
-			} catch (SQLException e) {
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (connection != null) try {
-				connection.close();
-			} catch (SQLException e) {
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
 		}
 		return list;
 	}
 
-	public void update(Object o) throws SQLException {
+	public void update(Object o) {
 	}
 
 	/**
-	 * Method delete() car from the table
+	 * Method delete() deletes object car from the table
+	 * Implements #DELETE_CAR
+	 *
 	 * @param o
-	 * @throws SQLException
-     */
-	public void delete(Object o) throws SQLException {
+   */
+	public void delete(Object o) {
 		Car car = (Car) o;
-		Connection connection = null;
-		PreparedStatement ps = null;
-		try {
-			connection = DBConnectionPool.getInstance().getConnection();
-			String query = sqlManager.getProperty(sqlManager.SQL_DELETE_CAR);
-			ps = connection.prepareStatement(query);
-			ps.setInt(1, car.getId());
-			ps.executeUpdate();
-		} catch (IOException| PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error("SQL, IOE or PropertyVetoException occurred during adding student");
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+			PreparedStatement ps = connection.prepareStatement(ISqlQuery.DELETE_CAR)){
+				ps.setInt(1, car.getId());
+				ps.executeUpdate();
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(CarDAO.class).error(e.getMessage());
 			e.printStackTrace();
-		} finally {
-			if (ps != null) try {
-				ps.close();
-			} catch (SQLException e) {
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
-			if (connection != null) try {
-				connection.close();
-			} catch (SQLException e) {
-				Logger.getLogger(CarDAO.class).error(e.getMessage());
-				e.printStackTrace();
-			}
 		}
-	}
-
-	public int count() throws SQLException {
-		return 0;
 	}
 }

@@ -1,6 +1,5 @@
 package by.academy.it.rentacar.filters;
 
-import by.academy.it.rentacar.managers.ConfigurationManager;
 import by.academy.it.rentacar.managers.ErrorManager;
 
 import javax.servlet.*;

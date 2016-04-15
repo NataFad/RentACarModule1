@@ -3,10 +3,8 @@ package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.beans.Car;
 import by.academy.it.rentacar.dao.CarDAO;
-import org.apache.log4j.Logger;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,14 +25,14 @@ public class CarService {
     private CarService(){}
 
     public static CarService getInstance() {
-        if (instance == null) {
-            synchronized (CarService.class) {
-                if (instance == null) {
-                    instance = new CarService();
-                }
-            }
+      if (instance == null) {
+        synchronized (CarService.class) {
+          if (instance == null) {
+            instance = new CarService();
+          }
         }
-        return instance;
+      }
+      return instance;
     }
 
     /**
@@ -44,14 +42,9 @@ public class CarService {
      * @return successReg
      */
     public int register(Car car){
-        int successReg = 1;
-        try {
-            CarDAO.getInstance().add(car);
-        } catch (SQLException e) {
-            successReg = 0;
-            Logger.getLogger(CarDAO.class).error(e.getMessage());
-        }
-        return successReg;
+      int successReg = 1;
+      CarDAO.getInstance().add(car);
+      return successReg;
     }
 
     /**
@@ -61,21 +54,13 @@ public class CarService {
      */
     public ArrayList<Car> getAllCars(){
         ArrayList<Car> carList = new ArrayList<Car>();
-        try {
-            carList = CarDAO.getInstance().getAll();
-        } catch (SQLException e) {
-            Logger.getLogger(CarDAO.class).error(e.getMessage());
-        }
+        carList = CarDAO.getInstance().getAll();
         return carList;
     }
 
     public ArrayList<Car> getSearchCar(Date fromDate, Date byDate,  HashMap<String, String> filterValues){
         ArrayList<Car> carList = new ArrayList<Car>();
-        try {
-            carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
-        } catch (SQLException e) {
-            Logger.getLogger(CarDAO.class).error(e.getMessage());
-        }
+        carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
         return carList;
     }
 }
