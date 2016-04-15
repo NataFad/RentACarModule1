@@ -42,7 +42,8 @@ public interface ISqlQuery {
 					"left join ratings on ratings.id = cars.ratings_id " +
 					"left join types on types.id = cars.types_id " +
 					"left join modelsandmarks on modelsandmarks.id = cars.modelsandmarks_id  " +
-					"left join fuels on fuels.id = cars.fuels_id";
+					"left join fuels on fuels.id = cars.fuels_id " +
+					"order by cars.id";
 	String ADD_CAR = " INSERT INTO " +
 					"cars(registrationNumber, transmission, ratings_id, types_id, modelsAndMarks_id, " +
 					"price_id, fuels_id, costOfDay, discount, description) " +
