@@ -11,7 +11,7 @@ package by.academy.it.rentacar.constants;
 public interface ISqlQuery {
 
 	// FUEL DAO
-	String GET_ALL_FUELS = "SELECT * FROM fuels";
+	String GET_ALL_FUELS = "SELECT * FROM fuels order by id";
 	String ADD_FUEL = "INSERT INTO fuels (name) VALUES (?)";
 	String UPDATE_FUEL = "UPDATE fuels SET name = ? WHERE id = ?";
 	String GET_FUEL_BY_ID = "SELECT * FROM fuels WHERE id = ?";
@@ -32,7 +32,7 @@ public interface ISqlQuery {
 	String GET_USER = "SELECT * FROM users WHERE login = ? AND password = ?";
 	String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
 	String COUNT_USERS = "SELECT COUNT(*) FROM users";
-	String GET_ALL_USERS = "SELECT * FROM users";
+	String GET_ALL_USERS = "SELECT * FROM users order by id";
 	String DELETE_USER = "DELETE FROM users WHERE id = ?";
 
 	// CAR DAO
@@ -52,19 +52,19 @@ public interface ISqlQuery {
 	
 	// RATING DAO
 	String GET_RATING_BY_ID = "SELECT * FROM ratings WHERE id = ?";
-	String GET_ALL_RATINGS = "SELECT * FROM ratings";
+	String GET_ALL_RATINGS = "SELECT * FROM ratings order by id";
 	String ADD_RATING = "INSERT INTO ratings (name, ratecost) VALUES (?,?)";
 	String DELETE_RATING = "DELETE FROM ratings WHERE id = ?";
 
 	// Type DAO
 	String GET_TYPE_BY_ID = "SELECT * FROM types WHERE id = ?";
-	String GET_ALL_TYPES = "SELECT * FROM types";
+	String GET_ALL_TYPES = "SELECT * FROM types order by id";
 	String ADD_TYPE = "INSERT INTO types (name, ratecost, ratediscount) VALUES (?,?,?)";
 	String DELETE_TYPE = "DELETE FROM types WHERE id = ?";
 
 	// ModelAndMark DAO
 	String GET_MODEL_BY_ID = "SELECT * FROM modelsAndMarks WHERE id = ?";
-	String GET_ALL_MODELS = "SELECT * FROM modelsAndMarks";
+	String GET_ALL_MODELS = "SELECT * FROM modelsAndMarks order by id";
 	String ADD_MODEL = "INSERT INTO modelsAndMarks (mark, model) VALUES (?,?)";
 	String DELETE_MODEL = "DELETE FROM modelsAndMarks WHERE id = ?";
 

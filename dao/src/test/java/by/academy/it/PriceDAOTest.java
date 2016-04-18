@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
+ * Unit-test class PriceDAO
+ *
  * Created by Nata on 18.04.2016.
  */
 public class PriceDAOTest {
