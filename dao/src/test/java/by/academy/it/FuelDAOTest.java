@@ -32,7 +32,7 @@ public class FuelDAOTest {
     expectedFuel = fuelList.get(fuelList.size()-1);
     int countFuels = fuelDAO.count();
 
-    Assert.assertEquals("Add car: registration number", true, testFuel.getName().equals(expectedFuel.getName()));
+    Assert.assertEquals("Add fuel: name", true, testFuel.getName().equals(expectedFuel.getName()));
     Assert.assertEquals("Count fuels", fuelList.size(), countFuels);
     testFuel.setId(expectedFuel.getId());
   }
