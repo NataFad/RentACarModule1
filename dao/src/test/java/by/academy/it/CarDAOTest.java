@@ -45,7 +45,7 @@ public class CarDAOTest {
     }
 
     @Test
-    public void addClent() throws Exception {
+    public void addCarTest() throws Exception {
         carDAO.add(testCar);
         carList = carDAO.getAll();
         expectedCar = carList.get(carList.size()-1);
