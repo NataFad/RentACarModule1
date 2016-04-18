@@ -180,6 +180,7 @@ public class CarDAO extends DAO {
 		if (ratingId != null) {
 			query = query + " AND ratings_id=" + Integer.parseInt(ratingId);
 		}
+		query = query + " ORDER BY cars.id";
 
 		ArrayList<Car> list = new ArrayList<Car>();
 		try (Connection	connection = DBConnectionPool.getInstance().getConnection();

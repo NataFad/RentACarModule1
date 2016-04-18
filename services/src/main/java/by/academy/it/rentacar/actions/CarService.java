@@ -53,14 +53,12 @@ public class CarService {
      * @return
      */
     public ArrayList<Car> getAllCars(){
-        ArrayList<Car> carList = new ArrayList<Car>();
-        carList = CarDAO.getInstance().getAll();
+        ArrayList<Car> carList = CarDAO.getInstance().getAll();
         return carList;
     }
 
     public ArrayList<Car> getSearchCar(Date fromDate, Date byDate,  HashMap<String, String> filterValues){
-        ArrayList<Car> carList = new ArrayList<Car>();
-        carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
+        ArrayList<Car> carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
         return carList;
     }
 }
