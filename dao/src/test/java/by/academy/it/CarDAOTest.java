@@ -68,7 +68,4 @@ public class CarDAOTest {
     public void tearDown() throws Exception {
         carDAO.delete(testCar);
     }
-
-
-
 }

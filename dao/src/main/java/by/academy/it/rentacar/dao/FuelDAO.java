@@ -125,8 +125,8 @@ public class FuelDAO extends DAO {
 	public Fuel getById(int id) {
     Fuel fuel = null;
     try (Connection connection = DBConnectionPool.getInstance().getConnection();
-        PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_FUEL_BY_ID)){
-      ps.setInt(1, fuel.getId());
+      PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_FUEL_BY_ID)){
+      ps.setInt(1, id);
       try (ResultSet result = ps.executeQuery()) {
         if (result.next()) {
           fuel = new Fuel();
