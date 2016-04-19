@@ -56,10 +56,7 @@ public class CarServiceTest {
     Assert.assertNotNull(carsList);
     Car car = carsList.get(carsList.size()-1);
     testCar.setId(car.getId());
-  }
 
-  @Test
-  public void getSearchCarServiceTest() throws Exception {
     // period
     Date fromDate = Date.valueOf("2016-01-01");
     Date byDate = Date.valueOf("2016-01-01");
@@ -70,13 +67,13 @@ public class CarServiceTest {
     String foreign_id = "1";
     filterValues.put("fuelId", foreign_id);
     // Type
-   filterValues.put("typeId", foreign_id);
+    filterValues.put("typeId", foreign_id);
     // Rating
     filterValues.put("ratingId", foreign_id);
 
     ArrayList<Car> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
     Assert.assertNotNull(list);
-    Car car = list.get(list.size()-1);
+    car = list.get(list.size()-1);
 
     Assert.assertEquals("Registered car: registration number", true, testCar.getRegistrationNumber().equals(car.getRegistrationNumber()));
     Assert.assertEquals("Registered car: price id", testCar.getPriceId(), car.getPriceId());
