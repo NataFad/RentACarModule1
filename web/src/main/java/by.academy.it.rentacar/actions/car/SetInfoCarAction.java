@@ -4,7 +4,6 @@
 package by.academy.it.rentacar.actions.car;
 
 
-
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.managers.ConfigurationManager;

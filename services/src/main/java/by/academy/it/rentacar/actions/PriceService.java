@@ -3,9 +3,6 @@ package by.academy.it.rentacar.actions;
 import by.academy.it.rentacar.beans.Price;
 import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.enums.Transmission;
-import org.apache.log4j.Logger;
-
-import java.sql.SQLException;
 
 /**
  * Class PriceService induces PriceDAO
@@ -41,11 +38,7 @@ public class PriceService {
      */
     public Price getByTransmissionAndFuel(Transmission transmission, int fuelId){
         Price price = null;
-        try {
-            price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuelId);
-        } catch (SQLException e) {
-            Logger.getLogger(PriceDAO.class).error(e.getMessage());
-        }
+        price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuelId);
         return price;
     }
 }

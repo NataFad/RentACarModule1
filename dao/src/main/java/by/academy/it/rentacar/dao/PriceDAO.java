@@ -4,8 +4,13 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.Price;
+import by.academy.it.rentacar.connectionpool.DBConnectionPool;
+import by.academy.it.rentacar.constants.ISqlQuery;
 import by.academy.it.rentacar.enums.Transmission;
+import org.apache.log4j.Logger;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,46 +56,79 @@ public class PriceDAO extends DAO {
 	/**
 	 * Method getByTransmissionAndFuel() searches object price by transmission and fuel
 	 *
-	 * Implements #SQL_GET_TYPES_BY_TRANSMISSION_AND_FUEL
+	 * Implements #GET_TYPES_BY_TRANSMISSION_AND_FUEL
 	 */
-	public Price getByTransmissionAndFuel(Transmission transmission, int fuelId) throws SQLException {
+	public Price getByTransmissionAndFuel(Transmission transmission, int fuelId) {
 		Price price = null;
-		String query = sqlManager.getProperty(sqlManager.SQL_GET_TYPES_BY_TRANSMISSION_AND_FUEL);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setString(1, transmission.value().toLowerCase());
-		ps.setInt(2, fuelId);
-		ResultSet result = ps.executeQuery();
-
-		if (result.next()) {
-			price = new Price();
-
-			price.setId(result.getInt(COLUMN_NAME_ID));
-			price.setName(result.getString(COLUMN_NAME_NAME));
-			price.setTransmission(transmission);
-			price.setFuelId(result.getInt(COLUMN_NAME_FUEL_ID));
-			price.setCostOfDay(result.getBigDecimal(COLUMN_NAME_COSTOFDAY));
-			price.setDiscount(result.getBigDecimal(COLUMN_NAME_DISCOUNT));
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				 PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_PRICE_BY_TRANSMISSION_AND_FUEL)){
+			ps.setString(1, transmission.value().toLowerCase());
+			ps.setInt(2, fuelId);
+			try (ResultSet	result = ps.executeQuery()) {
+				if (result.next()) {
+					price = new Price();
+					price.setId(result.getInt(COLUMN_NAME_ID));
+					price.setName(result.getString(COLUMN_NAME_NAME));
+					price.setTransmission(transmission);
+					price.setFuelId(result.getInt(COLUMN_NAME_FUEL_ID));
+					price.setCostOfDay(result.getBigDecimal(COLUMN_NAME_COSTOFDAY));
+					price.setDiscount(result.getBigDecimal(COLUMN_NAME_DISCOUNT));
+				}
+			} catch (SQLException e) {
+				Logger.getLogger(PriceDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(PriceDAO.class).error(e.getMessage());
+			e.printStackTrace();
 		}
-
-		poolInstance.freeConnection(connection);
 		return price;
 	}
 
-	public void add(Object o) throws SQLException {
+	/**
+	 * Method add() writes object price in the table
+	 * Implements #ADD_PRICE
+	 *
+	 * @param o
+   */
+	public void add(Object o) {
+  	Price price = (Price) o;
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.ADD_PRICE)) {
+			ps.setString(1, price.getName());
+			ps.setString(2, price.getTransmission().value().toLowerCase());
+			ps.setInt(3, price.getFuelId());
+			ps.setBigDecimal(4, price.getCostOfDay());
+			ps.setBigDecimal(5, price.getDiscount());
+			ps.executeUpdate();
+		}catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(PriceDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
-	public void update(Object o) throws SQLException {
+	public void update(Object o){
 	}
 
-	public void delete(Object o) throws SQLException {
+	/**
+	 * Method delete() deletes object price from yhe table
+	 * Implements #DELETE_PRICE
+	 *
+	 * @param o
+   */
+	public void delete(Object o){
+		Price price = (Price) o;
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.DELETE_PRICE)) {
+			ps.setInt(1, price.getId());
+			ps.executeUpdate();
+		}catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(PriceDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
-	public ArrayList getAll() throws SQLException {
+	public ArrayList<Price> getAll() {
 		return null;
-	}
-
-	public int count() throws SQLException {
-		return 0;
 	}
 }

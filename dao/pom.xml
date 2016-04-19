@@ -28,22 +28,34 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mysql.version>5.1.38</mysql.version>
     </properties>
 
     <dependencies>
-        <!--MySQL-->
+      <!--Modul-->
+      <dependency>
+        <groupId>by.academy.it</groupId>
+        <artifactId>modul</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <!--MySQL-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
+            <version>5.1.5</version>
         </dependency>
 
-        <!--Modul-->
         <dependency>
-            <groupId>by.academy.it</groupId>
-            <artifactId>modul</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>mchange-commons-java</artifactId>
+            <version>0.2.11</version>
         </dependency>
     </dependencies>
+
 </project>

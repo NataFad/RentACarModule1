@@ -3,9 +3,7 @@ package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.beans.Type;
 import by.academy.it.rentacar.dao.TypeDAO;
-import org.apache.log4j.Logger;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -41,11 +39,7 @@ public class TypeService {
     public ArrayList<Type> getListType(){
         // List of types
         ArrayList<Type> typeList = new ArrayList<Type>();
-        try {
-            typeList = TypeDAO.getInstance().getAll();
-        } catch (SQLException e) {
-            Logger.getLogger(TypeDAO.class).error(e.getMessage());
-        }
+        typeList = TypeDAO.getInstance().getAll();
         return typeList;
     }
 
@@ -57,11 +51,7 @@ public class TypeService {
      */
     public Type getById(int id){
         Type type = null;
-        try {
-            type = TypeDAO.getInstance().getById(id);
-        } catch (SQLException e) {
-            Logger.getLogger(TypeDAO.class).error(e.getMessage());
-        }
+        type = TypeDAO.getInstance().getById(id);
         return type;
     }
 

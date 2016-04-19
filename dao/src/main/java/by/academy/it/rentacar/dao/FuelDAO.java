@@ -1,7 +1,12 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.Fuel;
+import by.academy.it.rentacar.connectionpool.DBConnectionPool;
+import by.academy.it.rentacar.constants.ISqlQuery;
+import org.apache.log4j.Logger;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,161 +24,185 @@ import java.util.ArrayList;
  */
 public class FuelDAO extends DAO {
 
-    private volatile static FuelDAO instance;
+  private volatile static FuelDAO instance;
     
-    private final String COLUMN_NAME_ID = "id";
-    private final String COLUMN_NAME_NAME = "name";
+  private final String COLUMN_NAME_ID = "id";
+  private final String COLUMN_NAME_NAME = "name";
   
-    private FuelDAO() {
+  private FuelDAO() {
         super();
     }
 
-    public static FuelDAO getInstance() {
-        if (instance == null) {
-			synchronized (FuelDAO.class) {
-				if (instance == null) {
-					instance = new FuelDAO();
-				}
-			}
-		}
-        return instance;
-    }
+  public static FuelDAO getInstance() {
+    if (instance == null) {
+      synchronized (FuelDAO.class) {
+			  if (instance == null) {
+          instance = new FuelDAO();
+        }
+      }
+	  }
+    return instance;
+  }
      
-    /**
-     * Method add() writes data of fuel in the table
-     *
-     * Implements #SQL_ADD_FUEL
-     */
-	public void add(Object o) throws SQLException {
-        Fuel fuel = (Fuel) o;
-        Connection connection = poolInstance.getConnection();
-        String query = sqlManager.getProperty(sqlManager.SQL_ADD_FUEL);
-        PreparedStatement ps = connection.prepareStatement(query);
-
+  /**
+  * Method add() writes data of fuel in the table
+  *
+  * Implements #ADD_FUEL
+  */
+	public void add(Object o) {
+    Fuel fuel = (Fuel) o;
+    try (Connection connection = DBConnectionPool.getInstance().getConnection();
+      PreparedStatement ps = connection.prepareStatement(ISqlQuery.ADD_FUEL)){
         ps.setString(1, fuel.getName());
         ps.executeUpdate();
-
-        poolInstance.freeConnection(connection);
+    } catch (SQLException | IOException | PropertyVetoException e) {
+      Logger.getLogger(FuelDAO.class).error(e.getMessage());
+      e.printStackTrace();
     }
+  }
 
-    /**
-     * Method update() updates data of fuel in the table
-     *
-     * Implements #SQL_UPDATE_FUEL
-     */
-    public void update(Object o) throws SQLException {
-        Fuel fuel = (Fuel) o;
-        Connection connection = poolInstance.getConnection();
-        String query = sqlManager.getProperty(sqlManager.SQL_UPDATE_FUEL);
-        PreparedStatement ps = connection.prepareStatement(query);
-
+  /**
+  * Method update() updates data of fuel in the table
+  *
+  * Implements #UPDATE_FUEL
+  */
+  public void update(Object o) {
+    Fuel fuel = (Fuel) o;
+    try (Connection connection = DBConnectionPool.getInstance().getConnection();
+      PreparedStatement ps = connection.prepareStatement(ISqlQuery.UPDATE_FUEL)){
         ps.setString(1, fuel.getName());
         ps.setInt(2, fuel.getId());
         ps.executeUpdate();
-
-        poolInstance.freeConnection(connection);
+    } catch (SQLException | IOException | PropertyVetoException e) {
+      Logger.getLogger(FuelDAO.class).error(e.getMessage());
+      e.printStackTrace();
     }
+  }
 
-    /**
-     * Method getListFuelsFromResult()
-     * transforms result of sql-query in object fuel and adds in list
-     *
-     * @param result
-     * @return ArrayList<Fuel>
-     * @throws SQLException
-     */
-    private ArrayList<Fuel> getListFuelsFromResult(ResultSet result) throws SQLException {
-        ArrayList<Fuel> list = new ArrayList<Fuel>();
+  /**
+   * Method getListFuelsFromResult()
+   * transforms result of sql-query in object fuel and adds in list
+   *
+   * @param result
+   * @return ArrayList<Fuel>
+   * @throws SQLException
+   */
+  private ArrayList<Fuel> getListFuelsFromResult(ResultSet result) throws SQLException {
+    ArrayList<Fuel> list = new ArrayList<Fuel>();
+    while (result.next()) {
+      Fuel fuel = new Fuel();
+      fuel.setId(result.getInt(COLUMN_NAME_ID));
+      fuel.setName(result.getString(COLUMN_NAME_NAME));
 
-        while (result.next()) {
-            Fuel fuel = new Fuel();
-
-            fuel.setId(result.getInt(COLUMN_NAME_ID));
-            fuel.setName(result.getString(COLUMN_NAME_NAME));
-
-            list.add(fuel);
-        }
-        return list;
+      list.add(fuel);
     }
+    return list;
+  }
 
-    /**
-     * Method getAll() gets data about all fuels
-     *
-     * Implements #SQL_GET_ALL_FUELS
-     */
-   public ArrayList<Fuel> getAll() throws SQLException {
-        String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_FUELS);
-        Connection connection = poolInstance.getConnection();
-          
-        PreparedStatement ps = connection.prepareStatement(query);
-        ResultSet result = ps.executeQuery();
-        ArrayList<Fuel> list = getListFuelsFromResult(result);
-        poolInstance.freeConnection(connection);
-        return list;
+  /**
+   * Method getAll() gets data about all fuels
+   *
+   * Implements #GET_ALL_FUELS
+   */
+  public ArrayList<Fuel> getAll() {
+    ArrayList<Fuel> list = new ArrayList<Fuel>();
+    try (Connection connection = DBConnectionPool.getInstance().getConnection();
+      PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_ALL_FUELS);
+      ResultSet result = ps.executeQuery()){
+        list = getListFuelsFromResult(result);
+    } catch (SQLException | IOException | PropertyVetoException e) {
+      Logger.getLogger(FuelDAO.class).error(e.getMessage());
+      e.printStackTrace();
     }
+    return list;
+  }
     
-    /**
-     * Method getById() searches object fuel by id
-     *
-     * Implements #SQL_GET_FUELS_BY_ID
-     */
-	public Fuel getById(int id) throws SQLException {
-        Fuel fuel = null;
-        String query = sqlManager.getProperty(sqlManager.SQL_GET_FUELS_BY_ID);
-        Connection connection = poolInstance.getConnection();
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setInt(1, id);
-        ResultSet result = ps.executeQuery();
-        
+  /**
+   * Method getById() searches object fuel by id
+   *
+   * Implements #GET_FUEL_BY_ID
+   */
+	public Fuel getById(int id) {
+    Fuel fuel = null;
+    try (Connection connection = DBConnectionPool.getInstance().getConnection();
+      PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_FUEL_BY_ID)){
+      ps.setInt(1, id);
+      try (ResultSet result = ps.executeQuery()) {
         if (result.next()) {
-        	fuel = new Fuel();
-            
-        	fuel.setId(result.getInt(COLUMN_NAME_ID));
-        	fuel.setName(result.getString(COLUMN_NAME_NAME));
+          fuel = new Fuel();
+          fuel.setId(result.getInt(COLUMN_NAME_ID));
+          fuel.setName(result.getString(COLUMN_NAME_NAME));
         }
-        poolInstance.freeConnection(connection);
-        return fuel;
+      }catch (SQLException e){
+        Logger.getLogger(Fuel.class).error(e.getMessage());
+        e.printStackTrace();
+      }
+    } catch (SQLException | IOException | PropertyVetoException e) {
+      Logger.getLogger(FuelDAO.class).error(e.getMessage());
+      e.printStackTrace();
     }
+    return fuel;
+  }
     
     /**
      * Method searchByName() searches all fuels by name
      *
-     * Implements #SQL_SEARCH_FUEL
+     * Implements #SEARCH_FUEL
      */
-	public ArrayList<Fuel> searchByName(String q) throws SQLException{
-        q = q.trim();
-        String query = sqlManager.getProperty(sqlManager.SQL_SEARCH_FUEL);
-        Connection connection = poolInstance.getConnection();
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setString(1, '%'+ q + '%');
-       
-        ResultSet result = ps.executeQuery();
-        ArrayList<Fuel> list = getListFuelsFromResult(result);
-        poolInstance.freeConnection(connection);
-        return list;
+	public ArrayList<Fuel> searchByName(String q){
+    q = q.trim();
+    ArrayList<Fuel> list = new ArrayList<Fuel>();
+    try (Connection connection = DBConnectionPool.getInstance().getConnection();
+      PreparedStatement ps = connection.prepareStatement(ISqlQuery.SEARCH_FUEL)){
+      ps.setString(1, '%'+q+'%');
+      try (ResultSet result = ps.executeQuery()){
+        list = getListFuelsFromResult(result);
+      } catch (SQLException e) {
+        Logger.getLogger(FuelDAO.class).error(e.getMessage());
+        e.printStackTrace();
+      }
+    } catch (SQLException | IOException | PropertyVetoException e) {
+      Logger.getLogger(FuelDAO.class).error(e.getMessage());
+      e.printStackTrace();
     }
+    return list;
+  }
     
-    /**
-     * Method count() gets count of entries in the table
-     *
-     * Implements #SQL_COUNT_FUELS
-     */
-   public int count() throws SQLException {
-        Connection connection = poolInstance.getConnection();
-        String query = sqlManager.getProperty(sqlManager.SQL_COUNT_FUELS);
-        int count = -1;
-        
-        PreparedStatement ps = connection.prepareStatement(query);
-        ResultSet result = ps.executeQuery();
-
+  /**
+   * Method count() gets count of entries in the table
+   *
+   * Implements #COUNT_FUELS
+   */
+  public int count(){
+    int count = -1;
+    try (Connection connection = DBConnectionPool.getInstance().getConnection();
+      PreparedStatement ps = connection.prepareStatement(ISqlQuery.COUNT_FUELS);
+      ResultSet result = ps.executeQuery()){
         if(result.next()) {
-            count = result.getInt("COUNT(*)");
+          count = result.getInt("COUNT(*)");
         }
-        
-        poolInstance.freeConnection(connection);
-        return count;
-   }
-
-    public void delete(Object o) throws SQLException {
+    } catch (SQLException | IOException | PropertyVetoException e) {
+      Logger.getLogger(FuelDAO.class).error(e.getMessage());
+      e.printStackTrace();
     }
+    return count;
+  }
+
+  /**
+   * Method delete() deletes object fuel from the table
+   * Implements #DELETE_FUEL
+   *
+   * @param o
+   */
+  public void delete(Object o){
+    Fuel fuel = (Fuel) o;
+    try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+         PreparedStatement ps = connection.prepareStatement(ISqlQuery.DELETE_FUEL)){
+      ps.setInt(1, fuel.getId());
+      ps.executeUpdate();
+    } catch (SQLException | IOException | PropertyVetoException e) {
+      Logger.getLogger(FuelDAO.class).error(e.getMessage());
+      e.printStackTrace();
+    }
+  }
 }

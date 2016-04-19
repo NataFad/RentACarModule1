@@ -7,8 +7,6 @@ import by.academy.it.rentacar.beans.User;
 import by.academy.it.rentacar.dao.UserDAO;
 import org.apache.log4j.Logger;
 
-import java.sql.SQLException;
-
 /**
  * Class UserService
  * 
@@ -46,19 +44,11 @@ public class UserService {
 		int successRegistrate = 1;
 
 		UserDAO userDAO = UserDAO.getInstance();
-
-		try {
-			if (!userDAO.checkLogin(user.getLogin().trim())) {
-				successRegistrate = -1;
-				Logger.getLogger(userDAO.getClass()).error("User has yet registered with the login");
-			}
-			userDAO.add(user);
-
-		} catch (SQLException e) {
-			successRegistrate = 0;
-			Logger.getLogger(userDAO.getClass()).error(e.getMessage());
+		if (!userDAO.checkLogin(user.getLogin().trim())) {
+			successRegistrate = -1;
+			Logger.getLogger(userDAO.getClass()).error("User has yet registered with the login");
 		}
-
+		userDAO.add(user);
 		return successRegistrate;
 	}
 
@@ -71,11 +61,7 @@ public class UserService {
      */
 	public User loginUser(String login, String password){
 		User user = null;
-		try {
-			user = UserDAO.getInstance().getUser(login, password);
-		} catch (SQLException e) {
-			Logger.getLogger(UserDAO.class).error(e.getMessage());
-		}
+		user = UserDAO.getInstance().getUser(login, password);
 		return user;
 	}
 }

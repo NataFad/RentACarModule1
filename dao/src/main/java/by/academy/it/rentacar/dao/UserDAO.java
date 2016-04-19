@@ -4,9 +4,14 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.beans.User;
+import by.academy.it.rentacar.connectionpool.DBConnectionPool;
+import by.academy.it.rentacar.constants.ISqlQuery;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.managers.CoderManager;
+import org.apache.log4j.Logger;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,58 +64,58 @@ public class UserDAO extends DAO {
 	/**
 	 * Method add() writes object user in the table
 	 *
-	 * Implements #SQL_ADD_USER
+	 * Implements #ADD_USER
 	 */
-	public void add(Object o) throws SQLException {
+	public void add(Object o){
 		User user = (User) o;
-		Connection connection = poolInstance.getConnection();
-		String query = sqlManager.getProperty(sqlManager.SQL_ADD_USER);
-		PreparedStatement ps = connection.prepareStatement(query);
-
-		ps.setString(1, user.getName());
-		ps.setString(2, user.getSurname());
-		ps.setString(3, user.getLogin());
-		ps.setString(4, CoderManager.getHashCode(user.getPassword()));
-		ps.setInt(5, user.getAccess());
-		ps.setString(6, user.getPhone());
-		if ((user.getPassportNumber() == null) || (user.getPassportIssue() == null) ||
-				(user.getPassportNumber() == null) || (user.getPassportAuthority() == null)){
-			ps.setString(7, "");
-			ps.setDate(8, null);
-			ps.setDate(9, null);
-			ps.setString(10, "");		
-		}else{
-			ps.setString(7, user.getPassportNumber());
-			ps.setDate(8, getCurrentSQLDate(user.getPassportIssue()));
-			ps.setDate(9, getCurrentSQLDate(user.getPassportExpire()));
-			ps.setString(10, user.getPassportAuthority());
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				 PreparedStatement ps = connection.prepareStatement(ISqlQuery.ADD_USER)){
+			ps.setString(1, user.getName());
+			ps.setString(2, user.getSurname());
+			ps.setString(3, user.getLogin());
+			ps.setString(4, CoderManager.getHashCode(user.getPassword()));
+			ps.setInt(5, user.getAccess());
+			ps.setString(6, user.getPhone());
+			if ((user.getPassportNumber() == null) || (user.getPassportIssue() == null) ||
+					(user.getPassportNumber() == null) || (user.getPassportAuthority() == null)){
+				ps.setString(7, "");
+				ps.setDate(8, null);
+				ps.setDate(9, null);
+				ps.setString(10, "");
+			}else{
+				ps.setString(7, user.getPassportNumber());
+				ps.setDate(8, getCurrentSQLDate(user.getPassportIssue()));
+				ps.setDate(9, getCurrentSQLDate(user.getPassportExpire()));
+				ps.setString(10, user.getPassportAuthority());
+			}
+			ps.setDate(11, getCurrentSQLDate(user.getBirthday()));
+			ps.setString(12, user.getEmail());
+			ps.executeUpdate();
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
 		}
-		ps.setDate(11, getCurrentSQLDate(user.getBirthday()));
-		ps.setString(12, user.getEmail());
-		ps.executeUpdate();
-		
-		poolInstance.freeConnection(connection);
 	}
 
 	/**
 	 * Method update() updates data of user in the table
 	 *
-	 * Implements #SQL_UPDATE_USER
+	 * Implements #UPDATE_USER
 	 */
-	public void update(Object o) throws SQLException {
+	public void update(Object o){
 		User user = (User) o;
-		Connection connection = poolInstance.getConnection();
-		String query = sqlManager.getProperty(sqlManager.SQL_UPDATE_USER);
-		PreparedStatement ps = connection.prepareStatement(query);
-
-		ps.setString(1, user.getPassportNumber());
-		ps.setDate(2, getCurrentSQLDate(user.getPassportIssue()));
-		ps.setDate(3, getCurrentSQLDate(user.getPassportExpire()));
-		ps.setString(4, user.getPassportAuthority());
-		ps.setInt(5, user.getId());
-		ps.executeUpdate();
-
-		poolInstance.freeConnection(connection);
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.UPDATE_USER)){
+			ps.setString(1, user.getPassportNumber());
+			ps.setDate(2, getCurrentSQLDate(user.getPassportIssue()));
+			ps.setDate(3, getCurrentSQLDate(user.getPassportExpire()));
+			ps.setString(4, user.getPassportAuthority());
+			ps.setInt(5, user.getId());
+			ps.executeUpdate();
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -126,7 +131,6 @@ public class UserDAO extends DAO {
 
 		while (result.next()) {
 			User user = new User();
-
 			user.setId(result.getInt(COLUMN_NAME_ID));
 			user.setName(result.getString(COLUMN_NAME_NAME));
 			user.setSurname(result.getString(COLUMN_NAME_SURNAME));
@@ -157,148 +161,181 @@ public class UserDAO extends DAO {
 	/**
 	 * Method getAll() gets data about all users
 	 *
-	 * Implements #SQL_GET_ALL_USERS
+	 * Implements #GET_ALL_USERS
 	 */
-	public ArrayList<User> getAll() throws SQLException {
-		String query = sqlManager.getProperty(sqlManager.SQL_GET_ALL_USERS);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ResultSet result = ps.executeQuery();
-
-		ArrayList<User> list = getListUserFromResult(result);
-		poolInstance.freeConnection(connection);
+	public ArrayList<User> getAll() {
+		ArrayList<User> list = new ArrayList<User>();
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_ALL_USERS);
+				ResultSet result = ps.executeQuery()){
+			list = getListUserFromResult(result);
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
 		return list;
 	}
 
 	/**
 	 * Method getUser() searches user by login and password
 	 *
-	 * Implements #SQL_GET_USER
+	 * Implements #GET_USER
 	 */
-	public User getUser(String login, String password) throws SQLException {
+	public User getUser(String login, String password){
 		User user = null;
 		String pass = CoderManager.getHashCode(password);
-		String query = sqlManager.getProperty(sqlManager.SQL_GET_USER);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setString(1, login);
-		ps.setString(2, pass);
-		ResultSet result = ps.executeQuery();
-
-		ArrayList<User> list = getListUserFromResult(result);
-		if (list.size() > 0){
-			user = list.get(0);
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_USER)){
+			ps.setString(1, login);
+			ps.setString(2, pass);
+			try (ResultSet result = ps.executeQuery()) {
+				ArrayList<User> list = getListUserFromResult(result);
+				if (list.size() > 0) {
+					user = list.get(0);
+				}
+			}catch (SQLException e){
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+			}
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
 		}
-		poolInstance.freeConnection(connection);
 		return user;
 	}
 
 	/**
 	 * Method getById() searches object user by id
 	 *
-	 * Implements #SQL_GET_USER_BY_ID
+	 * Implements #GET_USER_BY_ID
 	 */
-	public User getById(int id) throws SQLException {
+	public User getById(int id){
 		User user = null;
-		String query = sqlManager.getProperty(sqlManager.SQL_GET_USER_BY_ID);
-		Connection connection = poolInstance.getConnection();
-		PreparedStatement ps = connection.prepareStatement(query);
-		ps.setInt(1, id);
-		ResultSet result = ps.executeQuery();
-
-		ArrayList<User> list = getListUserFromResult(result);
-		if (list.size() > 0){
-			user = list.get(0);
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_USER_BY_ID)){
+			ps.setInt(1, id);
+			try (ResultSet result = ps.executeQuery()) {
+				ArrayList<User> list = getListUserFromResult(result);
+				if (list.size() > 0) {
+					user = list.get(0);
+				}
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
 		}
-		poolInstance.freeConnection(connection);
 		return user;
 	}
 
 	 /**
 	  * Method checkLogin() checks for entry to the entered login
 	  *
-      * implements #SQL_CHECK_LOGIN
+      * implements #CHECK_LOGIN
       */
-  	public boolean checkLogin(String login) throws SQLException {
-    	String query =  sqlManager.getProperty(sqlManager.SQL_CHECK_LOGIN);
-        Connection connection = poolInstance.getConnection();
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setString(1, login);
-        ResultSet result = ps.executeQuery();
-        if(result.next()) {
-        	poolInstance.freeConnection(connection);
-        	return false;
-        }
-        poolInstance.freeConnection(connection);
-        return true;
+  	public boolean checkLogin(String login){
+			boolean checkResult = false;
+			try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+					PreparedStatement ps = connection.prepareStatement(ISqlQuery.CHECK_LOGIN)){
+		    ps.setString(1, login);
+    	  try (ResultSet result = ps.executeQuery()) {
+					if (!result.next()) {
+						checkResult = true;
+					}
+				} catch (SQLException e) {
+					Logger.getLogger(UserDAO.class).error(e.getMessage());
+					e.printStackTrace();
+				}
+			} catch (SQLException | IOException | PropertyVetoException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+      return checkResult;
     }
     
     /**
 	 * Method getAccess() gets the type of user access
 	 *
-     * implements #SQL_GET_ACCESS
+     * implements #GET_ACCESS
      */
-	public int getAccess(String id) throws SQLException {
-        int access = -1;
+	public int getAccess(String id) {
+    int access = -1;
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_ACCESS)){
+			ps.setInt(1, Integer.parseInt(id));
+    	try (ResultSet result = ps.executeQuery()) {
+				if (result.next()) {
+					access = result.getInt(COLUMN_NAME_ACCESS);
+				} else {
+					throw new RuntimeException("UserDAO: no such user");
+				}
+			} catch (SQLException e) {
+				Logger.getLogger(UserDAO.class).error(e.getMessage());
+				e.printStackTrace();
+			}
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
+    return access;
+  }
     
-        String query =  sqlManager.getProperty(sqlManager.SQL_SET_ACCESS);
-        Connection connection = poolInstance.getConnection();
-        PreparedStatement ps = connection.prepareStatement(query);
-
-		ps.setInt(1, Integer.parseInt(id));
-        ResultSet result = ps.executeQuery();
-        
-        if(result.next()) {
-            access = result.getInt(COLUMN_NAME_ACCESS);
-        } else {
-            throw new RuntimeException("UserDAO: no such user");
-        }
-        poolInstance.freeConnection(connection);
-        
-        return access;
-    }
-    
-    /**
+  /**
 	 * Method updateAccess() updates the type of user access
 	 *
-     * implements #SQL_UPDATE_ACCESS
-     */
-   	public void updateAccess(int id, int access) throws SQLException {
-        if(access < 0 || access > 2) {
-            throw new IllegalArgumentException("Unknown Access Level");
-        }
-        
-        String query =  sqlManager.getProperty(sqlManager.SQL_UPDATE_ACCESS);
-        Connection connection = poolInstance.getConnection();
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setInt(1, access);
-        ps.setInt(2, id);
-        ps.executeUpdate();
-      
-        poolInstance.freeConnection(connection);
+   * implements #UPDATE_ACCESS
+   */
+  public void updateAccess(int id, int access) {
+    if(access < 0 || access > 2) {
+      throw new IllegalArgumentException("Unknown Access Level");
     }
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.UPDATE_ACCESS)){
+      ps.setInt(1, access);
+     	ps.setInt(2, id);
+    	ps.executeUpdate();
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Method count() gets count of entries in the table
 	 *
-	 * Implements #SQL_COUNT_USERS
+	 * Implements #COUNT_USERS
 	 */
-	public int count() throws SQLException {
-		Connection connection = poolInstance.getConnection();
-		String query = sqlManager.getProperty(sqlManager.SQL_COUNT_USERS);
+	public int count(){
 		int count = -1;
-
-		PreparedStatement ps = connection.prepareStatement(query);
-		ResultSet result = ps.executeQuery();
-
-		if (result.next()) {
-			count = result.getInt("COUNT(*)");
+		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.COUNT_USERS);
+				ResultSet result = ps.executeQuery()){
+			if (result.next()) {
+				count = result.getInt("COUNT(*)");
+			}
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
 		}
-
-		poolInstance.freeConnection(connection);
 		return count;
 	}
 
-	public void delete(Object o) throws SQLException {
+	/**
+	 * Method delete() deletes object user from the table
+	 * Implements #DELETE_USER
+	 *
+	 * @param o
+   */
+	public void delete(Object o) {
+		User user = (User) o;
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+				PreparedStatement ps = connection.prepareStatement(ISqlQuery.DELETE_USER)) {
+			ps.setInt(1, user.getId());
+			ps.executeUpdate();
+		} catch (SQLException | PropertyVetoException | IOException e) {
+			Logger.getLogger(UserDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }

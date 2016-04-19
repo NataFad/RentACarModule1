@@ -6,9 +6,7 @@ import by.academy.it.rentacar.beans.ModelAndMark;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import by.academy.it.rentacar.enums.Transmission;
-import org.apache.log4j.Logger;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -57,11 +55,7 @@ public class ActionService {
 	public ArrayList<Fuel> getListFuel(){
 		// List of fuels
 		ArrayList<Fuel> fuelsList = new ArrayList<Fuel>();
-		try {
-			fuelsList = FuelDAO.getInstance().getAll();
-		} catch (SQLException e) {
-			Logger.getLogger(FuelDAO.class).error(e.getMessage());
-		}
+		fuelsList = FuelDAO.getInstance().getAll();
 		return fuelsList;
 	}
 
@@ -72,11 +66,7 @@ public class ActionService {
 	 */
 	public ArrayList<ModelAndMark> getListModel(){
 		ArrayList<ModelAndMark> modelList = new ArrayList<ModelAndMark>();
-		try {
-			modelList = ModelAndMarkDAO.getInstance().getAll();
-		} catch (SQLException e) {
-			Logger.getLogger(ModelAndMarkDAO.class).error(e.getMessage());
-		}
+		modelList = ModelAndMarkDAO.getInstance().getAll();
 		return modelList;
 	}
 }
