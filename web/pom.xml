@@ -9,7 +9,7 @@
     <artifactId>web</artifactId>
     <packaging>war</packaging>
 
-    <name>web</name>
+    <name>RentACar</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -43,7 +43,7 @@
     </dependencies>
 
     <build>
-        <finalName>web</finalName>
+        <finalName>RentACar</finalName>
     </build>
 
 </project>
