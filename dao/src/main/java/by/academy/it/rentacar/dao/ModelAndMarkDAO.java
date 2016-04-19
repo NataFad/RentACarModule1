@@ -77,8 +77,27 @@ public class ModelAndMarkDAO extends DAO {
 		}
 		return model;
 	}
-	 
-  /**
+
+	/**
+	 * Method add() writes object model and mark into the table
+	 * Implements #ADD_MODEL
+	 *
+	 * @param o
+	 */
+	public void add(Object o) {
+		ModelAndMark model = (ModelAndMark) o;
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+				 PreparedStatement ps = connection.prepareStatement(ISqlQuery.ADD_MODEL)){
+			ps.setString(1, model.getMark());
+			ps.setString(2, model.getModel());
+			ps.executeUpdate();
+		} catch (SQLException | IOException | PropertyVetoException e) {
+			Logger.getLogger(FuelDAO.class).error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * Method getAll() gets data about all models and marks
 	 *
    * Implements #GET_ALL_MODELS
@@ -101,25 +120,6 @@ public class ModelAndMarkDAO extends DAO {
 		}
 		return list;
   }
-
-	/**
-	 * Method add() writes object model and mark into the table
-	 * Implements #ADD_MODEL
-	 *
-	 * @param o
-	 */
-	public void add(Object o) {
-		ModelAndMark model = (ModelAndMark) o;
-		try (Connection connection = DBConnectionPool.getInstance().getConnection();
-				 PreparedStatement ps = connection.prepareStatement(ISqlQuery.ADD_MODEL)){
-			ps.setString(1, model.getMark());
-			ps.setString(2, model.getModel());
-			ps.executeUpdate();
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(FuelDAO.class).error(e.getMessage());
-			e.printStackTrace();
-		}
-	}
 
 	public void update(Object o){
 	}

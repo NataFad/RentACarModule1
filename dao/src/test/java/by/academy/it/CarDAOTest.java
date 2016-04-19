@@ -12,7 +12,9 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Unit-test class CarDAO
@@ -21,10 +23,10 @@ import java.util.ArrayList;
  */
 public class CarDAOTest {
 
-    private CarDAO carDAO;
-    private Car testCar;
-    private Car expectedCar;
-    private ArrayList<Car> carList;
+    private static CarDAO carDAO;
+    private static Car testCar;
+    private static Car expectedCar;
+    private static ArrayList<Car> carList;
 
     @Before
     public void setUp() throws Exception {
@@ -47,6 +49,10 @@ public class CarDAOTest {
     @Test
     public void addCarTest() throws Exception {
         carDAO.add(testCar);
+    }
+
+    @Test
+    public void getAllCarsTest() throws Exception {
         carList = carDAO.getAll();
         expectedCar = carList.get(carList.size()-1);
 
@@ -62,6 +68,33 @@ public class CarDAOTest {
         Assert.assertEquals("Add car: types id", testCar.getTypeId(), expectedCar.getTypeId());
 
         testCar.setId(expectedCar.getId());
+    }
+
+    @Test
+    public void SearchCarTest() throws Exception {
+        // period
+        Date fromDate = Date.valueOf("2016-02-01");
+        Date byDate = Date.valueOf("2016-02-01");
+        HashMap<String, String> filterValues = new HashMap<String, String>();
+        // Transmission
+        filterValues.put("transmission", Transmission.AUTO.toString());
+        // Fuels
+        String foreign_id = "1";
+        filterValues.put("fuelId", foreign_id);
+        // Type
+        filterValues.put("typeId", foreign_id);
+        // Rating
+        filterValues.put("ratingId", foreign_id);
+
+        carList = carDAO.searchCar(fromDate, byDate, filterValues);
+        Assert.assertNotNull(carList);
+        expectedCar = carList.get(carList.size()-1);
+
+        Assert.assertEquals("Registered car: registration number", true, testCar.getRegistrationNumber().equals(expectedCar.getRegistrationNumber()));
+        Assert.assertEquals("Registered car: price id", testCar.getPriceId(), expectedCar.getPriceId());
+        Assert.assertEquals("Registered car: cost of day", 0, testCar.getCostOfDay().compareTo(expectedCar.getCostOfDay()));
+        Assert.assertEquals("Registered car: discount", 0, testCar.getDiscount().compareTo(expectedCar.getDiscount()));
+        Assert.assertEquals("Registered car: description", testCar.getDescription(), expectedCar.getDescription());
     }
 
     @After

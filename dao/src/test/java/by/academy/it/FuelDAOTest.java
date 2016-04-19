@@ -26,19 +26,29 @@ public class FuelDAOTest {
   }
 
   @Test
-  public void addTest() throws Exception {
+  public void addFuelTest() throws Exception {
     fuelDAO.add(testFuel);
+  }
+
+  @Test
+  public void getAllFuelTest() throws Exception{
     fuelList = fuelDAO.getAll();
     expectedFuel = fuelList.get(fuelList.size()-1);
-    int countFuels = fuelDAO.count();
 
+    Assert.assertNotNull(fuelList);
     Assert.assertEquals("Add fuel: name", true, testFuel.getName().equals(expectedFuel.getName()));
-    Assert.assertEquals("Count fuels", fuelList.size(), countFuels);
     testFuel.setId(expectedFuel.getId());
   }
 
   @Test
-  public void updateTest() throws Exception{
+  public void countFuelTest() throws Exception{
+    int countFuels = fuelDAO.count();
+    fuelList = fuelDAO.getAll();
+    Assert.assertEquals("Count fuels", fuelList.size(), countFuels);
+  }
+
+  @Test
+  public void updateFuelTest() throws Exception{
     testFuel.setName("diesel+gaz");
     fuelDAO.update(testFuel);
     expectedFuel = fuelDAO.getById(testFuel.getId());

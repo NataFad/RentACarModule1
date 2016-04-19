@@ -11,7 +11,7 @@ package by.academy.it.rentacar.constants;
 public interface ISqlQuery {
 
 	// FUEL DAO
-	String GET_ALL_FUELS = "SELECT * FROM fuels order by id";
+	String GET_ALL_FUELS = "SELECT * FROM fuels ORDER BY id";
 	String ADD_FUEL = "INSERT INTO fuels (name) VALUES (?)";
 	String UPDATE_FUEL = "UPDATE fuels SET name = ? WHERE id = ?";
 	String GET_FUEL_BY_ID = "SELECT * FROM fuels WHERE id = ?";
@@ -32,7 +32,7 @@ public interface ISqlQuery {
 	String GET_USER = "SELECT * FROM users WHERE login = ? AND password = ?";
 	String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
 	String COUNT_USERS = "SELECT COUNT(*) FROM users";
-	String GET_ALL_USERS = "SELECT * FROM users order by id";
+	String GET_ALL_USERS = "SELECT * FROM users ORDER BY id";
 	String DELETE_USER = "DELETE FROM users WHERE id = ?";
 
 	// CAR DAO
@@ -43,7 +43,7 @@ public interface ISqlQuery {
 					"left join types on types.id = cars.types_id " +
 					"left join modelsandmarks on modelsandmarks.id = cars.modelsandmarks_id  " +
 					"left join fuels on fuels.id = cars.fuels_id " +
-					"order by cars.id";
+					"ORDER BY cars.id";
 	String ADD_CAR = " INSERT INTO " +
 					"cars(registrationNumber, transmission, ratings_id, types_id, modelsAndMarks_id, " +
 					"price_id, fuels_id, costOfDay, discount, description) " +
@@ -52,21 +52,21 @@ public interface ISqlQuery {
 	
 	// RATING DAO
 	String GET_RATING_BY_ID = "SELECT * FROM ratings WHERE id = ?";
-	String GET_ALL_RATINGS = "SELECT * FROM ratings order by id";
+	String GET_ALL_RATINGS = "SELECT * FROM ratings ORDER BY id";
 	String ADD_RATING = "INSERT INTO ratings (name, ratecost) VALUES (?,?)";
 	String DELETE_RATING = "DELETE FROM ratings WHERE id = ?";
 
 	// Type DAO
 	String GET_TYPE_BY_ID = "SELECT * FROM types WHERE id = ?";
-	String GET_ALL_TYPES = "SELECT * FROM types order by id";
+	String GET_ALL_TYPES = "SELECT * FROM types ORDER BY id";
 	String ADD_TYPE = "INSERT INTO types (name, ratecost, ratediscount) VALUES (?,?,?)";
 	String DELETE_TYPE = "DELETE FROM types WHERE id = ?";
 
 	// ModelAndMark DAO
-	String GET_MODEL_BY_ID = "SELECT * FROM modelsAndMarks WHERE id = ?";
-	String GET_ALL_MODELS = "SELECT * FROM modelsAndMarks order by id";
-	String ADD_MODEL = "INSERT INTO modelsAndMarks (mark, model) VALUES (?,?)";
-	String DELETE_MODEL = "DELETE FROM modelsAndMarks WHERE id = ?";
+	String GET_MODEL_BY_ID = "SELECT * FROM modelsandmarks WHERE id = ?";
+	String GET_ALL_MODELS = "SELECT * FROM modelsandmarks ORDER BY id";
+	String ADD_MODEL = "INSERT INTO modelsandmarks (mark, model) VALUES (?,?)";
+	String DELETE_MODEL = "DELETE FROM modelsandmarks WHERE id = ?";
 
 	// Price DAO
 	String GET_PRICE_BY_TRANSMISSION_AND_FUEL = "SELECT * FROM price WHERE transmission = ? AND fuels_id = ?";

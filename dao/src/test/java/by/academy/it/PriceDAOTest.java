@@ -20,24 +20,22 @@ import java.util.ArrayList;
  */
 public class PriceDAOTest {
 
-  private static FuelDAO fuelDAO;
+  private static FuelDAO fuelDAO = FuelDAO.getInstance();
   private static Fuel testFuel;
   private static Price testPrice;
   private static Price expectedPrice;
-  private static PriceDAO priceDAO;
+  private static PriceDAO priceDAO = PriceDAO.getInstance();
 
   @BeforeClass
   public static void setUp() throws Exception {
     // add new fuel
-    fuelDAO  = FuelDAO.getInstance();
     testFuel = new Fuel();
-    testFuel.setName("test");
+    testFuel.setName("new test");
     fuelDAO.add(testFuel);
     ArrayList<Fuel>  fuelList = fuelDAO.getAll();
     Fuel expectedFuel = fuelList.get(fuelList.size()-1);
     testFuel.setId(expectedFuel.getId());
-    // creature new price
-    priceDAO = PriceDAO.getInstance();
+    // creature new
     testPrice = new Price();
     testPrice.setName("test");
     testPrice.setTransmission(Transmission.AUTO);
@@ -47,12 +45,9 @@ public class PriceDAOTest {
   }
 
   @Test
-  public void addTest() throws Exception {
+  public void addPriceTest() throws Exception {
     priceDAO.add(testPrice);
-  }
 
-  @Test
-  public void getByTransmissionAndFuelTest() throws Exception {
     expectedPrice = priceDAO.getByTransmissionAndFuel(Transmission.AUTO, testFuel.getId());
     Assert.assertEquals("Add price: name", true, testPrice.getName().equals(expectedPrice.getName()));
     Assert.assertEquals("Add price: transmission", testPrice.getTransmission(), expectedPrice.getTransmission());

@@ -45,13 +45,13 @@ public class CarServiceTest {
   }
 
   @Test
-  public void register() throws Exception {
+  public void registerCarTest() throws Exception {
     int success = carService.register(testCar);
     Assert.assertEquals("Registered the car", 1, success);
   }
 
   @Test
-  public void getAllCars() throws Exception {
+  public void getAllCarsServiceTest() throws Exception {
     ArrayList<Car> carsList = carService.getAllCars();
     Assert.assertNotNull(carsList);
     Car car = carsList.get(carsList.size()-1);
@@ -59,7 +59,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void getSearchCar() throws Exception {
+  public void getSearchCarServiceTest() throws Exception {
     // period
     Date fromDate = Date.valueOf("2016-01-01");
     Date byDate = Date.valueOf("2016-01-01");

@@ -27,7 +27,7 @@ public class ActionServiceTest {
   }
 
   @Test
-  public void getListFuel() throws Exception {
+  public void getListFuelTest() throws Exception {
     ArrayList<Fuel> fuelsListTest = actionService.getListFuel();
     ArrayList<Fuel> fuelsListExpected = FuelDAO.getInstance().getAll();
     Assert.assertNotNull(fuelsListTest);
@@ -35,7 +35,7 @@ public class ActionServiceTest {
   }
 
   @Test
-  public void getListModel() throws Exception {
+  public void getListModelTest() throws Exception {
     ArrayList<ModelAndMark> modelsListTest = actionService.getListModel();
     ArrayList<ModelAndMark> modelsListExpected = ModelAndMarkDAO.getInstance().getAll();
     Assert.assertNotNull(modelsListTest);
