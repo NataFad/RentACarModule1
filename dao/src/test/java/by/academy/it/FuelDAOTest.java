@@ -1,8 +1,12 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.beans.Fuel;
+import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.dao.FuelDAO;
-import org.junit.*;
+import by.academy.it.rentacar.entity.Fuel;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
@@ -27,12 +31,12 @@ public class FuelDAOTest {
 
   @Test
   public void addFuelTest() throws Exception {
-    fuelDAO.add(testFuel);
+    fuelDAO.saveOrUpdate(testFuel);
   }
 
   @Test
   public void getAllFuelTest() throws Exception{
-    fuelList = fuelDAO.getAll();
+    fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
     expectedFuel = fuelList.get(fuelList.size()-1);
 
     Assert.assertNotNull(fuelList);
@@ -42,22 +46,23 @@ public class FuelDAOTest {
 
   @Test
   public void countFuelTest() throws Exception{
-    int countFuels = fuelDAO.count();
-    fuelList = fuelDAO.getAll();
+    long countFuels = fuelDAO.count();
+    fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
     Assert.assertEquals("Count fuels", fuelList.size(), countFuels);
   }
 
   @Test
   public void updateFuelTest() throws Exception{
     testFuel.setName("diesel+gaz");
-    fuelDAO.update(testFuel);
-    expectedFuel = fuelDAO.getById(testFuel.getId());
+    fuelDAO.saveOrUpdate(testFuel);
+    expectedFuel = fuelDAO.get(testFuel.getId());
     Assert.assertEquals("Update fuel", true, testFuel.getName().equals(expectedFuel.getName()));
   }
 
   @AfterClass
   public static void tearDown() throws Exception {
     fuelDAO.delete(testFuel);
+    HibernateUtil.getInstance().closeSession();
   }
 }
 

@@ -1,8 +1,8 @@
 package by.academy.it;
 
 import by.academy.it.rentacar.actions.PriceService;
-import by.academy.it.rentacar.beans.Fuel;
-import by.academy.it.rentacar.beans.Price;
+import by.academy.it.rentacar.entity.Fuel;
+import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.enums.Transmission;
@@ -34,8 +34,8 @@ public class PriceServiceTest {
     fuelDAO  = FuelDAO.getInstance();
     testFuel = new Fuel();
     testFuel.setName("new test");
-    fuelDAO.add(testFuel);
-    ArrayList<Fuel>  fuelList = fuelDAO.getAll();
+    fuelDAO.saveOrUpdate(testFuel);
+    ArrayList<Fuel>  fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
     Fuel expectedFuel = fuelList.get(fuelList.size()-1);
     testFuel.setId(expectedFuel.getId());
     // creature new price

@@ -2,7 +2,7 @@ package by.academy.it.rentacar.actions.user;
 
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.actions.UserService;
-import by.academy.it.rentacar.beans.User;
+import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 

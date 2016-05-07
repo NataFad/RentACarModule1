@@ -3,9 +3,8 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.beans.Car;
 import by.academy.it.rentacar.connectionpool.DBConnectionPool;
-import by.academy.it.rentacar.constants.ISqlQuery;
+import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.enums.Transmission;
 import org.apache.log4j.Logger;
 
@@ -26,7 +25,7 @@ import java.util.HashMap;
  * @since 2016-04
  * 
  */
-public class CarDAO extends DAO {
+public class CarDAO extends DAO<Car> {
 
 	private volatile static CarDAO instance;
 
@@ -60,33 +59,6 @@ public class CarDAO extends DAO {
 			}
 		}
 		return instance;
-	}
-
-	/**
-	 * Method add() writes object car in the table
-	 *
-	 * Implements #ADD_CAR
-	 */
-	public void add(Object o){
-		Car car = (Car) o;
-		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
-			PreparedStatement	ps = connection.prepareStatement(ISqlQuery.ADD_CAR)){
-		
-			ps.setString(1, car.getRegistrationNumber());
-			ps.setString(2, car.getTransmission().value().toLowerCase());
-			ps.setInt(3, car.getRatingId());
-			ps.setInt(4, car.getTypeId());
-			ps.setInt(5, car.getModelAndMarkId());
-			ps.setInt(6, car.getPriceId());
-			ps.setInt(7, car.getFuelId());
-			ps.setBigDecimal(8, car.getCostOfDay());
-			ps.setBigDecimal(9, car.getDiscount());
-			ps.setString(10, car.getDescription());
-			ps.executeUpdate();
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error(e.getMessage());
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -127,24 +99,6 @@ public class CarDAO extends DAO {
 	}
 
 	/**
-	 * Method getAllCars() reads from the table Car and add in the list
-	 *
-	 * Implements #GET_ALL_CARS
-	 */
-	public ArrayList<Car> getAll() {
-		ArrayList<Car> list = new ArrayList<Car>();
-		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
-			PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_ALL_CARS);
-			ResultSet result = ps.executeQuery()){
-			list = getListCarFromResult(result, 1);
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error(e.getMessage());
-			e.printStackTrace();
-		}
-		return list;
-	}
-
-	/**
 	 * Method searchCar()
 	 * performs a search based on the rental dates and defined filters
 	 *
@@ -154,7 +108,7 @@ public class CarDAO extends DAO {
 	 * @return
 	 * @throws SQLException
      */
-	public ArrayList<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues){
+	public ArrayList<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
 		// query text writing
 		String query = "SELECT cars.*, ratings.name as rating, fuels.name as fuel, types.name as type_name, "
 				+ " modelsandmarks.mark as marka, modelsandmarks.model as model FROM cars "
@@ -183,37 +137,16 @@ public class CarDAO extends DAO {
 		query = query + " ORDER BY cars.id";
 
 		ArrayList<Car> list = new ArrayList<Car>();
-		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
-			PreparedStatement ps = connection.prepareStatement(query);
-			ResultSet result = ps.executeQuery()){
-				long difference = byDate.getTime() - fromDate.getTime();
-				int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
-				list = getListCarFromResult(result, days);
+		try (Connection connection = DBConnectionPool.getInstance().getConnection();
+			 PreparedStatement ps = connection.prepareStatement(query);
+			 ResultSet result = ps.executeQuery()) {
+			long difference = byDate.getTime() - fromDate.getTime();
+			int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
+			list = getListCarFromResult(result, days);
 		} catch (SQLException | IOException | PropertyVetoException e) {
 			Logger.getLogger(CarDAO.class).error(e.getMessage());
 			e.printStackTrace();
 		}
 		return list;
-	}
-
-	public void update(Object o) {
-	}
-
-	/**
-	 * Method delete() deletes object car from the table
-	 * Implements #DELETE_CAR
-	 *
-	 * @param o
-   */
-	public void delete(Object o) {
-		Car car = (Car) o;
-		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
-			PreparedStatement ps = connection.prepareStatement(ISqlQuery.DELETE_CAR)){
-				ps.setInt(1, car.getId());
-				ps.executeUpdate();
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error(e.getMessage());
-			e.printStackTrace();
-		}
 	}
 }

@@ -5,7 +5,7 @@ package by.academy.it.rentacar.actions.car;
 
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.actions.CarService;
-import by.academy.it.rentacar.beans.Car;
+import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;

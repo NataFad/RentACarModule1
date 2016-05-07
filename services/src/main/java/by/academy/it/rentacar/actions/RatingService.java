@@ -1,7 +1,7 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.beans.Rating;
+import by.academy.it.rentacar.entity.Rating;
 import by.academy.it.rentacar.dao.RatingDAO;
 
 import java.util.ArrayList;

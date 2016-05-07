@@ -10,15 +10,6 @@ package by.academy.it.rentacar.constants;
  */
 public interface ISqlQuery {
 
-	// FUEL DAO
-	String GET_ALL_FUELS = "SELECT * FROM fuels ORDER BY id";
-	String ADD_FUEL = "INSERT INTO fuels (name) VALUES (?)";
-	String UPDATE_FUEL = "UPDATE fuels SET name = ? WHERE id = ?";
-	String GET_FUEL_BY_ID = "SELECT * FROM fuels WHERE id = ?";
-	String SEARCH_FUEL = "SELECT * FROM fuels WHERE name LIKE ?";
-	String COUNT_FUELS = "SELECT COUNT(*) FROM fuels";
-	String DELETE_FUEL = "DELETE FROM fuels WHERE id = ?";
-
 	// USER DAO
 	String ADD_USER = "INSERT INTO users(name, surname, login, password, access, phone, passportNumber, " +
 					"passportIssue, passportExpire, passportAuthority, birthday, email) " +

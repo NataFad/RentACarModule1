@@ -3,7 +3,7 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.beans.Rating;
+import by.academy.it.rentacar.entity.Rating;
 import by.academy.it.rentacar.connectionpool.DBConnectionPool;
 import by.academy.it.rentacar.constants.ISqlQuery;
 import org.apache.log4j.Logger;

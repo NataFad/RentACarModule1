@@ -1,6 +1,6 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.beans.ModelAndMark;
+import by.academy.it.rentacar.entity.ModelAndMark;
 import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import org.junit.*;
 

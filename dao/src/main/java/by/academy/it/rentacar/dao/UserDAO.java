@@ -3,7 +3,7 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.beans.User;
+import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.connectionpool.DBConnectionPool;
 import by.academy.it.rentacar.constants.ISqlQuery;
 import by.academy.it.rentacar.enums.TypeUser;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package by.academy.it.rentacar.beans;
+package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.Transmission;
 

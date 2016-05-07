@@ -1,7 +1,7 @@
 /**
  * 
  */
-package by.academy.it.rentacar.beans;
+package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.Transmission;
 
@@ -17,6 +17,7 @@ import java.math.BigDecimal;
  *
  */
 public class Car {
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String registrationNumber;
 	private Transmission transmission;

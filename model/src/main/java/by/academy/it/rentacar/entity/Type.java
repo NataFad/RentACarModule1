@@ -1,4 +1,4 @@
-package by.academy.it.rentacar.beans;
+package by.academy.it.rentacar.entity;
 
 import java.math.BigDecimal;
 

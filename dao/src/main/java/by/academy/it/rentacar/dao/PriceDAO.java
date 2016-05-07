@@ -3,7 +3,7 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.beans.Price;
+import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.connectionpool.DBConnectionPool;
 import by.academy.it.rentacar.constants.ISqlQuery;
 import by.academy.it.rentacar.enums.Transmission;

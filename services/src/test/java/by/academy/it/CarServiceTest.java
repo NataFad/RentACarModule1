@@ -1,8 +1,8 @@
 package by.academy.it;
 
 import by.academy.it.rentacar.actions.CarService;
-import by.academy.it.rentacar.beans.Car;
-import by.academy.it.rentacar.beans.Price;
+import by.academy.it.rentacar.entity.Car;
+import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.dao.CarDAO;
 import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.enums.Transmission;

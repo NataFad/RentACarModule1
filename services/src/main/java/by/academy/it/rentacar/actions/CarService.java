@@ -1,8 +1,9 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.beans.Car;
+import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.dao.CarDAO;
+import by.academy.it.rentacar.exceptions.DAOException;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -43,8 +44,12 @@ public class CarService {
      */
     public int register(Car car){
       int successReg = 1;
-      CarDAO.getInstance().add(car);
-      return successReg;
+        try {
+            CarDAO.getInstance().saveOrUpdate(car);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+        return successReg;
     }
 
     /**
@@ -53,7 +58,12 @@ public class CarService {
      * @return
      */
     public ArrayList<Car> getAllCars(){
-        ArrayList<Car> carList = CarDAO.getInstance().getAll();
+        ArrayList<Car> carList = null;
+        try {
+            carList = (ArrayList<Car>) CarDAO.getInstance().getAll();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return carList;
     }
 

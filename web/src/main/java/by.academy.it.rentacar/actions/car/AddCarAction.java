@@ -4,10 +4,10 @@
 package by.academy.it.rentacar.actions.car;
 
 import by.academy.it.rentacar.actions.*;
-import by.academy.it.rentacar.beans.Car;
-import by.academy.it.rentacar.beans.Price;
-import by.academy.it.rentacar.beans.Rating;
-import by.academy.it.rentacar.beans.Type;
+import by.academy.it.rentacar.entity.Car;
+import by.academy.it.rentacar.entity.Price;
+import by.academy.it.rentacar.entity.Rating;
+import by.academy.it.rentacar.entity.Type;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 

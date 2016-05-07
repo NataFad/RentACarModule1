@@ -3,7 +3,7 @@
  */
 package by.academy.it.rentacar.actions;
 
-import by.academy.it.rentacar.beans.User;
+import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.dao.UserDAO;
 import org.apache.log4j.Logger;
 
