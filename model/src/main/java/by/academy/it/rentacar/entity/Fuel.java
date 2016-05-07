@@ -36,7 +36,7 @@ public class Fuel implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", length = 11)
     public int getId() {
         return id;
     }
@@ -51,7 +51,7 @@ public class Fuel implements Serializable {
     /**
      * @return the name
      */
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 45)
     public String getName() {
         return name;
     }

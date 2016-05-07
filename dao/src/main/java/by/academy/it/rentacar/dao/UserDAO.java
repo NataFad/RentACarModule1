@@ -306,7 +306,7 @@ public class UserDAO extends DAO {
 	 *
 	 * Implements #COUNT_USERS
 	 */
-	public int count(){
+	public long count(){
 		int count = -1;
 		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
 				PreparedStatement ps = connection.prepareStatement(ISqlQuery.COUNT_USERS);

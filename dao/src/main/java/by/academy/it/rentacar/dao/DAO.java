@@ -7,9 +7,11 @@ import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.DBSqlManager;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -164,6 +166,21 @@ public abstract class DAO<T> implements IDAO<T> {
             throw new DAOException(e.getMessage());
         }
         return results;
+    }
+
+    /**
+     * Method count() gets count of entries in the table
+     * <p>
+     * Implements #COUNT_FUELS
+     */
+    public long count() {
+        Long count = -1L;
+        Session session = util.getSession();
+        Criteria criteria = session.createCriteria(getPersistentClass());
+        criteria.setProjection(Projections.rowCount());
+        List results = criteria.list();
+        count = (Long) results.get(0);
+        return count;
     }
 
     /**

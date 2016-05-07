@@ -1,9 +1,7 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Fuel;
-import by.academy.it.rentacar.exceptions.DAOException;
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -43,47 +41,12 @@ public class FuelDAO extends DAO<Fuel>{
      * Method searchByName() searches all fuels by name
      *
      */
-    public List<Fuel> searchByName(String q) {
-        String hql = "SELECT F FROM Fuel as F WHERE F.name LIKE %" + q.trim() + "%";
+    public List<Fuel> searchByName(String nameSearch) {
+        String hql = "SELECT F FROM Fuel as F WHERE F.name = :nameFuel";
         Session session = util.getSession();
         Query query = session.createQuery(hql);
+        query.setParameter("nameFuel", nameSearch);
         List<Fuel> list = (ArrayList<Fuel>) query.list();
         return list;
-    }
-
-    /**
-     * Method count() gets count of entries in the table
-     * <p>
-     * Implements #COUNT_FUELS
-     */
-    public long count() {
-        Long count = -1L;
-        Session session = util.getSession();
-        Query query = session.createQuery("SELECT COUNT(*) FROM Fuel");
-        count = (Long) query.uniqueResult();
-        return count;
-    }
-
-    /**
-     * Method getAll() gets all objects T from the table
-     *
-     * @return results
-     */
-    public List<Fuel> getAll() throws DAOException {
-        List<Fuel> results = null;
-        try {
-            Session session = util.getSession();
-            transaction = session.beginTransaction();
-            String hql = "FROM Fuel";
-            Query query = session.createQuery(hql);
-            results = (ArrayList) query.list();
-            transaction.commit();
-            log.info("List:" + results);
-        } catch (HibernateException e) {
-            log.error("Error save or update " + Fuel.class + " in DAO " + e);
-            transaction.rollback();
-            throw new DAOException(e.getMessage());
-        }
-        return results;
     }
 }

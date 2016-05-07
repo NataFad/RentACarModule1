@@ -12,57 +12,75 @@ import java.util.ArrayList;
 
 /**
  * Unit-test class FuelDAO
- *
+ * <p>
  * Created by Nata on 12.04.2016.
  */
 public class FuelDAOTest {
 
-  private static FuelDAO fuelDAO;
-  private static Fuel testFuel;
-  private static Fuel expectedFuel;
-  private static ArrayList<Fuel> fuelList;
+    private static FuelDAO fuelDAO;
+    private static Fuel testFuel;
+    private static Fuel expectedFuel;
+    private static ArrayList<Fuel> fuelList;
 
-  @BeforeClass
-  public static void setUp() throws Exception {
-    fuelDAO  = FuelDAO.getInstance();
-    testFuel = new Fuel();
-    testFuel.setName("test");
-  }
+    @BeforeClass
+    public static void setUp() throws Exception {
+        fuelDAO = FuelDAO.getInstance();
+        testFuel = new Fuel();
+        testFuel.setName("test");
+    }
 
-  @Test
-  public void addFuelTest() throws Exception {
-    fuelDAO.saveOrUpdate(testFuel);
-  }
+    @Test
+    public void testFuelDAO() throws Exception {
+        addFuelTest();
+        getAllFuelTest();
+        countFuelTest();
+        updateFuelTest();
+        searchByNameTest();
+        deleteFuelTest();
+    }
 
-  @Test
-  public void getAllFuelTest() throws Exception{
-    fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
-    expectedFuel = fuelList.get(fuelList.size()-1);
+    private void addFuelTest() throws Exception {
+        fuelDAO.saveOrUpdate(testFuel);
+    }
 
-    Assert.assertNotNull(fuelList);
-    Assert.assertEquals("Add fuel: name", true, testFuel.getName().equals(expectedFuel.getName()));
-    testFuel.setId(expectedFuel.getId());
-  }
+    private void getAllFuelTest() throws Exception {
+        fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
+        expectedFuel = fuelList.get(fuelList.size() - 1);
 
-  @Test
-  public void countFuelTest() throws Exception{
-    long countFuels = fuelDAO.count();
-    fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
-    Assert.assertEquals("Count fuels", fuelList.size(), countFuels);
-  }
+        Assert.assertNotNull(fuelList);
+        Assert.assertEquals("Add fuel: name", true, testFuel.getName().equals(expectedFuel.getName()));
+        testFuel.setId(expectedFuel.getId());
+    }
 
-  @Test
-  public void updateFuelTest() throws Exception{
-    testFuel.setName("diesel+gaz");
-    fuelDAO.saveOrUpdate(testFuel);
-    expectedFuel = fuelDAO.get(testFuel.getId());
-    Assert.assertEquals("Update fuel", true, testFuel.getName().equals(expectedFuel.getName()));
-  }
+    private void countFuelTest() throws Exception {
+        long countFuels = fuelDAO.count();
+        fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
+        Assert.assertEquals("Count fuels", fuelList.size(), countFuels);
+    }
 
-  @AfterClass
-  public static void tearDown() throws Exception {
-    fuelDAO.delete(testFuel);
-    HibernateUtil.getInstance().closeSession();
-  }
+    private void updateFuelTest() throws Exception {
+        testFuel.setName("diesel+gaz");
+        fuelDAO.saveOrUpdate(testFuel);
+        expectedFuel = fuelDAO.get(testFuel.getId());
+        Assert.assertEquals("Update fuel", true, testFuel.getName().equals(expectedFuel.getName()));
+    }
+
+    private void searchByNameTest() throws Exception {
+        fuelList = (ArrayList<Fuel>) fuelDAO.searchByName("diesel+gaz");
+        Assert.assertFalse(fuelList.isEmpty());
+
+        expectedFuel = fuelList.get(0);
+        Assert.assertNotNull(expectedFuel);
+        Assert.assertEquals(expectedFuel, testFuel);
+    }
+
+    private void deleteFuelTest() throws Exception {
+        fuelDAO.delete(testFuel);
+    }
+
+    @AfterClass
+    public static void tearDown() throws Exception {
+        HibernateUtil.getInstance().closeSession();
+    }
 }
 

@@ -25,4 +25,6 @@ public interface IDAO<T> {
     void delete(T t) throws DAOException;
 
     List<T> getAll() throws DAOException;
+
+    long count() throws DAOException;
 }
