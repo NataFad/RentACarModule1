@@ -70,8 +70,12 @@ public class ActionService {
 	 * @return ArrayList<ModelAndMark>
 	 */
 	public ArrayList<ModelAndMark> getListModel(){
-		ArrayList<ModelAndMark> modelList = new ArrayList<ModelAndMark>();
-		modelList = ModelAndMarkDAO.getInstance().getAll();
+		ArrayList<ModelAndMark> modelList = null;
+		try {
+			modelList = (ArrayList<ModelAndMark>) ModelAndMarkDAO.getInstance().getAll();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 		return modelList;
 	}
 }
