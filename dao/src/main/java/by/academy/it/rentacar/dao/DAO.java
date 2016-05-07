@@ -12,6 +12,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -34,7 +35,7 @@ public abstract class DAO<T> implements IDAO<T> {
     }
 
     private static Logger log = Logger.getLogger(DAO.class);
-    protected static HibernateUtil util = HibernateUtil.getInstance();
+    protected static Session session = HibernateUtil.getInstance().getSession();
     protected Transaction transaction = null;
 
     /**
@@ -64,16 +65,16 @@ public abstract class DAO<T> implements IDAO<T> {
     /**
      * Method saveOrUpdate() saves or updates object T from the table
      *
-     * @param t
+     * @param entity
      */
-    public void saveOrUpdate(T t) throws DAOException{
+    public void saveOrUpdate(T entity) throws DAOException{
         try {
-            Session session = util.getSession();
             transaction = session.beginTransaction();
-            session.saveOrUpdate(t);
-            log.info("saveOrUpdate(t):" + t);
+            session.saveOrUpdate(entity);
+            log.info("saveOrUpdate(entity):" + entity);
+            session.flush();
             transaction.commit();
-            log.info("Save or update (commit):" + t);
+            log.info("Save or update (commit):" + entity);
         } catch (HibernateException e) {
             log.error("Error save or update " + getPersistentClass() + " in DAO " + e);
             transaction.rollback();
@@ -85,39 +86,38 @@ public abstract class DAO<T> implements IDAO<T> {
      * Method get() gets the object T by id from the table
      *
      * @param id
-     * @return t
+     * @return entity
      */
     public T get(Serializable id) throws DAOException {
         log.info("Get class by id:" + id);
-        T t = null;
+        T entity = null;
         try {
-            Session session = util.getSession();
             transaction = session.beginTransaction();
-            t = (T) session.get(getPersistentClass(), id);
+            entity = (T) session.get(getPersistentClass(), id);
+            session.flush();
             transaction.commit();
-            log.info("get clazz:" + t);
+            log.info("get clazz:" + entity);
         } catch (HibernateException e) {
             transaction.rollback();
             log.error("Error get " + getPersistentClass() + " in DAO " + e);
             throw new DAOException(e.getMessage());
         }
-        return t;
+        return entity;
     }
 
     /**
      * Method load() gets the object T by id from the table
      *
      * @param id
-     * @return t
+     * @return entity
      */
     public T load(Serializable id) throws DAOException {
         log.info("Load class by id:" + id);
-        T t = null;
+        T entity = null;
         try {
-            Session session = util.getSession();
             transaction = session.beginTransaction();
-            t = (T) session.load(getPersistentClass(), id);
-            log.info("load() clazz:" + t);
+            entity = (T) session.load(getPersistentClass(), id);
+            log.info("load() clazz:" + entity);
             session.isDirty();
             transaction.commit();
         } catch (HibernateException e) {
@@ -125,21 +125,21 @@ public abstract class DAO<T> implements IDAO<T> {
             transaction.rollback();
             throw new DAOException(e.getMessage());
         }
-        return t;
+        return entity;
     }
 
     /**
      * Method delete() deletes object T from the table
      *
-     * @param t
+     * @param entity
      */
-    public void delete(T t) throws DAOException {
+    public void delete(T entity) throws DAOException {
         try {
-            Session session = util.getSession();
             transaction = session.beginTransaction();
-            session.delete(t);
+            session.delete(entity);
+            session.flush();
             transaction.commit();
-            log.info("Delete:" + t);
+            log.info("Delete:" + entity);
         } catch (HibernateException e) {
             log.error("Error save or update " + getPersistentClass() + " in DAO " + e);
             transaction.rollback();
@@ -155,9 +155,8 @@ public abstract class DAO<T> implements IDAO<T> {
     public List<T> getAll() throws DAOException {
         List<T> results = null;
         try {
-            Session session = util.getSession();
             transaction = session.beginTransaction();
-            results = (ArrayList) session.createCriteria(getPersistentClass()).list();
+            results = (ArrayList) createEntityCriteria().list();
             transaction.commit();
             log.info("List:" + results);
         } catch (HibernateException e) {
@@ -169,18 +168,31 @@ public abstract class DAO<T> implements IDAO<T> {
     }
 
     /**
+     * Method getByKey() searches by the value of the key
+     *
+     */
+    public T getByKey(String key, Serializable value){
+        return (T) createEntityCriteria().add(Restrictions.eq(key, value)).uniqueResult();
+    }
+
+    /**
      * Method count() gets count of entries in the table
      * <p>
-     * Implements #COUNT_FUELS
      */
     public long count() {
         Long count = -1L;
-        Session session = util.getSession();
-        Criteria criteria = session.createCriteria(getPersistentClass());
-        criteria.setProjection(Projections.rowCount());
-        List results = criteria.list();
+        List results = createEntityCriteria().setProjection(Projections.rowCount()).list();
         count = (Long) results.get(0);
         return count;
+    }
+
+    /**
+     * Method getPersistentClass() returns the name ot the parametrized type
+     *
+     * @return results
+     */
+    protected Criteria createEntityCriteria(){
+        return session.createCriteria(getPersistentClass());
     }
 
     /**

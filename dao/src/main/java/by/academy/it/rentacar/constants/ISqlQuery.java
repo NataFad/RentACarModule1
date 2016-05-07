@@ -47,18 +47,6 @@ public interface ISqlQuery {
 	String ADD_RATING = "INSERT INTO ratings (name, ratecost) VALUES (?,?)";
 	String DELETE_RATING = "DELETE FROM ratings WHERE id = ?";
 
-	// Type DAO
-	String GET_TYPE_BY_ID = "SELECT * FROM types WHERE id = ?";
-	String GET_ALL_TYPES = "SELECT * FROM types ORDER BY id";
-	String ADD_TYPE = "INSERT INTO types (name, ratecost, ratediscount) VALUES (?,?,?)";
-	String DELETE_TYPE = "DELETE FROM types WHERE id = ?";
-
-	// ModelAndMark DAO
-	String GET_MODEL_BY_ID = "SELECT * FROM modelsandmarks WHERE id = ?";
-	String GET_ALL_MODELS = "SELECT * FROM modelsandmarks ORDER BY id";
-	String ADD_MODEL = "INSERT INTO modelsandmarks (mark, model) VALUES (?,?)";
-	String DELETE_MODEL = "DELETE FROM modelsandmarks WHERE id = ?";
-
 	// Price DAO
 	String GET_PRICE_BY_TRANSMISSION_AND_FUEL = "SELECT * FROM price WHERE transmission = ? AND fuels_id = ?";
 	String ADD_PRICE = "INSERT INTO price (name, transmission, Fuels_id, costofday, discount) VALUES (?,?,?,?,?)";

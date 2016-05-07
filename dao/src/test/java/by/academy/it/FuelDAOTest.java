@@ -14,6 +14,10 @@ import java.util.ArrayList;
  * Unit-test class FuelDAO
  * <p>
  * Created by Nata on 12.04.2016.
+ *
+ * @author Fadeeva Natallia
+ * @version 1.2
+ * @since 2016-05
  */
 public class FuelDAOTest {
 
@@ -49,7 +53,6 @@ public class FuelDAOTest {
 
         Assert.assertNotNull(fuelList);
         Assert.assertEquals("Add fuel: name", true, testFuel.getName().equals(expectedFuel.getName()));
-        testFuel.setId(expectedFuel.getId());
     }
 
     private void countFuelTest() throws Exception {

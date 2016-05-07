@@ -3,6 +3,7 @@
  */
 package by.academy.it.rentacar.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**Class Bill
@@ -15,7 +16,8 @@ import java.math.BigDecimal;
  * @since 2016-04
  *
  */
-public class Bill {
+public class Bill implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private java.sql.Date dateBill;
 	private int orderId;

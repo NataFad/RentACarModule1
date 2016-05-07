@@ -4,17 +4,19 @@
 package by.academy.it.rentacar.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Class ModelAndMark: id, model, mark
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  */
 @Entity
 @Table(name = "modelsandmarks")
-public class ModelAndMark {
+public class ModelAndMark implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private String mark;
     private String model;

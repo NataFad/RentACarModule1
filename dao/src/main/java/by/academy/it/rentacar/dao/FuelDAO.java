@@ -1,9 +1,7 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Fuel;
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
-import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,6 @@ import java.util.List;
 public class FuelDAO extends DAO<Fuel>{
 
     private volatile static FuelDAO instance;
-    private static Logger log = Logger.getLogger(FuelDAO.class);
 
     private FuelDAO() {
         super();
@@ -43,7 +40,6 @@ public class FuelDAO extends DAO<Fuel>{
      */
     public List<Fuel> searchByName(String nameSearch) {
         String hql = "SELECT F FROM Fuel as F WHERE F.name = :nameFuel";
-        Session session = util.getSession();
         Query query = session.createQuery(hql);
         query.setParameter("nameFuel", nameSearch);
         List<Fuel> list = (ArrayList<Fuel>) query.list();

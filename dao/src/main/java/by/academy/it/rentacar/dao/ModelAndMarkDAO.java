@@ -3,21 +3,7 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.connectionpool.DBConnectionPool;
-import by.academy.it.rentacar.constants.ISqlQuery;
 import by.academy.it.rentacar.entity.ModelAndMark;
-import org.apache.log4j.Logger;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class ModelAndMarkDAO
@@ -26,17 +12,13 @@ import java.util.List;
  * table ModelsAndMarks.
  * 
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  * 
  */
 public class ModelAndMarkDAO extends DAO<ModelAndMark>{
 
 	private volatile static ModelAndMarkDAO instance;
-
-	private final String COLUMN_NAME_ID = "id";
-	private final String COLUMN_NAME_MARK = "mark";
-	private final String COLUMN_NAME_MODEL = "model";
 
 	private ModelAndMarkDAO() {
 		super();
@@ -56,18 +38,8 @@ public class ModelAndMarkDAO extends DAO<ModelAndMark>{
 	/**
 	 * Method getById() searches object model and mark by id
 	 *
-	 * Implements #GET_MODEL_BY_ID
 	 */
 	public ModelAndMark getById(int id){
-		ModelAndMark model = null;
-		String hql = "SELECT MAM FROM ModelAndMark as MAM WHERE MAM.id = :modelId";
-		Session session = util.getSession();
-		Query query = session.createQuery(hql);
-		query.setParameter("modelId", id);
-		List<ModelAndMark> result = (ArrayList<ModelAndMark>) query.list();
-		if (!result.isEmpty()) {
-			model = result.get(0);
-		}
-		return model;
+		return getByKey("id", id);
 	}
 }

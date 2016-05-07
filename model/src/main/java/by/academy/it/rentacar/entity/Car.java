@@ -5,6 +5,7 @@ package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.Transmission;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
  * @since 2016-04
  *
  */
-public class Car {
+public class Car implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String registrationNumber;

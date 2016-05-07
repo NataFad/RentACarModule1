@@ -15,6 +15,10 @@ import java.util.List;
  * Unit-test class ModelAndMarkDAO
  * <p>
  * Created by Nata on 18.04.2016.
+ *
+ * @author Fadeeva Natallia
+ * @version 1.2
+ * @since 2016-05
  */
 public class ModelAndMarkDAOTest {
 
@@ -46,8 +50,6 @@ public class ModelAndMarkDAOTest {
 
         Assert.assertEquals("Add model and mark: mark", true, testModel.getMark().equals(expectedModel.getMark()));
         Assert.assertEquals("Add model and mark: model", true, testModel.getModel().equals(expectedModel.getModel()));
-
-        testModel.setId(expectedModel.getId());
     }
 
     private void getModelByIdTest() throws Exception{

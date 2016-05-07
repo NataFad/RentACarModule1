@@ -16,13 +16,15 @@ import java.util.List;
  */
 public interface IDAO<T> {
 
-    void saveOrUpdate(T t) throws DAOException;
+    void saveOrUpdate(T entity) throws DAOException;
 
     T get(Serializable id) throws DAOException;
 
     T load(Serializable id) throws DAOException;
 
-    void delete(T t) throws DAOException;
+    T getByKey(String key, Serializable value) throws DAOException;
+
+    void delete(T entity) throws DAOException;
 
     List<T> getAll() throws DAOException;
 

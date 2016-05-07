@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "fuels")
-public class Fuel implements Serializable {
+public class Fuel implements Serializable{
     private static final long serialVersionUID = 1L;
     private int id;
     private String name;

@@ -1,5 +1,7 @@
 package by.academy.it.rentacar.entity;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -13,22 +15,36 @@ import java.math.BigDecimal;
  * @since 2016-04
  *
  */
-public class Type {
-	
+@Entity
+@Table(name = "types")
+public class Type implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
 	private BigDecimal rateCost;
 	private BigDecimal rateDiscount;
 
 	/**
-	 * 
+	 *
 	 */
 	public Type() {
 	}
 
 	/**
+	 *
+	 */
+	public Type(String name, BigDecimal rateCost, BigDecimal rateDiscount) {
+		this.name = name;
+		this.rateCost = rateCost;
+		this.rateDiscount = rateDiscount;
+	}
+
+	/**
 	 * @return the id
 	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", length = 11)
 	public int getId() {
 		return id;
 	}
@@ -44,6 +60,7 @@ public class Type {
 	/**
 	 * @return the name
 	 */
+	@Column(name = "name", nullable = false, length = 45)
 	public String getName() {
 		return name;
 	}
@@ -59,6 +76,7 @@ public class Type {
 	/**
 	 * @return the rateCost
 	 */
+	@Column(name = "rateCost", nullable = false, precision = 3, scale = 2)
 	public BigDecimal getRateCost() {
 		return rateCost;
 	}
@@ -67,13 +85,14 @@ public class Type {
 	 * @param rateCost
 	 *            the rateCost to set
 	 */
-	public void setRatecost(BigDecimal rateCost) {
+	public void setRateCost(BigDecimal rateCost) {
 		this.rateCost = rateCost;
 	}
 
 	/**
 	 * @return the rateDiscount
 	 */
+	@Column(name = "rateDiscount", nullable = false, precision = 3, scale = 2)
 	public BigDecimal getRateDiscount() {
 		return rateDiscount;
 	}
