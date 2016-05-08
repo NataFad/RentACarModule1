@@ -3,6 +3,7 @@ package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.entity.Type;
 import by.academy.it.rentacar.dao.TypeDAO;
+import by.academy.it.rentacar.exceptions.DAOException;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,11 @@ public class TypeService {
     public ArrayList<Type> getListType(){
         // List of types
         ArrayList<Type> typeList = new ArrayList<Type>();
-        typeList = TypeDAO.getInstance().getAll();
+        try {
+            typeList = (ArrayList<Type>) TypeDAO.getInstance().getAll();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return typeList;
     }
 

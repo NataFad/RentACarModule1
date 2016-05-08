@@ -3,6 +3,7 @@ package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.entity.Rating;
 import by.academy.it.rentacar.dao.RatingDAO;
+import by.academy.it.rentacar.exceptions.DAOException;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,11 @@ public class RatingService {
     public ArrayList<Rating> getListRating(){
         // List of ratings
         ArrayList<Rating> ratingList = new ArrayList<Rating>();
-        ratingList = RatingDAO.getInstance().getAll();
+        try {
+            ratingList = (ArrayList<Rating>) RatingDAO.getInstance().getAll();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return ratingList;
     }
 

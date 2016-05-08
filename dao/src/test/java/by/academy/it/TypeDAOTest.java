@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * Created by Nata on 07.05.2016.
  *
  * @author Fadeeva Natallia
- * @version 1.1
+ * @version 1.2
  * @since 2016-05
  */
 public class TypeDAOTest {

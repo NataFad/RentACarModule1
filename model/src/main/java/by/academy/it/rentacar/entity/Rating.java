@@ -32,6 +32,14 @@ public class Rating implements Serializable{
     }
 
     /**
+     *
+     */
+    public Rating(String name, BigDecimal rateCost) {
+        this.name = name;
+        this.rateCost = rateCost;
+    }
+
+    /**
      * @return the id
      */
     @Id

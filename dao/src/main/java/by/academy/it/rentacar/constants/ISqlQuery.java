@@ -40,12 +40,6 @@ public interface ISqlQuery {
 					"price_id, fuels_id, costOfDay, discount, description) " +
 					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	String DELETE_CAR = "DELETE FROM cars WHERE id = ?";
-	
-	// RATING DAO
-	String GET_RATING_BY_ID = "SELECT * FROM ratings WHERE id = ?";
-	String GET_ALL_RATINGS = "SELECT * FROM ratings ORDER BY id";
-	String ADD_RATING = "INSERT INTO ratings (name, ratecost) VALUES (?,?)";
-	String DELETE_RATING = "DELETE FROM ratings WHERE id = ?";
 
 	// Price DAO
 	String GET_PRICE_BY_TRANSMISSION_AND_FUEL = "SELECT * FROM price WHERE transmission = ? AND fuels_id = ?";
