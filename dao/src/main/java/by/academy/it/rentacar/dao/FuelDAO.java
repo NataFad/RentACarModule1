@@ -45,4 +45,12 @@ public class FuelDAO extends DAO<Fuel>{
         List<Fuel> list = (ArrayList<Fuel>) query.list();
         return list;
     }
+
+    /**
+     * Method getById() searches object fuel by id
+     *
+     */
+    public Fuel getById(int id){
+        return getByKey("id", id);
+    }
 }

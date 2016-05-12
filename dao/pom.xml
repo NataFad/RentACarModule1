@@ -31,7 +31,7 @@
     </properties>
 
     <dependencies>
-      <!--Modul-->
+      <!--Model-->
       <dependency>
         <groupId>by.academy.it</groupId>
         <artifactId>model</artifactId>

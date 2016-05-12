@@ -1,10 +1,9 @@
 
 package by.academy.it.rentacar.actions;
 
+import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
-import by.academy.it.rentacar.dao.FuelDAO;
-import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.exceptions.DAOException;
 
@@ -55,12 +54,7 @@ public class ActionService {
 	 */
 	public ArrayList<Fuel> getListFuel(){
 		// List of fuels
-		ArrayList<Fuel> fuelsList = null;
-		try {
-			fuelsList = (ArrayList<Fuel>) FuelDAO.getInstance().getAll();
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+		ArrayList<Fuel> fuelsList = FuelService.getInstance().getListFuel();
 		return fuelsList;
 	}
 

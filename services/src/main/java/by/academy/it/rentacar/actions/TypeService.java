@@ -56,7 +56,11 @@ public class TypeService {
      */
     public Type getById(int id){
         Type type = null;
-        type = TypeDAO.getInstance().getById(id);
+        try {
+            type = TypeDAO.getInstance().get(id);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return type;
     }
 

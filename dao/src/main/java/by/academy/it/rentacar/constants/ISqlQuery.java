@@ -41,8 +41,4 @@ public interface ISqlQuery {
 					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	String DELETE_CAR = "DELETE FROM cars WHERE id = ?";
 
-	// Price DAO
-	String GET_PRICE_BY_TRANSMISSION_AND_FUEL = "SELECT * FROM price WHERE transmission = ? AND fuels_id = ?";
-	String ADD_PRICE = "INSERT INTO price (name, transmission, Fuels_id, costofday, discount) VALUES (?,?,?,?,?)";
-	String DELETE_PRICE = "DELETE FROM price WHERE id = ?";
 }

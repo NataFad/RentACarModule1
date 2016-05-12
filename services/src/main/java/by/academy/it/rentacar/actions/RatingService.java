@@ -56,7 +56,11 @@ public class RatingService {
      */
     public Rating getById(int id){
         Rating rating = null;
-        rating = RatingDAO.getInstance().getById(id);
+        try {
+            rating = RatingDAO.getInstance().get(id);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return rating;
     }
 

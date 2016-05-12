@@ -5,6 +5,7 @@ package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.Transmission;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -17,20 +18,18 @@ import java.math.BigDecimal;
  * @since 2016-04
  *
  */
+@Entity
+@Table(name = "cars")
 public class Car implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String registrationNumber;
 	private Transmission transmission;
-	private int ratingId;
-	private String ratingName;
-	private int typeId;
-	private String typeName;
-	private int modelAndMarkId;
-	private String modelName;
-	private int fuelId;
-	private String fuelName;
-	private int priceId;
+	private Rating rating;
+	private Type type;
+	private ModelAndMark model;
+	private Fuel fuel;
+	private Price price;
 	private String description;
 	private BigDecimal costOfDay;
 	private BigDecimal discount;
@@ -45,6 +44,9 @@ public class Car implements Serializable{
 	/**
 	 * @return the id
 	 */
+	@Id
+	@GeneratedValue(strategy =  GenerationType.IDENTITY)
+	@Column(name = "id", length = 11)
 	public int getId() {
 		return id;
 	}
@@ -60,6 +62,7 @@ public class Car implements Serializable{
 	/**
 	 * @return the registrationNumber
 	 */
+	@Column(nullable = false, length = 45)
 	public String getRegistrationNumber() {
 		return registrationNumber;
 	}
@@ -75,6 +78,7 @@ public class Car implements Serializable{
 	/**
 	 * @return the transmission
 	 */
+	@Column(nullable = false, columnDefinition = "enum('AUTO','MANUAL') default 'AUTO'")
 	public Transmission getTransmission() {
 		return transmission;
 	}
@@ -87,83 +91,94 @@ public class Car implements Serializable{
 	}
 
 	/**
-	 * @return the ratingId
+	 * @return the rating
 	 */
-	public int getRatingId() {
-		return ratingId;
+	@ManyToOne
+	@JoinColumn(name = "ratings_id")
+	public Rating getRating() {
+		return rating;
 	}
 
 	/**
-	 * @param ratingId
+	 * @param rating
 	 *            the ratingId to set
 	 */
-	public void setRatingId(int ratingId) {
-		this.ratingId = ratingId;
+	public void setRating(Rating rating) {
+		this.rating = rating;
 	}
 
 	/**
-	 * @return the typeId
+	 * @return the type
 	 */
-	public int getTypeId() {
-		return typeId;
+	@ManyToOne
+	@JoinColumn(name = "types_id")
+	public Type getType() {
+		return type;
 	}
 
 	/**
-	 * @param typeId
-	 *            the typeId to set
+	 * @param type
+	 *            the type to set
 	 */
-	public void setTypeId(int typeId) {
-		this.typeId = typeId;
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	/**
-	 * @return the modelAndMarkId
+	 * @return the modelAndMark
 	 */
-	public int getModelAndMarkId() {
-		return modelAndMarkId;
+	@ManyToOne
+	@JoinColumn(name = "ModelsAndMarks_id")
+	public ModelAndMark getModel() {
+		return model;
 	}
 
 	/**
-	 * @param modelAndMarkId
-	 *            the modelAndMarkId to set
+	 * @param model
+	 *            the modelAndMark to set
 	 */
-	public void setModelAndMarkId(int modelAndMarkId) {
-		this.modelAndMarkId = modelAndMarkId;
+	public void setModel(ModelAndMark model) {
+		this.model = model;
 	}
 
 	/**
-	 * @return the fuelId
+	 * @return the fuel
 	 */
-	public int getFuelId() {
-		return fuelId;
+	@ManyToOne
+	@JoinColumn(name = "Fuels_id")
+	public Fuel getFuel() {
+		return fuel;
 	}
 
 	/**
-	 * @param fuelId
-	 *            the fuelId to set
+	 * @param fuel
+	 *            the fuel to set
 	 */
-	public void setFuelId(int fuelId) {
-		this.fuelId = fuelId;
+	public void setFuel(Fuel fuel) {
+		this.fuel = fuel;
 	}
 
 	/**
-	 * @return the priceId
+	 * @return the price
 	 */
-	public int getPriceId() {
-		return priceId;
+	@ManyToOne
+	@JoinColumn(name = "price_id")
+	public Price getPrice() {
+		return price;
 	}
 
 	/**
-	 * @param priceId
-	 *            the priceId to set
+	 * @param price
+	 *            the price to set
 	 */
-	public void setPriceId(int priceId) {
-		this.priceId = priceId;
+	public void setPrice(Price price) {
+		this.price = price;
 	}
 
 	/**
 	 * @return the description
 	 */
+	@Column(nullable = false, length = 100)
 	public String getDescription() {
 		return description;
 	}
@@ -179,6 +194,7 @@ public class Car implements Serializable{
 	/**
 	 * @return the costOfDay
 	 */
+	@Column(nullable = false, precision = 10, scale = 2)
 	public BigDecimal getCostOfDay() {
 		return costOfDay;
 	}
@@ -194,6 +210,7 @@ public class Car implements Serializable{
 	/**
 	 * @return the discount
 	 */
+	@Column(nullable = false, precision = 6, scale = 4)
 	public BigDecimal getDiscount() {
 		return discount;
 	}
@@ -220,62 +237,6 @@ public class Car implements Serializable{
 		this.cost = cost;
 	}
 
-	/**
-	 * @return the name of rating
-     */
-	public String getRatingName() {
-		return ratingName;
-	}
-
-	/**
-	 * @param ratingName
-     */
-	public void setRatingName(String ratingName) {
-		this.ratingName = ratingName;
-	}
-
-	/**
-	 * @return the name of type
-     */
-	public String getTypeName() {
-		return typeName;
-	}
-
-	/**
-	 * @param typeName
-     */
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-
-	/**
-	 * @return the name of model and mark
-     */
-	public String getModelName() {
-		return modelName;
-	}
-
-	/**
-	 * @param modelName
-     */
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
-
-	/**
-	 * @return the name of fuel
-     */
-	public String getFuelName() {
-		return fuelName;
-	}
-
-	/**
-	 * @param fuelName
-     */
-	public void setFuelName(String fuelName) {
-		this.fuelName = fuelName;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -284,18 +245,14 @@ public class Car implements Serializable{
 		Car car = (Car) o;
 
 		if (id != car.id) return false;
-		if (ratingId != car.ratingId) return false;
-		if (typeId != car.typeId) return false;
-		if (modelAndMarkId != car.modelAndMarkId) return false;
-		if (fuelId != car.fuelId) return false;
-		if (priceId != car.priceId) return false;
 		if (!registrationNumber.equals(car.registrationNumber)) return false;
 		if (transmission != car.transmission) return false;
-		if (ratingName != null ? !ratingName.equals(car.ratingName) : car.ratingName != null) return false;
-		if (typeName != null ? !typeName.equals(car.typeName) : car.typeName != null) return false;
-		if (modelName != null ? !modelName.equals(car.modelName) : car.modelName != null) return false;
-		if (fuelName != null ? !fuelName.equals(car.fuelName) : car.fuelName != null) return false;
-		if (description != null ? !description.equals(car.description) : car.description != null) return false;
+		if (!rating.equals(car.rating)) return false;
+		if (!type.equals(car.type)) return false;
+		if (!model.equals(car.model)) return false;
+		if (!fuel.equals(car.fuel)) return false;
+		if (!price.equals(car.price)) return false;
+		if (description != null ? !description.equals(car.description) : car.description == null) return false;
 		if (!costOfDay.equals(car.costOfDay)) return false;
 		if (!discount.equals(car.discount)) return false;
 		return cost != null ? cost.equals(car.cost) : car.cost == null;
@@ -307,41 +264,15 @@ public class Car implements Serializable{
 		int result = id;
 		result = 31 * result + registrationNumber.hashCode();
 		result = 31 * result + transmission.hashCode();
-		result = 31 * result + ratingId;
-		result = 31 * result + (ratingName != null ? ratingName.hashCode() : 0);
-		result = 31 * result + typeId;
-		result = 31 * result + (typeName != null ? typeName.hashCode() : 0);
-		result = 31 * result + modelAndMarkId;
-		result = 31 * result + (modelName != null ? modelName.hashCode() : 0);
-		result = 31 * result + fuelId;
-		result = 31 * result + (fuelName != null ? fuelName.hashCode() : 0);
-		result = 31 * result + priceId;
+		result = 31 * result + rating.hashCode();
+		result = 31 * result + type.hashCode();
+		result = 31 * result + model.hashCode();
+		result = 31 * result + fuel.hashCode();
+		result = 31 * result + price.hashCode();
 		result = 31 * result + (description != null ? description.hashCode() : 0);
 		result = 31 * result + costOfDay.hashCode();
 		result = 31 * result + discount.hashCode();
 		result = 31 * result + (cost != null ? cost.hashCode() : 0);
 		return result;
-	}
-
-	@Override
-	public String toString() {
-		return "Car{" +
-				"id=" + id +
-				", registrationNumber='" + registrationNumber + '\'' +
-				", transmission=" + transmission +
-				", ratingId=" + ratingId +
-				", ratingName='" + ratingName + '\'' +
-				", typeId=" + typeId +
-				", typeName='" + typeName + '\'' +
-				", modelAndMarkId=" + modelAndMarkId +
-				", modelName='" + modelName + '\'' +
-				", fuelId=" + fuelId +
-				", fuelName='" + fuelName + '\'' +
-				", priceId=" + priceId +
-				", description='" + description + '\'' +
-				", costOfDay=" + costOfDay +
-				", discount=" + discount +
-				", cost=" + cost +
-				'}';
 	}
 }

@@ -4,7 +4,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/rentacar</property>
+        <property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3307/rentacar</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">fadeeva</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
@@ -16,6 +16,8 @@
         <mapping class="by.academy.it.rentacar.entity.ModelAndMark"/>
         <mapping class="by.academy.it.rentacar.entity.Rating"/>
         <mapping class="by.academy.it.rentacar.entity.Type"/>
+        <mapping class="by.academy.it.rentacar.entity.Price"/>
+
     </session-factory>
 </hibernate-configuration>
 

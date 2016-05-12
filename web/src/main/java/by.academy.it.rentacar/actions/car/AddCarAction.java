@@ -4,10 +4,9 @@
 package by.academy.it.rentacar.actions.car;
 
 import by.academy.it.rentacar.actions.*;
-import by.academy.it.rentacar.entity.Car;
-import by.academy.it.rentacar.entity.Price;
-import by.academy.it.rentacar.entity.Rating;
-import by.academy.it.rentacar.entity.Type;
+import by.academy.it.rentacar.dao.FuelDAO;
+import by.academy.it.rentacar.dao.ModelAndMarkDAO;
+import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 
@@ -59,7 +58,8 @@ public class AddCarAction extends Action {
 		ratecostByType = type.getRateCost();
 		rateDiscountByType = type.getRateDiscount();
 
-		priceCar = PriceService.getInstance().getByTransmissionAndFuel(transmission, fuelId);
+		Fuel fuel = FuelDAO.getInstance().getById(fuelId);
+		priceCar = PriceService.getInstance().getByTransmissionAndFuel(transmission, fuel);
 		if (priceCar == null) {
 			request.getSession().setAttribute("addCarMessage", errorManager.getProperty("error.priceCar") + errorManager.getProperty("error.addcar"));
 			return ConfigurationManager.getProperty("page.addCar");
@@ -76,13 +76,13 @@ public class AddCarAction extends Action {
 		// car
 		Car car = new Car();
 		car.setRegistrationNumber(request.getParameter("registrationNumber").trim());
-		car.setModelAndMarkId(Integer.parseInt(request.getParameter("modelId").trim()));
+		car.setModel(ModelAndMarkDAO.getInstance().getById(Integer.parseInt(request.getParameter("modelId").trim())));
 		car.setTransmission(transmission);
-		car.setFuelId(fuelId);
-		car.setTypeId(typeId);
-		car.setRatingId(ratingId);
+		car.setFuel(FuelService.getInstance().getById(fuelId));
+		car.setType(TypeService.getInstance().getById(typeId));
+		car.setRating(RatingService.getInstance().getById(ratingId));
 		car.setDescription(request.getParameter("description").trim());
-		car.setPriceId(priceCar.getId());
+		car.setPrice(priceCar);
 		car.setCostOfDay(costOfDay);
 		car.setDiscount(priceCar.getDiscount().multiply(rateDiscountByType).multiply(new BigDecimal(100)));
 

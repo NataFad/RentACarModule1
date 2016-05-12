@@ -1,5 +1,6 @@
 package by.academy.it.rentacar.actions;
 
+import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.enums.Transmission;
@@ -33,12 +34,12 @@ public class PriceService {
      * Method getByTransmissionAndFuel() calls the method in PriceDAO
      *
      * @param transmission
-     * @param fuelId
+     * @param fuel
      * @return
      */
-    public Price getByTransmissionAndFuel(Transmission transmission, int fuelId){
+    public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel){
         Price price = null;
-        price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuelId);
+        price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuel);
         return price;
     }
 }
