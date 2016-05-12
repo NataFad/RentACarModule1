@@ -42,19 +42,19 @@ public class PriceServiceTest {
     testPrice = new Price();
     testPrice.setName("test + manual");
     testPrice.setTransmission(Transmission.MANUAL);
-    testPrice.setFuelId(testFuel.getId());
+    testPrice.setFuel(testFuel);
     testPrice.setCostOfDay(new BigDecimal(10).setScale(2));
     testPrice.setDiscount(new BigDecimal(1.5).setScale(4, BigDecimal.ROUND_HALF_UP));
-    priceDAO.add(testPrice);
+    priceDAO.saveOrUpdate(testPrice);
   }
 
   @Test
   public void getByTransmissionAndFuelTest() throws Exception {
-    expectedPrice = priceService.getByTransmissionAndFuel(Transmission.MANUAL, testFuel.getId());
+    expectedPrice = priceService.getByTransmissionAndFuel(Transmission.MANUAL, testFuel);
     Assert.assertNotNull(expectedPrice);
     Assert.assertEquals("Add price: name", true, testPrice.getName().equals(expectedPrice.getName()));
     Assert.assertEquals("Add price: transmission", testPrice.getTransmission(), expectedPrice.getTransmission());
-    Assert.assertEquals("Add price: fuels id", testPrice.getFuelId(), expectedPrice.getFuelId());
+    Assert.assertEquals("Add price: fuels id", testPrice.getFuel(), expectedPrice.getFuel());
     Assert.assertEquals("Add price: cost of day", 0, testPrice.getCostOfDay().compareTo(expectedPrice.getCostOfDay()));
     Assert.assertEquals("Add price: discount", 0, testPrice.getDiscount().compareTo(expectedPrice.getDiscount()));
     testPrice.setId(expectedPrice.getId());

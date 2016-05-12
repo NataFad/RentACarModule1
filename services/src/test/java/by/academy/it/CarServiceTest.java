@@ -1,10 +1,8 @@
 package by.academy.it;
 
 import by.academy.it.rentacar.actions.CarService;
-import by.academy.it.rentacar.entity.Car;
-import by.academy.it.rentacar.entity.Price;
-import by.academy.it.rentacar.dao.CarDAO;
-import by.academy.it.rentacar.dao.PriceDAO;
+import by.academy.it.rentacar.dao.*;
+import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -29,18 +27,23 @@ public class CarServiceTest {
   @BeforeClass
   public static void setUp() throws Exception {
     int foreign_id = 1;
-    Price price = PriceDAO.getInstance().getByTransmissionAndFuel(Transmission.MANUAL, foreign_id);
+    Fuel fuel = FuelDAO.getInstance().getById(foreign_id);
+    Rating rating = RatingDAO.getInstance().getById(foreign_id);
+    ModelAndMark model = ModelAndMarkDAO.getInstance().getById(foreign_id);
+    Type type = TypeDAO.getInstance().getById(foreign_id);
+
+    Price price = PriceDAO.getInstance().getByTransmissionAndFuel(Transmission.MANUAL, fuel);
     carDAO  = CarDAO.getInstance();
     testCar = new Car();
     testCar.setRegistrationNumber("00-00 TE");
     testCar.setTransmission(Transmission.MANUAL);
-    testCar.setRatingId(foreign_id);
-    testCar.setModelAndMarkId(foreign_id);
-    testCar.setPriceId(price.getId());
-    testCar.setFuelId(foreign_id);
+    testCar.setRating(rating);
+    testCar.setModel(model);
+    testCar.setPrice(price);
+    testCar.setFuel(fuel);
     testCar.setCostOfDay(new BigDecimal(15).setScale(2));
     testCar.setDiscount(new BigDecimal(1.5).setScale(4, RoundingMode.HALF_UP));
-    testCar.setTypeId(foreign_id);
+    testCar.setType(type);
     testCar.setDescription("test");
   }
 
@@ -76,7 +79,7 @@ public class CarServiceTest {
     car = list.get(list.size()-1);
 
     Assert.assertEquals("Registered car: registration number", true, testCar.getRegistrationNumber().equals(car.getRegistrationNumber()));
-    Assert.assertEquals("Registered car: price id", testCar.getPriceId(), car.getPriceId());
+    Assert.assertEquals("Registered car: price id", testCar.getPrice(), car.getPrice());
     Assert.assertEquals("Registered car: cost of day", 0, testCar.getCostOfDay().compareTo(car.getCostOfDay()));
     Assert.assertEquals("Registered car: discount", 0, testCar.getDiscount().compareTo(car.getDiscount()));
     Assert.assertEquals("Registered car: description", testCar.getDescription(), car.getDescription());

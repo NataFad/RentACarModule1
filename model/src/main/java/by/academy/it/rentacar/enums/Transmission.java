@@ -16,7 +16,6 @@ import by.academy.it.rentacar.exceptions.EnumNotFindException;
 public enum Transmission {
 	AUTO("auto"), MANUAL("manual");
 
-
 	private String transmission;
 
 	Transmission(final String transmission){
