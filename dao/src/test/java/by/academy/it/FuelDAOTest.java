@@ -36,6 +36,7 @@ public class FuelDAOTest {
     @Test
     public void testFuelDAO() throws Exception {
         addFuelTest();
+        getByIdTest();
         getAllFuelTest();
         countFuelTest();
         updateFuelTest();
@@ -45,6 +46,12 @@ public class FuelDAOTest {
 
     private void addFuelTest() throws Exception {
         fuelDAO.saveOrUpdate(testFuel);
+    }
+
+    private void getByIdTest(){
+        expectedFuel = fuelDAO.getById(testFuel.getId());
+        Assert.assertNotNull(expectedFuel);
+        Assert.assertEquals(expectedFuel, testFuel);
     }
 
     private void getAllFuelTest() throws Exception {
