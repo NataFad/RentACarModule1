@@ -1,5 +1,6 @@
 package by.academy.it;
 
+import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
@@ -54,5 +55,6 @@ public class PriceDAOTest {
     public static void tearDown() throws Exception {
         priceDAO.delete(testPrice);
         fuelDAO.delete(testFuel);
+        HibernateUtil.getInstance().closeSession();
     }
 }

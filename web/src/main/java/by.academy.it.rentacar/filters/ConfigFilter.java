@@ -1,7 +1,6 @@
 package by.academy.it.rentacar.filters;
 
 import by.academy.it.rentacar.entity.User;
-import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.*;
@@ -39,7 +38,6 @@ public class ConfigFilter implements Filter {
 			User userGuest = new User();
 			userGuest.setName("Гость");
 			userGuest.setAccess(0);
-			userGuest.setType(TypeUser.GUEST);
 			session.setAttribute("user", userGuest);
 			
 			if (session.isNew()) {

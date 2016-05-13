@@ -32,7 +32,12 @@ public class LoginUserAction extends Action{
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		TypeUser type = user.getType();
+		TypeUser type = null;
+		try {
+			type = TypeUser.stringToEnum(user.getAccess());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		ConfigurationManager.getInstance();
 		// извлечение из запроса логина и пароля

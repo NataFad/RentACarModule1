@@ -5,6 +5,7 @@ package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.dao.UserDAO;
+import by.academy.it.rentacar.exceptions.DAOException;
 import org.apache.log4j.Logger;
 
 /**
@@ -48,7 +49,13 @@ public class UserService {
 			successRegistrate = -1;
 			Logger.getLogger(userDAO.getClass()).error("User has yet registered with the login");
 		}
-		userDAO.add(user);
+		try {
+			userDAO.saveOrUpdate(user);
+		} catch (DAOException e) {
+			successRegistrate = -2;
+			Logger.getLogger(userDAO.getClass()).error("The registration has not been completed");
+			e.printStackTrace();
+		}
 		return successRegistrate;
 	}
 

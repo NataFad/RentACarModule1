@@ -17,6 +17,7 @@
         <mapping class="by.academy.it.rentacar.entity.Rating"/>
         <mapping class="by.academy.it.rentacar.entity.Type"/>
         <mapping class="by.academy.it.rentacar.entity.Price"/>
+        <mapping class="by.academy.it.rentacar.entity.User"/>
 
     </session-factory>
 </hibernate-configuration>

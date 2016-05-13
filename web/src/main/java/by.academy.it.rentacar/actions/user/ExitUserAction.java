@@ -2,7 +2,6 @@ package by.academy.it.rentacar.actions.user;
 
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.entity.User;
-import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,6 @@ public class ExitUserAction extends Action {
 		User userGuest = new User();
 		userGuest.setName("Гость");
 		userGuest.setAccess(0);
-		userGuest.setType(TypeUser.GUEST);
 		
 		session.setAttribute("access", 0);
 		session.setAttribute("user", userGuest);

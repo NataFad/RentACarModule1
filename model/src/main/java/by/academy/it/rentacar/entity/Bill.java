@@ -38,9 +38,9 @@ public class Bill implements Serializable {
     /**
      * @return the id
      */
-   // @Id
-   // @GenericGenerator(name = "orderId", strategy = "foreign",
-   //     parameters = )
+    // @Id
+    // @GenericGenerator(name = "orderId", strategy = "foreign",
+    //     parameters = )
     @Column(length = 11)
     public int getId() {
         return id;
