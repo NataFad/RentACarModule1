@@ -30,7 +30,7 @@ public class UserDAOTest {
         userTest.setAccess(1);
         userTest.setBirthday(new Date(1975, 01, 25));
         userTest.setEmail("nata.filimon@gmail.com");
-        userTest.setLogin("testfil");
+        userTest.setLogin("testNata");
         userTest.setPhone("+375 29 692-82-42");
         userTest.setPassword("filimon");
         userTest.setSurname("test");
