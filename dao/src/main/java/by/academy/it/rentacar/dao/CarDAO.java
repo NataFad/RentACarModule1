@@ -4,12 +4,14 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Car;
+import by.academy.it.rentacar.viewobject.CarViewObject;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class CarDAO
@@ -50,7 +52,9 @@ public class CarDAO extends DAO<Car> {
 	 * @return
 	 * @throws SQLException
      */
-	public ArrayList<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+	public List<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+		long difference = byDate.getTime() - fromDate.getTime();
+		int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
 		// query text writing
 		String sqlQuery = "SELECT CarVO.id AS id, " +
 				"CarVO.registrationNumber AS registrationNumber, " +
@@ -61,7 +65,7 @@ public class CarDAO extends DAO<Car> {
 				"MAndM.mark AS marka," +
 				"F.name AS fuel," +
 				"CarVO.description AS description, " +
-				"" +
+				"CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days-1) + "/10)/100 AS cost " +
 				"FROM cars AS CarVO " +
 				"LEFT JOIN ratings AS R ON CarVO.ratings_id = R.id " +
 				"LEFT JOIN types AS T ON CarVO.types_id = T.id " +
@@ -87,7 +91,7 @@ public class CarDAO extends DAO<Car> {
 		}
 		sqlQuery = sqlQuery + " ORDER BY TC.id";
 
-		session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+		List<Car> list = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
 				.addScalar("registrationNumber", StandardBasicTypes.STRING)
 				.addScalar("transmission", StandardBasicTypes.STRING)
 				.addScalar("rating", StandardBasicTypes.STRING)
@@ -97,9 +101,8 @@ public class CarDAO extends DAO<Car> {
 				.addScalar("fuel", StandardBasicTypes.STRING)
 				.addScalar("description", StandardBasicTypes.STRING)
 				.addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
-				.setResultTransformer(Transformers.aliasToBean(Employee.class))    .list();
+				.setResultTransformer(Transformers.aliasToBean(CarViewObject.class)).list();
 
-		ArrayList<Car> list = new ArrayList<Car>();
 		/**
 
 		try (Connection connection = DBConnectionPool.getInstance().getConnection();
