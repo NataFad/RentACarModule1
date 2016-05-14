@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @since 2016-04
  */
 @Entity
-@Table(name = "T_users")
+@Table(name = "users")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -265,8 +265,8 @@ public class User implements Serializable {
             return false;
         if (passportAuthority != null ? !passportAuthority.equals(user.passportAuthority) : user.passportAuthority != null)
             return false;
-        if (!birthday.equals(user.birthday)) return false;
-        return email.equals(user.email);
+        if (birthday.equals(user.birthday)) if (email.equals(user.email)) return true;
+        return false;
 
     }
 

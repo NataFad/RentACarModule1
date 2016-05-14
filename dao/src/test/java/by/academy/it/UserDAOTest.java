@@ -1,6 +1,7 @@
-package by.academy.it.rentacar.dao;
+package by.academy.it;
 
 import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
+import by.academy.it.rentacar.dao.UserDAO;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
@@ -9,7 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Nata on 13.05.2016.
@@ -25,10 +27,11 @@ public class UserDAOTest {
 
     @Before
     public void setUp() throws Exception {
+        Calendar calendar = new GregorianCalendar(1975, 0, 25);
         userTest = new User();
         userTest.setName("test");
         userTest.setAccess(1);
-        userTest.setBirthday(new Date(1975, 01, 25));
+        userTest.setBirthday(calendar.getTime());
         userTest.setEmail("nata.filimon@gmail.com");
         userTest.setLogin("testNata");
         userTest.setPhone("+375 29 692-82-42");
