@@ -71,10 +71,7 @@ public class Price implements Serializable {
      * @return the transmission
      */
     @Enumerated(EnumType.STRING)
-    //@MapKeyEnumerated
-    //@Convert(converter = ConvertorTransmission.class)
     @Column(name = "transmission", nullable = false, columnDefinition = "enum('AUTO','MANUAL') DEFAULT 'AUTO'", length = 10)
-    //@org.hibernate.annotations.Type(type = "by.academy.it.rentacar.enums.Transmission", parameters = @org.hibernate.annotations.Parameter(name="type", value="by.academy.it.rentacar.enums.Transmission"))
     public Transmission getTransmission() {
         return transmission;
     }

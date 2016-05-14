@@ -33,7 +33,6 @@ public class Car implements Serializable{
 	private String description;
 	private BigDecimal costOfDay;
 	private BigDecimal discount;
-	private BigDecimal cost;
 
 	/**
 	 * 
@@ -78,7 +77,7 @@ public class Car implements Serializable{
 	/**
 	 * @return the transmission
 	 */
-	@Column(nullable = false, columnDefinition = "enum('AUTO','MANUAL') default 'AUTO'")
+	@Column(nullable = false, columnDefinition = "enum('AUTO','MANUAL') default 'AUTO'", length = 10)
 	public Transmission getTransmission() {
 		return transmission;
 	}
@@ -94,7 +93,7 @@ public class Car implements Serializable{
 	 * @return the rating
 	 */
 	@ManyToOne
-	@JoinColumn(name = "ratings_id")
+	@JoinColumn(name = "ratings_id", nullable = false)
 	public Rating getRating() {
 		return rating;
 	}
@@ -111,7 +110,7 @@ public class Car implements Serializable{
 	 * @return the type
 	 */
 	@ManyToOne
-	@JoinColumn(name = "types_id")
+	@JoinColumn(name = "types_id", nullable = false)
 	public Type getType() {
 		return type;
 	}
@@ -128,7 +127,7 @@ public class Car implements Serializable{
 	 * @return the modelAndMark
 	 */
 	@ManyToOne
-	@JoinColumn(name = "ModelsAndMarks_id")
+	@JoinColumn(name = "ModelsAndMarks_id", nullable = false)
 	public ModelAndMark getModel() {
 		return model;
 	}
@@ -145,7 +144,7 @@ public class Car implements Serializable{
 	 * @return the fuel
 	 */
 	@ManyToOne
-	@JoinColumn(name = "Fuels_id")
+	@JoinColumn(name = "Fuels_id", nullable = false)
 	public Fuel getFuel() {
 		return fuel;
 	}
@@ -162,7 +161,7 @@ public class Car implements Serializable{
 	 * @return the price
 	 */
 	@ManyToOne
-	@JoinColumn(name = "price_id")
+	@JoinColumn(name = "price_id", nullable = false)
 	public Price getPrice() {
 		return price;
 	}
@@ -178,7 +177,7 @@ public class Car implements Serializable{
 	/**
 	 * @return the description
 	 */
-	@Column(nullable = false, length = 100)
+	@Column(length = 100)
 	public String getDescription() {
 		return description;
 	}
@@ -223,20 +222,6 @@ public class Car implements Serializable{
 		this.discount = discount;
 	}
 
-	/**
-	 * @return the cost
-	 */
-	public BigDecimal getCost() {
-		return cost;
-	}
-
-	/**
-	 * @param cost the cost to set
-	 */
-	public void setCost(BigDecimal cost) {
-		this.cost = cost;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -252,10 +237,9 @@ public class Car implements Serializable{
 		if (!model.equals(car.model)) return false;
 		if (!fuel.equals(car.fuel)) return false;
 		if (!price.equals(car.price)) return false;
-		if (description != null ? !description.equals(car.description) : car.description == null) return false;
+		if (description != null ? !description.equals(car.description) : car.description != null) return false;
 		if (!costOfDay.equals(car.costOfDay)) return false;
-		if (!discount.equals(car.discount)) return false;
-		return cost != null ? cost.equals(car.cost) : car.cost == null;
+		return discount.equals(car.discount);
 
 	}
 
@@ -272,7 +256,23 @@ public class Car implements Serializable{
 		result = 31 * result + (description != null ? description.hashCode() : 0);
 		result = 31 * result + costOfDay.hashCode();
 		result = 31 * result + discount.hashCode();
-		result = 31 * result + (cost != null ? cost.hashCode() : 0);
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Car{" +
+				"id=" + id +
+				", registrationNumber='" + registrationNumber + '\'' +
+				", transmission=" + transmission +
+				", rating=" + rating +
+				", type=" + type +
+				", model=" + model +
+				", fuel=" + fuel +
+				", price=" + price +
+				", description='" + description + '\'' +
+				", costOfDay=" + costOfDay +
+				", discount=" + discount +
+				'}';
 	}
 }
