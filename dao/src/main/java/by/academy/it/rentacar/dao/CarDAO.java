@@ -60,13 +60,15 @@ public class CarDAO extends DAO<Car> {
 				"MAndM.model AS model," +
 				"MAndM.mark AS marka," +
 				"F.name AS fuel," +
-				"CarVO.description AS description " +
+				"CarVO.description AS description, " +
+				"" +
 				"FROM cars AS CarVO " +
 				"LEFT JOIN ratings AS R ON CarVO.ratings_id = R.id " +
 				"LEFT JOIN types AS T ON CarVO.types_id = T.id " +
 				"LEFT JOIN modelsandmarks AS MAndM ON CarVO.ModelsAndMarks_id = MAndM.id " +
 				"LEFT JOIN fuels AS F ON CarVO.Fuels_id = F.id "
-				+ "WHERE NOT EXISTS (SELECT O.cars_id FROM Order AS O WHERE NOT (O.fromdate > :fromDate OR O.bydate < :byDate) AND O.car = CarVO.id)";
+				+ "WHERE NOT EXISTS (SELECT O.cars_id FROM Order AS O "
+				+		"WHERE NOT (O.fromdate > '\" + byDate + \"' OR O.bydate < '\" + fromDate + \"') AND O.cars_id = CarVO.id)";
 		String transmission = filterValues.get("transmission");
 		if (transmission != null) {
 			sqlQuery = sqlQuery + " AND CarVO.transmission= '" + transmission.toLowerCase() + "'";
@@ -85,7 +87,17 @@ public class CarDAO extends DAO<Car> {
 		}
 		sqlQuery = sqlQuery + " ORDER BY TC.id";
 
-		session.createSQLQuery(sqlQuery).setParameter(1, fromDate).setParameter(2, byDate).addScalar("id", StandardBasicTypes.INTEGER )    .addScalar("firstName",StandardBasicTypes.STRING )    .addScalar("password",StandardBasicTypes.STRING )    .setResultTransformer(Transformers.aliasToBean(Employee.class))    .list();
+		session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+				.addScalar("registrationNumber", StandardBasicTypes.STRING)
+				.addScalar("transmission", StandardBasicTypes.STRING)
+				.addScalar("rating", StandardBasicTypes.STRING)
+				.addScalar("type", StandardBasicTypes.STRING)
+				.addScalar("model", StandardBasicTypes.STRING)
+				.addScalar("marka", StandardBasicTypes.STRING)
+				.addScalar("fuel", StandardBasicTypes.STRING)
+				.addScalar("description", StandardBasicTypes.STRING)
+				.addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
+				.setResultTransformer(Transformers.aliasToBean(Employee.class))    .list();
 
 		ArrayList<Car> list = new ArrayList<Car>();
 		/**
