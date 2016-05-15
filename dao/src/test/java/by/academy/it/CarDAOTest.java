@@ -2,7 +2,7 @@ package by.academy.it;
 
 import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.dao.CarDAO;
-import by.academy.it.rentacar.entity.Car;
+import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,11 +23,15 @@ public class CarDAOTest {
         // the list of the filter
         HashMap<String, String> filterValues = new HashMap<String, String>();
         filterValues.put("transmission", "auto");
-        //filterValues.put("fuelId", "1");
-        //filterValues.put("typeId", "1");
         filterValues.put("ratingId", "1");
+        filterValues.put("orderBy", "F.name ASC, MAndM.mark ASC");
 
-        List<Car> list = CarDAO.getInstance().searchCar(dateForTest, dateForTest, filterValues);
+        List<CarViewObject> list = CarDAO.getInstance().searchCar(dateForTest, dateForTest, filterValues);
+        for (CarViewObject car:list){
+            System.out.println(car);
+        }
+
+
         BigInteger countCar = CarDAO.getInstance().countCarByFilter(dateForTest, dateForTest, filterValues);
 
         Assert.assertNotNull(list);

@@ -91,7 +91,7 @@ public class CarDAO extends DAO<Car> {
 	 * @return list
 	 * @throws SQLException
      */
-	public List<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+	public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
 		long difference = byDate.getTime() - fromDate.getTime();
 		int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
 		// query text writing
@@ -104,11 +104,17 @@ public class CarDAO extends DAO<Car> {
 				"MAndM.mark AS marka," +
 				"F.name AS fuel," +
 				"CarVO.description AS description, " +
-				"ROUND(CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days-1) + "/10)/100, 2) AS cost "
-				+ sqlQueryStringByFilter(fromDate, byDate, filterValues)
-				+ " ORDER BY CarVO.id";
+				"ROUND(CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days-1) + ")/100, 2) AS cost "
+				+ sqlQueryStringByFilter(fromDate, byDate, filterValues);
 
-		List<Car> list = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+		String orderBy = filterValues.get("orderBy");
+		if (orderBy != null) {
+			sqlQuery = sqlQuery + " ORDER BY " + orderBy;
+		}else{
+			sqlQuery = sqlQuery + " ORDER BY CarVO.transmission, F.name, T.name, R.name";
+		}
+
+		List<CarViewObject> list = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
 				.addScalar("registrationNumber", StandardBasicTypes.STRING)
 				.addScalar("transmission", StandardBasicTypes.STRING)
 				.addScalar("rating", StandardBasicTypes.STRING)
@@ -120,19 +126,6 @@ public class CarDAO extends DAO<Car> {
 				.addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
 				.setResultTransformer(Transformers.aliasToBean(CarViewObject.class)).list();
 
-		/**
-
-		try (Connection connection = DBConnectionPool.getInstance().getConnection();
-			 PreparedStatement ps = connection.prepareStatement(query);
-			 ResultSet result = ps.executeQuery()) {
-			long difference = byDate.getTime() - fromDate.getTime();
-			int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
-			list = getListCarFromResult(result, days);
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error(e.getMessage());
-			e.printStackTrace();
-		}
-		 */
 		return list;
 	}
 
