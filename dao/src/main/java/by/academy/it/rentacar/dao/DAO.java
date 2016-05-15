@@ -39,30 +39,6 @@ public abstract class DAO<T> implements IDAO<T> {
     protected Transaction transaction = null;
 
     /**
-     * Method getCurrentSQLDate()
-     * translate the format util of the date in the format sql
-     *
-     * @param date
-     * @return
-     */
-    protected static java.sql.Date getCurrentSQLDate(java.util.Date date) {
-		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-		return sqlDate;
-	}
-
-    /**
-     * Method getCurrentDate()
-     * translate the format sql of the date in the format util
-     *
-     * @param sqlDate
-     * @return
-     */
-    protected static java.util.Date getCurrentDate(java.sql.Date sqlDate) {
-		java.util.Date date = new java.util.Date(sqlDate.getTime());
-		return date;
-	}
-
-    /**
      * Method saveOrUpdate() saves or updates object T from the table
      *
      * @param entity

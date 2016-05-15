@@ -5,9 +5,11 @@ package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.viewobject.CarViewObject;
+import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -43,13 +45,50 @@ public class CarDAO extends DAO<Car> {
 	}
 
 	/**
+	 * Method sqlQueryStringByFilter()
+	 * returns string of sql-query based on the rental dates and defined filters
+	 *
+	 * @param fromDate
+	 * @param byDate
+	 * @param filterValues
+	 * @return String
+	 */
+	public String sqlQueryStringByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+		String sqlQueryFromWhere = "FROM cars AS CarVO " +
+				"LEFT JOIN ratings AS R ON CarVO.ratings_id = R.id " +
+				"LEFT JOIN types AS T ON CarVO.types_id = T.id " +
+				"LEFT JOIN modelsandmarks AS MAndM ON CarVO.ModelsAndMarks_id = MAndM.id " +
+				"LEFT JOIN fuels AS F ON CarVO.Fuels_id = F.id "
+				+ "WHERE NOT EXISTS (SELECT O.cars_id FROM orders AS O "
+				+		"WHERE NOT (O.fromdate >= '" + byDate + "' OR O.bydate <= '" + fromDate + "') AND O.cars_id = CarVO.id)";
+		String transmission = filterValues.get("transmission");
+		if (transmission != null) {
+			sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.transmission= '" + transmission.toLowerCase() + "'";
+		}
+		String fuelId = filterValues.get("fuelId");
+		if (fuelId != null){
+			sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.fuels_id= " + Integer.parseInt(fuelId);
+		}
+		String typeId = filterValues.get("typeId");
+		if (typeId != null) {
+			sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.types_id = " + Integer.parseInt(typeId);
+		}
+		String ratingId = filterValues.get("ratingId");
+		if (ratingId != null) {
+			sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.ratings_id = " + Integer.parseInt(ratingId);
+		}
+
+		return sqlQueryFromWhere;
+	}
+
+	/**
 	 * Method searchCar()
 	 * performs a search based on the rental dates and defined filters
 	 *
 	 * @param fromDate
 	 * @param byDate
 	 * @param filterValues
-	 * @return
+	 * @return list
 	 * @throws SQLException
      */
 	public List<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
@@ -60,42 +99,20 @@ public class CarDAO extends DAO<Car> {
 				"CarVO.registrationNumber AS registrationNumber, " +
 				"CarVO.transmission AS transmission, " +
 				"R.name AS rating, " +
-				"T.name AS type, " +
+				"T.name AS typeCar, " +
 				"MAndM.model AS model," +
 				"MAndM.mark AS marka," +
 				"F.name AS fuel," +
 				"CarVO.description AS description, " +
-				"CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days-1) + "/10)/100 AS cost " +
-				"FROM cars AS CarVO " +
-				"LEFT JOIN ratings AS R ON CarVO.ratings_id = R.id " +
-				"LEFT JOIN types AS T ON CarVO.types_id = T.id " +
-				"LEFT JOIN modelsandmarks AS MAndM ON CarVO.ModelsAndMarks_id = MAndM.id " +
-				"LEFT JOIN fuels AS F ON CarVO.Fuels_id = F.id "
-				+ "WHERE NOT EXISTS (SELECT O.cars_id FROM Order AS O "
-				+		"WHERE NOT (O.fromdate > '\" + byDate + \"' OR O.bydate < '\" + fromDate + \"') AND O.cars_id = CarVO.id)";
-		String transmission = filterValues.get("transmission");
-		if (transmission != null) {
-			sqlQuery = sqlQuery + " AND CarVO.transmission= '" + transmission.toLowerCase() + "'";
-		}
-		String fuelId = filterValues.get("fuelId");
-		if (fuelId != null){
-			sqlQuery = sqlQuery + " AND CarVO.fuels_id= " + Integer.parseInt(fuelId);
-		}
-		String typeId = filterValues.get("typeId");
-		if (typeId != null) {
-			sqlQuery = sqlQuery + " AND CarVO.types_id = " + Integer.parseInt(typeId);
-		}
-		String ratingId = filterValues.get("ratingId");
-		if (ratingId != null) {
-			sqlQuery = sqlQuery + " AND CarVO.ratings_id = " + Integer.parseInt(ratingId);
-		}
-		sqlQuery = sqlQuery + " ORDER BY TC.id";
+				"ROUND(CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days-1) + "/10)/100, 2) AS cost "
+				+ sqlQueryStringByFilter(fromDate, byDate, filterValues)
+				+ " ORDER BY CarVO.id";
 
 		List<Car> list = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
 				.addScalar("registrationNumber", StandardBasicTypes.STRING)
 				.addScalar("transmission", StandardBasicTypes.STRING)
 				.addScalar("rating", StandardBasicTypes.STRING)
-				.addScalar("type", StandardBasicTypes.STRING)
+				.addScalar("typeCar", StandardBasicTypes.STRING)
 				.addScalar("model", StandardBasicTypes.STRING)
 				.addScalar("marka", StandardBasicTypes.STRING)
 				.addScalar("fuel", StandardBasicTypes.STRING)
@@ -117,5 +134,27 @@ public class CarDAO extends DAO<Car> {
 		}
 		 */
 		return list;
+	}
+
+	/**
+	 * Method countCarByFilter()
+	 * performs a search based on the rental dates and defined filters
+	 *
+	 * @param fromDate
+	 * @param byDate
+	 * @param filterValues
+	 * @return
+	 * @throws SQLException
+	 */
+	public BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+		// query text writing
+		String sqlQuery = "SELECT count(*) "
+				+ sqlQueryStringByFilter(fromDate, byDate, filterValues);
+
+		Query query = session.createSQLQuery(sqlQuery);
+		List results = query.list();
+		BigInteger countCar = (BigInteger) results.get(0);
+
+		return countCar;
 	}
 }
