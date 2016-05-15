@@ -4,6 +4,7 @@ import by.academy.it.rentacar.actions.CarService;
 import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
+import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -14,6 +15,7 @@ import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Nata on 19.04.2016.
@@ -74,15 +76,15 @@ public class CarServiceTest {
     // Rating
     filterValues.put("ratingId", foreign_id);
 
-    ArrayList<Car> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
+    List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
     Assert.assertNotNull(list);
-    car = list.get(list.size()-1);
+    CarViewObject carVO = list.get(list.size()-1);
 
     Assert.assertEquals("Registered car: registration number", true, testCar.getRegistrationNumber().equals(car.getRegistrationNumber()));
-    Assert.assertEquals("Registered car: price id", testCar.getPrice(), car.getPrice());
-    Assert.assertEquals("Registered car: cost of day", 0, testCar.getCostOfDay().compareTo(car.getCostOfDay()));
-    Assert.assertEquals("Registered car: discount", 0, testCar.getDiscount().compareTo(car.getDiscount()));
-    Assert.assertEquals("Registered car: description", testCar.getDescription(), car.getDescription());
+    Assert.assertEquals("Registered car: fuel", testCar.getFuel().getName(), carVO.getFuel());
+    Assert.assertEquals("Registered car: type", testCar.getType().getName(), carVO.getType());
+    Assert.assertEquals("Registered car: rating", testCar.getRating().getName(), carVO.getRating());
+    Assert.assertEquals("Registered car: description", testCar.getDescription(), carVO.getDescription());
   }
 
   @AfterClass
