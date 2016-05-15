@@ -3,7 +3,11 @@
  */
 package by.academy.it.rentacar.entity;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -36,12 +40,13 @@ public class Bill implements Serializable {
     }
 
     /**
-     * @return the id
+     * @return the orders_id
      */
-    // @Id
-    // @GenericGenerator(name = "orderId", strategy = "foreign",
-    //     parameters = )
-    @Column(length = 11)
+    @Id
+    @GenericGenerator(name = "ordersId", strategy = "foreign",
+       parameters = @org.hibernate.annotations.Parameter(name = "property", value = "order"))
+    @GeneratedValue(generator = "ordersId")
+    @Column(name = "orders_id", length = 11)
     public int getId() {
         return id;
     }
@@ -56,7 +61,8 @@ public class Bill implements Serializable {
     /**
      * @return the dateBill
      */
-    @Column(name = "dateBill")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "datebill", nullable = false)
     public java.util.Date getDateBill() {
         return dateBill;
     }
@@ -72,7 +78,8 @@ public class Bill implements Serializable {
      * @return the order
      */
     @OneToOne
-    @JoinColumn
+    @JoinColumn(name = "orders_id", nullable = false)
+    @PrimaryKeyJoinColumn
     public Order getOrder() {
         return order;
     }
@@ -87,6 +94,7 @@ public class Bill implements Serializable {
     /**
      * @return the description
      */
+    @Column(nullable = false, length = 50)
     public String getDescription() {
         return description;
     }
@@ -101,6 +109,7 @@ public class Bill implements Serializable {
     /**
      * @return the cost
      */
+    @Column(nullable = false, precision = 10, scale = 2)
     public BigDecimal getCost() {
         return cost;
     }
@@ -115,6 +124,7 @@ public class Bill implements Serializable {
     /**
      * @return the payment
      */
+    @Column(precision = 1)
     public int getPayment() {
         return payment;
     }
@@ -129,6 +139,8 @@ public class Bill implements Serializable {
     /**
      * @return the dateReturn
      */
+    @Temporal(TemporalType.DATE)
+    @Column
     public java.util.Date getDateReturn() {
         return dateReturn;
     }
@@ -140,5 +152,45 @@ public class Bill implements Serializable {
         this.dateReturn = dateReturn;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Bill bill = (Bill) o;
+
+        if (id != bill.id) return false;
+        if (payment != bill.payment) return false;
+        if (!dateBill.equals(bill.dateBill)) return false;
+        if (!order.equals(bill.order)) return false;
+        if (!description.equals(bill.description)) return false;
+        if (!cost.equals(bill.cost)) return false;
+        return dateReturn != null ? dateReturn.equals(bill.dateReturn) : bill.dateReturn == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + dateBill.hashCode();
+        result = 31 * result + order.hashCode();
+        result = 31 * result + description.hashCode();
+        result = 31 * result + cost.hashCode();
+        result = 31 * result + payment;
+        result = 31 * result + (dateReturn != null ? dateReturn.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "id=" + id +
+                ", dateBill=" + dateBill +
+                ", order=" + order +
+                ", description='" + description + '\'' +
+                ", cost=" + cost +
+                ", payment=" + payment +
+                ", dateReturn=" + dateReturn +
+                '}';
+    }
 }

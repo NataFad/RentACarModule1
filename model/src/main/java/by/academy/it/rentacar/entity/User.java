@@ -93,7 +93,7 @@ public class User implements Serializable {
     /**
      * @return the access
      */
-    @Column(length = 3)
+    @Column(length = 3, nullable = false)
     public int getAccess() {
         return access;
     }
@@ -123,7 +123,7 @@ public class User implements Serializable {
     /**
      * @return the name
      */
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     public String getName() {
         return name;
     }
@@ -138,7 +138,7 @@ public class User implements Serializable {
     /**
      * @return the surname
      */
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     public String getSurname() {
         return surname;
     }

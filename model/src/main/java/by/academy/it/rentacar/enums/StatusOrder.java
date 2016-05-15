@@ -11,7 +11,21 @@ import by.academy.it.rentacar.exceptions.EnumNotFindException;
  *
  */
 public enum StatusOrder {
-	AWAITING, APPROVED, REJECTED, CLOSED;
+	 AWAITING("awaiting"), APPROVED("approved"), REJECTED("rejected"), CLOSED("closed");
+	 private String status;
+
+	StatusOrder(final String status) {
+		this.status = status;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	/**
 	 * The method determines the resulting string value for the status of order
 	 * 
@@ -33,10 +47,28 @@ public enum StatusOrder {
 			throw new EnumNotFindException("Значение <"+statusInt+"> не входит в заданный список");
 		}
 	}
+	public static StatusOrder fromValue(String value){
+		StatusOrder statusOrder = null;
+		if (value != null){
+			for (StatusOrder statusOrder1 : values()){
+				if (statusOrder1.getStatus() == value){
+					statusOrder = statusOrder1;
+				}
+			}
+		}
+		return statusOrder;
+	}
+
 	public String value() {
 		return name();
 	}
-	public static StatusOrder fromValue(String v) {
-		return valueOf(v);
+
+	public String getName(){
+		return this.name();
+	}
+
+	@Override
+	public String toString(){
+		return this.name();
 	}
 }

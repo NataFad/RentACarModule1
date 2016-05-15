@@ -5,8 +5,8 @@ package by.academy.it.rentacar.actions.car;
 
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.actions.CarService;
-import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.managers.ConfigurationManager;
+import by.academy.it.rentacar.viewobject.CarViewObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +58,7 @@ public class SearchCarAction extends Action {
 		request.setAttribute("byDate", formateDate(byDate));
 		getListFilterCar(request, 0);
 
-		List<Car> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
+		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
 		if (list.isEmpty()) {
 			list = null;
 			request.setAttribute("search_result", list);

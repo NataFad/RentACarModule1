@@ -4,6 +4,7 @@ package by.academy.it.rentacar.actions;
 import by.academy.it.rentacar.dao.CarDAO;
 import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.exceptions.DAOException;
+import by.academy.it.rentacar.viewobject.CarViewObject;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -68,8 +69,8 @@ public class CarService {
         return carList;
     }
 
-    public List<Car> getSearchCar(Date fromDate, Date byDate,  HashMap<String, String> filterValues){
-        List<Car> carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
+    public List<CarViewObject> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues){
+        List<CarViewObject> carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
         return carList;
     }
 }

@@ -18,7 +18,8 @@
         <mapping class="by.academy.it.rentacar.entity.Type"/>
         <mapping class="by.academy.it.rentacar.entity.Price"/>
         <mapping class="by.academy.it.rentacar.entity.User"/>
-
+        <mapping class="by.academy.it.rentacar.entity.Order"/>
+        <mapping class="by.academy.it.rentacar.entity.Bill"/>
     </session-factory>
 </hibernate-configuration>
 
