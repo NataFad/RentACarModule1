@@ -45,7 +45,7 @@ public class Bill implements Serializable {
     @GenericGenerator(name = "orders_id", strategy = "foreign",
             parameters = @org.hibernate.annotations.Parameter(name = "property", value = "order"))
     @GeneratedValue(generator = "orders_id")
-    //@Column(name = "orders_id", length = 11)
+    @Column(name = "orders_id", length = 11)
     public int getId() {
         return id;
     }
