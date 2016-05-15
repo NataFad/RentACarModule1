@@ -3,13 +3,12 @@
  */
 package by.academy.it.rentacar.entity;
 
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Class Bill
@@ -26,12 +25,12 @@ import java.math.BigDecimal;
 public class Bill implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
-    private java.util.Date dateBill;
+    private Date dateBill;
     private Order order;
     private String description;
     private BigDecimal cost;
     private int payment;
-    private java.util.Date dateReturn;
+    private Date dateReturn;
 
     /**
      *
@@ -43,10 +42,10 @@ public class Bill implements Serializable {
      * @return the orders_id
      */
     @Id
-    @GenericGenerator(name = "ordersId", strategy = "foreign",
-       parameters = @org.hibernate.annotations.Parameter(name = "property", value = "order"))
-    @GeneratedValue(generator = "ordersId")
-    @Column(name = "orders_id", length = 11)
+    @GenericGenerator(name = "orders_id", strategy = "foreign",
+            parameters = @org.hibernate.annotations.Parameter(name = "property", value = "order"))
+    @GeneratedValue(generator = "orders_id")
+    //@Column(name = "orders_id", length = 11)
     public int getId() {
         return id;
     }
@@ -62,7 +61,7 @@ public class Bill implements Serializable {
      * @return the dateBill
      */
     @Temporal(TemporalType.DATE)
-    @Column(name = "datebill", nullable = false)
+    @Column(nullable = false)
     public java.util.Date getDateBill() {
         return dateBill;
     }
@@ -78,7 +77,6 @@ public class Bill implements Serializable {
      * @return the order
      */
     @OneToOne
-    @JoinColumn(name = "orders_id", nullable = false)
     @PrimaryKeyJoinColumn
     public Order getOrder() {
         return order;
@@ -124,7 +122,7 @@ public class Bill implements Serializable {
     /**
      * @return the payment
      */
-    @Column(precision = 1)
+    @Column(length = 1)
     public int getPayment() {
         return payment;
     }
@@ -141,14 +139,14 @@ public class Bill implements Serializable {
      */
     @Temporal(TemporalType.DATE)
     @Column
-    public java.util.Date getDateReturn() {
+    public Date getDateReturn() {
         return dateReturn;
     }
 
     /**
      * @param dateReturn the dateReturn to set
      */
-    public void setDateReturn(java.sql.Date dateReturn) {
+    public void setDateReturn(Date dateReturn) {
         this.dateReturn = dateReturn;
     }
 
