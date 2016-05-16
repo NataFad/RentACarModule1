@@ -1,6 +1,5 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.dao.RatingDAO;
 import by.academy.it.rentacar.entity.Rating;
 import org.junit.Assert;
@@ -29,6 +28,6 @@ public class RatingDAOTest {
         Assert.assertEquals(ratingTest, rating);
 
         ratingDAO.delete(rating);
-        HibernateUtil.getInstance().closeSession();
+     //   HibernateUtil.getInstance().closeSession();
     }
 }

@@ -1,6 +1,5 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import org.junit.AfterClass;
@@ -90,7 +89,7 @@ public class FuelDAOTest {
 
     @AfterClass
     public static void tearDown() throws Exception {
-        HibernateUtil.getInstance().closeSession();
+      //  HibernateUtil.getInstance().closeSession();
     }
 }
 

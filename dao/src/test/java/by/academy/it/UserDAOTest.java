@@ -1,6 +1,5 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.dao.UserDAO;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
@@ -41,7 +40,7 @@ public class UserDAOTest {
 
     @After
     public void tearDown() throws Exception {
-        HibernateUtil.getInstance().closeSession();
+      //  HibernateUtil.getInstance().closeSession();
     }
 
     @Test

@@ -1,6 +1,5 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
@@ -34,7 +33,7 @@ public class PriceDAOTest {
         // creature new price
         testPrice = new Price();
         testPrice.setName("test price");
-        testPrice.setTransmission(Transmission.AUTO);
+        testPrice.setTransmission(Transmission.MANUAL);
         testPrice.setFuel(testFuel);
         testPrice.setCostOfDay(new BigDecimal(10).setScale(2));
         testPrice.setDiscount(new BigDecimal(1.5).setScale(4, BigDecimal.ROUND_HALF_UP));
@@ -43,7 +42,7 @@ public class PriceDAOTest {
     @Test
     public void getByTransmissionAndFuelTest() throws Exception {
         priceDAO.saveOrUpdate(testPrice);
-        Price expectedPrice = priceDAO.getByTransmissionAndFuel(Transmission.AUTO, testFuel);
+        Price expectedPrice = priceDAO.getByTransmissionAndFuel(Transmission.MANUAL, testFuel);
         Assert.assertEquals("Add price: name", true, testPrice.getName().equals(expectedPrice.getName()));
         Assert.assertEquals("Add price: transmission", testPrice.getTransmission(), expectedPrice.getTransmission());
         Assert.assertEquals("Add price: fuels id", testPrice.getFuel(), expectedPrice.getFuel());
@@ -55,6 +54,6 @@ public class PriceDAOTest {
     public static void tearDown() throws Exception {
         priceDAO.delete(testPrice);
         fuelDAO.delete(testFuel);
-        HibernateUtil.getInstance().closeSession();
+       // HibernateUtil.getInstance().closeSession();
     }
 }

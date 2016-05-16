@@ -78,7 +78,8 @@ public class Car implements Serializable{
 	 * @return the transmission
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, columnDefinition = "enum('AUTO','MANUAL') default 'AUTO'", length = 10)
+	//@MapKeyEnumerated
+	@Column(nullable = false, columnDefinition = "enum('auto','manual') default 'auto'", length = 10)
 	public Transmission getTransmission() {
 		return transmission;
 	}

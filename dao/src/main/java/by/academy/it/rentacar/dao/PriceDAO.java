@@ -45,7 +45,7 @@ public class PriceDAO extends DAO<Price> {
 	public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) {
 		Price price = null;
 		/**String hql = "SELECT P FROM Price as P "
-		 	+ "WHERE P.transmission = '"+ transmission.name() +"' and P.fuel = :fuel";
+		 	+ "WHERE P.transmission = '"+ transmission.getTransmission() +"' and P.fuel = :fuel";
 		Query query = session.createQuery(hql);
 		query.setParameter("fuel", fuel);
 		query.getQueryString();

@@ -1,6 +1,5 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.dao.CarDAO;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.junit.AfterClass;
@@ -27,10 +26,10 @@ public class CarDAOTest {
         filterValues.put("orderBy", "F.name ASC, MAndM.mark ASC");
 
         List<CarViewObject> list = CarDAO.getInstance().searchCar(dateForTest, dateForTest, filterValues);
-        for (CarViewObject car:list){
+        /**for (CarViewObject car:list){
             System.out.println(car);
         }
-
+        */
 
         BigInteger countCar = CarDAO.getInstance().countCarByFilter(dateForTest, dateForTest, filterValues);
 
@@ -41,6 +40,6 @@ public class CarDAOTest {
 
     @AfterClass
     public static void tearDown() throws Exception {
-        HibernateUtil.getInstance().closeSession();
+      //  HibernateUtil.getInstance().closeSession();
     }
 }

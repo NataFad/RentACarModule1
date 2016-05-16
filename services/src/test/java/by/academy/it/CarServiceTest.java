@@ -25,6 +25,7 @@ public class CarServiceTest {
   private static CarService carService = CarService.getInstance();
   private static CarDAO carDAO = CarDAO.getInstance();
   private static Car testCar;
+  private static Transmission transTest = Transmission.AUTO;
 
   @BeforeClass
   public static void setUp() throws Exception {
@@ -34,11 +35,12 @@ public class CarServiceTest {
     ModelAndMark model = ModelAndMarkDAO.getInstance().getById(foreign_id);
     Type type = TypeDAO.getInstance().getById(foreign_id);
 
-    Price price = PriceDAO.getInstance().getByTransmissionAndFuel(Transmission.MANUAL, fuel);
+    System.out.println(fuel);
+    Price price = PriceDAO.getInstance().getByTransmissionAndFuel(transTest, fuel);
     carDAO  = CarDAO.getInstance();
     testCar = new Car();
     testCar.setRegistrationNumber("00-00 TE");
-    testCar.setTransmission(Transmission.MANUAL);
+    testCar.setTransmission(transTest);
     testCar.setRating(rating);
     testCar.setModel(model);
     testCar.setPrice(price);
@@ -67,7 +69,7 @@ public class CarServiceTest {
     Date byDate = Date.valueOf("2016-01-01");
     HashMap<String, String> filterValues = new HashMap<String, String>();
     // Transmission
-    filterValues.put("transmission", Transmission.MANUAL.toString());
+    filterValues.put("transmission", transTest.toString());
     // Fuels
     String foreign_id = "1";
     filterValues.put("fuelId", foreign_id);
