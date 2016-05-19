@@ -35,7 +35,6 @@ public class CarServiceTest {
     ModelAndMark model = ModelAndMarkDAO.getInstance().getById(foreign_id);
     Type type = TypeDAO.getInstance().getById(foreign_id);
 
-    System.out.println(fuel);
     Price price = PriceDAO.getInstance().getByTransmissionAndFuel(transTest, fuel);
     carDAO  = CarDAO.getInstance();
     testCar = new Car();

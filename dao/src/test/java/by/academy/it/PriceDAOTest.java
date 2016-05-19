@@ -30,19 +30,22 @@ public class PriceDAOTest {
         testFuel = new Fuel();
         testFuel.setName("new test");
         fuelDAO.saveOrUpdate(testFuel);
+
+        System.out.println(testFuel);
         // creature new price
         testPrice = new Price();
         testPrice.setName("test price");
-        testPrice.setTransmission(Transmission.MANUAL);
+        testPrice.setTransmission(Transmission.AUTO);
         testPrice.setFuel(testFuel);
         testPrice.setCostOfDay(new BigDecimal(10).setScale(2));
         testPrice.setDiscount(new BigDecimal(1.5).setScale(4, BigDecimal.ROUND_HALF_UP));
+
     }
 
     @Test
     public void getByTransmissionAndFuelTest() throws Exception {
         priceDAO.saveOrUpdate(testPrice);
-        Price expectedPrice = priceDAO.getByTransmissionAndFuel(Transmission.MANUAL, testFuel);
+        Price expectedPrice = priceDAO.getByTransmissionAndFuel(Transmission.AUTO, testFuel);
         Assert.assertEquals("Add price: name", true, testPrice.getName().equals(expectedPrice.getName()));
         Assert.assertEquals("Add price: transmission", testPrice.getTransmission(), expectedPrice.getTransmission());
         Assert.assertEquals("Add price: fuels id", testPrice.getFuel(), expectedPrice.getFuel());
@@ -53,7 +56,7 @@ public class PriceDAOTest {
     @AfterClass
     public static void tearDown() throws Exception {
         priceDAO.delete(testPrice);
-        fuelDAO.delete(testFuel);
+        //fuelDAO.delete(testFuel);
        // HibernateUtil.getInstance().closeSession();
     }
 }

@@ -14,7 +14,7 @@ import by.academy.it.rentacar.exceptions.EnumNotFindException;
  *
  */
 public enum Transmission {
-	AUTO("auto"), MANUAL("manual");
+	AUTO("AUTO"), MANUAL("MANUAL");
 
 	private String transmission;
 
@@ -22,12 +22,8 @@ public enum Transmission {
 		this.transmission = transmission;
 	}
 
-	public String getTransmission(){
+	public String getValue(){
 		return this.transmission;
-	}
-
-	public void setTransmission(String transmission) {
-		this.transmission = transmission;
 	}
 
 	/**
@@ -52,7 +48,7 @@ public enum Transmission {
 		Transmission transmission1 = null;
 		if (value != null){
 			for (Transmission transmissions : values()){
-				if (transmissions.getTransmission().equals(value)){
+				if (transmissions.getValue().equals(value)){
 					transmission1 = transmissions;
 				}
 			}
