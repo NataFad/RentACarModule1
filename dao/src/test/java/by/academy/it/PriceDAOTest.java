@@ -5,7 +5,6 @@ import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.util.HibernateUtil;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -62,6 +61,6 @@ public class PriceDAOTest {
     public static void tearDown() throws Exception {
         priceDAO.delete(testPrice);
         fuelDAO.delete(testFuel);
-        HibernateUtil.getInstance().closeSession();
+       // HibernateUtil.getInstance().closeSession();
     }
 }

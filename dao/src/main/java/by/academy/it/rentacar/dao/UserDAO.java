@@ -47,10 +47,20 @@ public class UserDAO extends DAO<User> {
     public User getUser(String login, String password) throws DAOException {
         User user = null;
 
+        /**
         Criteria criteria = createEntityCriteria();
         criteria.add(Restrictions.and(Restrictions.eq("login", login), Restrictions.eq("password", CoderManager.getHashCode(password))));
-        try {
-            user = (User) criteria.uniqueResult();
+        */
+
+        String hql = "SELECT U.access FROM User as U "
+                + "WHERE U.login = :login and U.password = '" + CoderManager.getHashCode(password) + "'";
+        Query query = session.createQuery(hql);
+        query.setParameter("login", login);
+        query.toString();
+
+         try {
+           // user = (User) criteria.uniqueResult();
+             user = (User) query.uniqueResult();
         } catch (HibernateException e) {
             log.error("Error get the user in UserDAO " + e);
             throw new DAOException(e.getMessage());
@@ -93,6 +103,7 @@ public class UserDAO extends DAO<User> {
                 + "WHERE U.id = :id";
         Query query = session.createQuery(hql);
         query.setParameter("id", Integer.parseInt(id));
+        query.toString();
         int access = 0;
 
         try {

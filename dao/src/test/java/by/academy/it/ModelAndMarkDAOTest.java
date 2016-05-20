@@ -2,7 +2,6 @@ package by.academy.it;
 
 import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import by.academy.it.rentacar.entity.ModelAndMark;
-import by.academy.it.rentacar.util.HibernateUtil;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -65,6 +64,6 @@ public class ModelAndMarkDAOTest {
 
     @AfterClass
     public static void tearDown() throws Exception {
-        HibernateUtil.getInstance().closeSession();
+       // HibernateUtil.getInstance().closeSession();
     }
 }

@@ -41,18 +41,18 @@ public class UserDAOTest {
 
     @After
     public void tearDown() throws Exception {
-        HibernateUtil.getInstance().closeSession();
+        // HibernateUtil.getInstance().closeSession();
     }
 
     @Test
     public void userDAOTest() throws Exception {
         checkLoginTest();
         addUser();
+        System.out.println(userTest);
         HibernateUtil.getInstance().getSession().flush();
         getByIdTest();
         getAccessTest(TypeUser.USER.getType());
         updateAccessTest();
-        getUserTest();
         deleteTest();
     }
 
@@ -66,6 +66,7 @@ public class UserDAOTest {
 
     private void getByIdTest() throws Exception {
         User userExpected = userDAO.getById(userTest.getId());
+        System.out.println(userExpected);
         Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }
@@ -88,7 +89,6 @@ public class UserDAOTest {
 
     private void getUserTest() throws Exception {
         User userExpected = userDAO.getUser("testNata", "filimon");
-        System.out.println(userExpected);
         Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }
