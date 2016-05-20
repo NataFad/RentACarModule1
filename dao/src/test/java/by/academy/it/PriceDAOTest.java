@@ -5,6 +5,7 @@ import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.enums.Transmission;
+import by.academy.it.rentacar.util.HibernateUtil;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -16,6 +17,10 @@ import java.math.BigDecimal;
  * Unit-test class PriceDAO
  * <p>
  * Created by Nata on 18.04.2016.
+ *
+ * @author Fadeeva Natallia
+ * @version 1.2
+ * @since 2016-05
  */
 public class PriceDAOTest {
 
@@ -56,7 +61,7 @@ public class PriceDAOTest {
     @AfterClass
     public static void tearDown() throws Exception {
         priceDAO.delete(testPrice);
-        //fuelDAO.delete(testFuel);
-       // HibernateUtil.getInstance().closeSession();
+        fuelDAO.delete(testFuel);
+        HibernateUtil.getInstance().closeSession();
     }
 }

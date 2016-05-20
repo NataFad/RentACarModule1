@@ -4,7 +4,10 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Car;
+import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.viewobject.CarViewObject;
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
@@ -28,6 +31,7 @@ import java.util.List;
 public class CarDAO extends DAO<Car> {
 
 	private volatile static CarDAO instance;
+	private static Logger log = Logger.getLogger(CarDAO.class);
 
 	private CarDAO() {
 		super();
@@ -91,7 +95,7 @@ public class CarDAO extends DAO<Car> {
 	 * @return list
 	 * @throws SQLException
      */
-	public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+	public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
 		long difference = byDate.getTime() - fromDate.getTime();
 		int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
 		// query text writing
@@ -114,18 +118,23 @@ public class CarDAO extends DAO<Car> {
 			sqlQuery = sqlQuery + " ORDER BY CarVO.transmission, F.name, T.name, R.name";
 		}
 
-		List<CarViewObject> list = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
-				.addScalar("registrationNumber", StandardBasicTypes.STRING)
-				.addScalar("transmission", StandardBasicTypes.STRING)
-				.addScalar("rating", StandardBasicTypes.STRING)
-				.addScalar("typeCar", StandardBasicTypes.STRING)
-				.addScalar("model", StandardBasicTypes.STRING)
-				.addScalar("marka", StandardBasicTypes.STRING)
-				.addScalar("fuel", StandardBasicTypes.STRING)
-				.addScalar("description", StandardBasicTypes.STRING)
-				.addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
-				.setResultTransformer(Transformers.aliasToBean(CarViewObject.class)).list();
-
+		List<CarViewObject> list = null;
+		try {
+			list = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+					.addScalar("registrationNumber", StandardBasicTypes.STRING)
+					.addScalar("transmission", StandardBasicTypes.STRING)
+					.addScalar("rating", StandardBasicTypes.STRING)
+					.addScalar("typeCar", StandardBasicTypes.STRING)
+					.addScalar("model", StandardBasicTypes.STRING)
+					.addScalar("marka", StandardBasicTypes.STRING)
+					.addScalar("fuel", StandardBasicTypes.STRING)
+					.addScalar("description", StandardBasicTypes.STRING)
+					.addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
+					.setResultTransformer(Transformers.aliasToBean(CarViewObject.class)).list();
+		} catch (HibernateException e){
+			log.error("Error search cars in CarDAO " + e);
+			throw new DAOException(e.getMessage());
+		}
 		return list;
 	}
 
@@ -139,15 +148,21 @@ public class CarDAO extends DAO<Car> {
 	 * @return
 	 * @throws SQLException
 	 */
-	public BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+	public BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
 		// query text writing
 		String sqlQuery = "SELECT count(*) "
 				+ sqlQueryStringByFilter(fromDate, byDate, filterValues);
 
 		Query query = session.createSQLQuery(sqlQuery);
-		List results = query.list();
-		BigInteger countCar = (BigInteger) results.get(0);
+		BigInteger countCar = BigInteger.ZERO;
 
+		try {
+		List results = query.list();
+		countCar = (BigInteger) results.get(0);
+		} catch (HibernateException e){
+			log.error("Error count of the cars by filter in CarDAO " + e);
+			throw new DAOException(e.getMessage());
+		}
 		return countCar;
 	}
 }

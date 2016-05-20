@@ -2,6 +2,7 @@ package by.academy.it;
 
 import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import by.academy.it.rentacar.entity.ModelAndMark;
+import by.academy.it.rentacar.util.HibernateUtil;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -43,7 +44,7 @@ public class ModelAndMarkDAOTest {
         modelDAO.saveOrUpdate(testModel);
     }
 
-    private void getAllModelsTest() throws Exception{
+    private void getAllModelsTest() throws Exception {
         List<ModelAndMark> listModels = (ArrayList<ModelAndMark>) modelDAO.getAll();
         ModelAndMark expectedModel = listModels.get(listModels.size() - 1);
 
@@ -51,19 +52,19 @@ public class ModelAndMarkDAOTest {
         Assert.assertEquals("Add model and mark: model", true, testModel.getModel().equals(expectedModel.getModel()));
     }
 
-    private void getModelByIdTest() throws Exception{
+    private void getModelByIdTest() throws Exception {
         ModelAndMark expectedModel = modelDAO.getById(testModel.getId());
 
         Assert.assertNotNull(expectedModel);
         Assert.assertEquals(expectedModel, testModel);
     }
 
-    private void deleteModelTest() throws Exception{
+    private void deleteModelTest() throws Exception {
         modelDAO.delete(testModel);
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
-       // HibernateUtil.getInstance().closeSession();
+        HibernateUtil.getInstance().closeSession();
     }
 }

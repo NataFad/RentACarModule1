@@ -41,7 +41,7 @@ public class UserService {
 	 * @param user
 	 * @return successRegistrate
      */
-	public int registerUser(User user){
+	public int registerUser(User user) throws DAOException {
 		int successRegistrate = 1;
 
 		UserDAO userDAO = UserDAO.getInstance();
@@ -66,7 +66,7 @@ public class UserService {
 	 * @param password
      * @return
      */
-	public User loginUser(String login, String password){
+	public User loginUser(String login, String password) throws DAOException {
 		User user = null;
 		user = UserDAO.getInstance().getUser(login, password);
 		return user;

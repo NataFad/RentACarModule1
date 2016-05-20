@@ -2,6 +2,7 @@ package by.academy.it;
 
 import by.academy.it.rentacar.dao.TypeDAO;
 import by.academy.it.rentacar.entity.Type;
+import by.academy.it.rentacar.util.HibernateUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,6 +31,6 @@ public class TypeDAOTest {
         Assert.assertEquals(testType, type);
 
         typeDAO.delete(type);
-       // HibernateUtil.getInstance().closeSession();
+        HibernateUtil.getInstance().closeSession();
     }
 }

@@ -70,7 +70,12 @@ public class CarService {
     }
 
     public List<CarViewObject> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues){
-        List<CarViewObject> carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
+        List<CarViewObject> carList = null;
+        try {
+            carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return carList;
     }
 }

@@ -7,6 +7,7 @@ import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.actions.UserService;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
+import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +47,12 @@ public class LoginUserAction extends Action{
 
 		// проверяем, не пытается ли пользователь повторно авторизоваться
 		if (type == TypeUser.GUEST) {
-			User userReg = UserService.getInstance().loginUser(login, password);
+			User userReg = null;
+			try {
+				userReg = UserService.getInstance().loginUser(login, password);
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
 			if (userReg == null) {
 				session.setAttribute("errorLoginPassMessage", errorManager.getProperty("error.login"));
 				return ConfigurationManager.getProperty("page.main");

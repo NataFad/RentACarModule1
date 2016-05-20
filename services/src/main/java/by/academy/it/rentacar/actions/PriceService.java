@@ -4,6 +4,7 @@ import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.enums.Transmission;
+import by.academy.it.rentacar.exceptions.DAOException;
 
 /**
  * Class PriceService induces PriceDAO
@@ -37,7 +38,7 @@ public class PriceService {
      * @param fuel
      * @return
      */
-    public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel){
+    public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) throws DAOException {
         Price price = null;
         price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuel);
         return price;

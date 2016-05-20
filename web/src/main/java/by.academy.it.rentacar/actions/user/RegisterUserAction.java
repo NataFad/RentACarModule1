@@ -3,6 +3,7 @@ package by.academy.it.rentacar.actions.user;
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.actions.UserService;
 import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +42,12 @@ public class RegisterUserAction extends Action{
         user.setPhone(request.getParameter("phone").trim());
         user.setAccess(access);
 
-        int successRegister = UserService.getInstance().registerUser(user);
+        int successRegister = 0;
+        try {
+            successRegister = UserService.getInstance().registerUser(user);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
 
         switch (successRegister){
             case -1:

@@ -1,6 +1,9 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Fuel;
+import by.academy.it.rentacar.exceptions.DAOException;
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.List;
 public class FuelDAO extends DAO<Fuel>{
 
     private volatile static FuelDAO instance;
+    private static Logger log = Logger.getLogger(FuelDAO.class);
 
     private FuelDAO() {
         super();
@@ -38,11 +42,17 @@ public class FuelDAO extends DAO<Fuel>{
      * Method searchByName() searches all fuels by name
      *
      */
-    public List<Fuel> searchByName(String nameSearch) {
+    public List<Fuel> searchByName(String nameSearch) throws DAOException {
         String hql = "SELECT F FROM Fuel as F WHERE F.name = :nameFuel";
         Query query = session.createQuery(hql);
         query.setParameter("nameFuel", nameSearch);
-        List<Fuel> list = (ArrayList<Fuel>) query.list();
+        List<Fuel> list = null;
+        try{
+            list = (ArrayList<Fuel>) query.list();
+        } catch (HibernateException e){
+            log.error("Error of the search of fuel by name in FuelDAO " + e);
+            throw new DAOException(e.getMessage());
+        }
         return list;
     }
 

@@ -2,6 +2,8 @@ package by.academy.it;
 
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.entity.Fuel;
+import by.academy.it.rentacar.exceptions.DAOException;
+import by.academy.it.rentacar.util.HibernateUtil;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -36,6 +38,7 @@ public class FuelDAOTest {
     public void testFuelDAO() throws Exception {
         addFuelTest();
         getByIdTest();
+        getTest();
         getAllFuelTest();
         countFuelTest();
         updateFuelTest();
@@ -49,6 +52,12 @@ public class FuelDAOTest {
 
     private void getByIdTest(){
         expectedFuel = fuelDAO.getById(testFuel.getId());
+        Assert.assertNotNull(expectedFuel);
+        Assert.assertEquals(expectedFuel, testFuel);
+    }
+
+    private void getTest() throws DAOException {
+        expectedFuel = fuelDAO.get(testFuel.getId());
         Assert.assertNotNull(expectedFuel);
         Assert.assertEquals(expectedFuel, testFuel);
     }
@@ -89,7 +98,7 @@ public class FuelDAOTest {
 
     @AfterClass
     public static void tearDown() throws Exception {
-      //  HibernateUtil.getInstance().closeSession();
+        HibernateUtil.getInstance().closeSession();
     }
 }
 

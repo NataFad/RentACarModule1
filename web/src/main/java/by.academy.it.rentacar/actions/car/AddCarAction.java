@@ -8,6 +8,7 @@ import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
+import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +60,11 @@ public class AddCarAction extends Action {
 		rateDiscountByType = type.getRateDiscount();
 
 		Fuel fuel = FuelDAO.getInstance().getById(fuelId);
-		priceCar = PriceService.getInstance().getByTransmissionAndFuel(transmission, fuel);
+		try {
+			priceCar = PriceService.getInstance().getByTransmissionAndFuel(transmission, fuel);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 		if (priceCar == null) {
 			request.getSession().setAttribute("addCarMessage", errorManager.getProperty("error.priceCar") + errorManager.getProperty("error.addcar"));
 			return ConfigurationManager.getProperty("page.addCar");

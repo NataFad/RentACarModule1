@@ -4,6 +4,7 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Rating;
+import org.apache.log4j.Logger;
 
 /**
  * Class RatingDAO
@@ -11,13 +12,14 @@ import by.academy.it.rentacar.entity.Rating;
  * Class RatingDAO creates object Rating and executes queries the table Ratings.
  * 
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  * 
  */
 public class RatingDAO extends DAO<Rating> {
 
 	private volatile static RatingDAO instance;
+	private static Logger log = Logger.getLogger(RatingDAO.class);
 
 	private RatingDAO() {
 		super();
