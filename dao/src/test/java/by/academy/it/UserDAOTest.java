@@ -50,6 +50,7 @@ public class UserDAOTest {
         getByIdTest();
         getAccessTest(TypeUser.USER.getType());
         updateAccessTest();
+        getUserTest();
         deleteTest();
     }
 
@@ -62,9 +63,9 @@ public class UserDAOTest {
     }
 
     private void getByIdTest() throws Exception {
-        User userExpexted = userDAO.getById(userTest.getId());
-        Assert.assertNotNull(userExpexted);
-        Assert.assertEquals(userExpexted, userTest);
+        User userExpected = userDAO.getById(userTest.getId());
+        Assert.assertNotNull(userExpected);
+        Assert.assertEquals(userExpected, userTest);
     }
 
     private void checkLoginTest() throws Exception {
@@ -81,6 +82,12 @@ public class UserDAOTest {
         userTest.setAccess(TypeUser.ADMINISTRATOR.getType());
         userDAO.saveOrUpdate(userTest);
         getAccessTest(TypeUser.ADMINISTRATOR.getType());
+    }
+
+    private void getUserTest() throws Exception{
+        User userExpected = userDAO.getUser(userTest.getLogin(), userTest.getPassword());
+        Assert.assertNotNull(userExpected);
+        Assert.assertEquals(userExpected, userTest);
     }
 
     private void deleteTest() throws DAOException {

@@ -8,7 +8,7 @@
  * Use, disclosure, or reproduction is prohibited
  * without prior written approval from VeriFone, Inc.
  */
-package by.academy.it.rentacar.by.academy.it.rentacar.util;
+package by.academy.it.rentacar.util;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -17,13 +17,13 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 
-/**Class HibernateUtil
+/**
+ * Class HibernateUtil
  * is
  *
- * @author  Fadeeva Natallia
+ * @author Fadeeva Natallia
  * @version 1.1
  * @since 2016-04
- *
  */
 public class HibernateUtil {
     private static HibernateUtil util = null;
@@ -40,11 +40,11 @@ public class HibernateUtil {
             sessionFactory = configuration.buildSessionFactory(builder.build());
         } catch (Throwable ex) {
             log.error("Initial SessionFactory creation failed." + ex);
-           // System.exit(0);
+            System.exit(0);
         }
     }
 
-    public Session getSession () {
+    public Session getSession() {
         Session session = (Session) sessions.get();
         if (session == null) {
             session = sessionFactory.openSession();
@@ -64,7 +64,7 @@ public class HibernateUtil {
         return util;
     }
 
-    public void closeSession(){
+    public void closeSession() {
         Session session = (Session) sessions.get();
         sessions.set(null);
         if (session != null) {
@@ -72,6 +72,5 @@ public class HibernateUtil {
                 session.close();
             }
         }
-
     }
 }

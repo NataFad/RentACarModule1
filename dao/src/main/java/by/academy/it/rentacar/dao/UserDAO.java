@@ -77,8 +77,7 @@ public class UserDAO extends DAO<User> {
 
     /**
      * Method getAccess() gets the type of user access
-     * <p>
-     * implements #GET_ACCESS
+     *
      */
     public int getAccess(String id) {
         String hql = "SELECT U.access FROM User as U "

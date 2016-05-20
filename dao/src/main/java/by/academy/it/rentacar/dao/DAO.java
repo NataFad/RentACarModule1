@@ -3,7 +3,7 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.by.academy.it.rentacar.util.HibernateUtil;
+import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.DBSqlManager;
 import org.apache.log4j.Logger;

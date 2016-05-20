@@ -1,6 +1,7 @@
 package by.academy.it;
 
 import by.academy.it.rentacar.dao.CarDAO;
+import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -40,6 +41,6 @@ public class CarDAOTest {
 
     @AfterClass
     public static void tearDown() throws Exception {
-      //  HibernateUtil.getInstance().closeSession();
+        HibernateUtil.getInstance().closeSession();
     }
 }

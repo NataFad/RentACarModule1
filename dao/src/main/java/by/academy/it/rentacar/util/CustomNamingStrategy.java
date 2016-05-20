@@ -1,4 +1,4 @@
-package by.academy.it.rentacar.by.academy.it.rentacar.util;
+package by.academy.it.rentacar.util;
 
 import org.hibernate.cfg.DefaultNamingStrategy;
 
