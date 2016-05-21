@@ -5,7 +5,6 @@ import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.CoderManager;
-import by.academy.it.rentacar.util.HibernateUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,13 +48,11 @@ public class UserDAOTest {
     public void userDAOTest() throws Exception {
         checkLoginTest();
         addUser();
-        System.out.println(userTest);
-        HibernateUtil.getInstance().getSession().flush();
         getByIdTest();
         getAccessTest(TypeUser.USER.getType());
         getUserTest();
         updateAccessTest();
-     //   deleteTest();
+        deleteTest();
     }
 
     private void addUser() {
@@ -71,17 +68,13 @@ public class UserDAOTest {
 
     private void getByIdTest() throws Exception {
         User userExpected = userDAO.getById(userTest.getId());
-       Assert.assertNotNull(userExpected);
+        Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }
 
     private void checkLoginTest() throws Exception {
         boolean check = userDAO.checkLogin("testfil");
         Assert.assertTrue(check);
-
-        check = userDAO.checkLogin("testNata");
-        System.out.println(check);
-        //Assert.assertFalse(check);
     }
 
     private void getAccessTest(int accessExpected) throws Exception {

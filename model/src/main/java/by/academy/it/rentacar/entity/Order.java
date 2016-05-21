@@ -190,7 +190,7 @@ public class Order implements Serializable {
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10,
-            columnDefinition = "enum('awaiting','approved', 'rejected', 'closed') default 'awaiting'")
+            columnDefinition = "enum('AWAITING','APPROVED', 'REJECTED', 'CLOSED') default 'AWAITING'")
     public StatusOrder getStatus() {
         return status;
     }

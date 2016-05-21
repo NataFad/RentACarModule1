@@ -11,19 +11,15 @@ import by.academy.it.rentacar.exceptions.EnumNotFindException;
  *
  */
 public enum StatusOrder {
-	 AWAITING("awaiting"), APPROVED("approved"), REJECTED("rejected"), CLOSED("closed");
+	 AWAITING("AWAITING"), APPROVED("APPROVED"), REJECTED("REJECTED"), CLOSED("CLOSED");
 	 private String status;
 
 	StatusOrder(final String status) {
 		this.status = status;
 	}
 
-	public String getStatus() {
+	public String getValue() {
 		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	/**
@@ -51,7 +47,7 @@ public enum StatusOrder {
 		StatusOrder statusOrder = null;
 		if (value != null){
 			for (StatusOrder statusOrder1 : values()){
-				if (statusOrder1.getStatus() == value){
+				if (statusOrder1.getValue().equals(value)){
 					statusOrder = statusOrder1;
 				}
 			}

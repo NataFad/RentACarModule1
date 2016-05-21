@@ -52,11 +52,10 @@ public class UserDAO extends DAO<User> {
         criteria.toString();
         */
 
-        String hql = "SELECT U.access FROM User as U "
-                + "WHERE U.password = '" + CoderManager.getHashCode(password) + "' and U.login = :login";
+        String hql = "SELECT U FROM User as U "
+                + "WHERE U.password = '" + CoderManager.getHashCode(password) + "' and U.login = :loginUser";
         Query query = session.createQuery(hql);
-        query.setParameter("login", login);
-        query.getQueryString();
+        query.setParameter("loginUser", login);
 
          try {
            // user = (User) criteria.uniqueResult();
