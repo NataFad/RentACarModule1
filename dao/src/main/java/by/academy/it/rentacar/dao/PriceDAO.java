@@ -57,7 +57,7 @@ public class PriceDAO extends DAO<Price> {
 
         Criteria criteria = createEntityCriteria();
         criteria.add(Restrictions.and(Restrictions.eq("fuel", fuel), Restrictions.eq("transmission", transmission)));
-        System.out.println(criteria.toString());
+
         try {
             price = (Price) criteria.uniqueResult();
         } catch (HibernateException e) {

@@ -4,6 +4,7 @@ import by.academy.it.rentacar.dao.UserDAO;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
+import by.academy.it.rentacar.managers.CoderManager;
 import by.academy.it.rentacar.util.HibernateUtil;
 import org.junit.After;
 import org.junit.Assert;
@@ -52,28 +53,35 @@ public class UserDAOTest {
         HibernateUtil.getInstance().getSession().flush();
         getByIdTest();
         getAccessTest(TypeUser.USER.getType());
+        getUserTest();
         updateAccessTest();
-        deleteTest();
+     //   deleteTest();
     }
 
     private void addUser() {
+        String password = userTest.getPassword();
+        userTest.setPassword(CoderManager.getHashCode(password));
         try {
             userDAO.saveOrUpdate(userTest);
         } catch (DAOException e) {
             e.printStackTrace();
         }
+        userTest.setPassword(password);
     }
 
     private void getByIdTest() throws Exception {
         User userExpected = userDAO.getById(userTest.getId());
-        System.out.println(userExpected);
-        Assert.assertNotNull(userExpected);
+       Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }
 
     private void checkLoginTest() throws Exception {
         boolean check = userDAO.checkLogin("testfil");
         Assert.assertTrue(check);
+
+        check = userDAO.checkLogin("testNata");
+        System.out.println(check);
+        //Assert.assertFalse(check);
     }
 
     private void getAccessTest(int accessExpected) throws Exception {
@@ -88,7 +96,9 @@ public class UserDAOTest {
     }
 
     private void getUserTest() throws Exception {
+        System.out.println(userTest);
         User userExpected = userDAO.getUser("testNata", "filimon");
+        System.out.println(userExpected);
         Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }
