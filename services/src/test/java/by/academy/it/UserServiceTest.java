@@ -44,13 +44,13 @@ public class UserServiceTest {
 
     @After
     public void tearDown() throws Exception {
-       HibernateUtil.getInstance().getSession().beginTransaction();
+        HibernateUtil.getInstance().getSession().beginTransaction();
         UserDAO.getInstance().delete(userTest);
         HibernateUtil.getInstance().getSession().getTransaction().commit();
     }
 
     public void registerUserTest() throws Exception {
-       HibernateUtil.getInstance().getSession().beginTransaction();
+        HibernateUtil.getInstance().getSession().beginTransaction();
         password = userTest.getPassword();
         int registerSuccess = userService.registerUser(userTest);
 
@@ -58,15 +58,15 @@ public class UserServiceTest {
     }
 
     public void loginUserTest() throws Exception {
-       HibernateUtil.getInstance().getSession().beginTransaction();
+        HibernateUtil.getInstance().getSession().beginTransaction();
         User userReg = UserService.getInstance().loginUser(userTest.getLogin(), password, userTest);
 
         Assert.assertNotNull(userReg);
         Assert.assertEquals(userTest, userReg);
     }
 
-    public void exitUserTest() throws Exception{
-       HibernateUtil.getInstance().getSession().beginTransaction();
+    public void exitUserTest() throws Exception {
+        HibernateUtil.getInstance().getSession().beginTransaction();
         User userGuest = UserService.getInstance().exitUser();
 
         Assert.assertNotNull(userGuest);

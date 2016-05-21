@@ -27,7 +27,6 @@ public class UserService implements IUserService{
 
 	private volatile static UserService instance;
 	private Logger log = Logger.getLogger(UserService.class);
-	//private Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
 
 	private UserService(){}
 
@@ -48,29 +47,36 @@ public class UserService implements IUserService{
 	 * @param user
 	 * @return successRegistrate
      */
-	public int registerUser(User user) throws DAOException {
+	public int registerUser(User user) {
 		int successRegistrate = 1;
 		Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }
+
 		UserDAO userDAO = UserDAO.getInstance();
-		if (!userDAO.checkLogin(user.getLogin().trim())) {
-			successRegistrate = -1;
-			log.error("User has yet registered with the login");
+		try {
+			if (!userDAO.checkLogin(user.getLogin().trim())) {
+                successRegistrate = -1;
+                log.error("User has yet registered with the login");
+                transaction.rollback();
+            } else {
+                try {
+                    user.setPassword(CoderManager.getHashCode(user.getPassword()));
+                    userDAO.saveOrUpdate(user);
+                    if (!transaction.wasCommitted()) {
+                        transaction.commit();
+                    }
+                } catch (DAOException e) {
+                    successRegistrate = -2;
+                    log.error("The registration has not been completed");
+                    transaction.rollback();
+                }
+            }
+		} catch (DAOException e) {
+			successRegistrate = -2;
+			log.error("The registration has not been completed");
 			transaction.rollback();
-		} else {
-			try {
-				user.setPassword(CoderManager.getHashCode(user.getPassword()));
-				userDAO.saveOrUpdate(user);
-				if (!transaction.wasCommitted()) {
-					transaction.commit();
-				}
-			} catch (DAOException e) {
-				successRegistrate = -2;
-				log.error("The registration has not been completed");
-				transaction.rollback();
-			}
 		}
 		return successRegistrate;
 	}
@@ -89,6 +95,7 @@ public class UserService implements IUserService{
         if (!transaction.isActive()){
             transaction.begin();
         }
+
 		try {
 			type = TypeUser.stringToEnum(user.getAccess());
 		} catch (EnumNotFindException e) {
@@ -116,6 +123,10 @@ public class UserService implements IUserService{
 		return userReg;
 	}
 
+	/**
+	 * Method exitUser() gets new user-guest
+	 *
+	 */
 	public User exitUser(){
 		Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
         if (!transaction.isActive()){
