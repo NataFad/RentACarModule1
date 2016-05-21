@@ -20,12 +20,8 @@ public enum TypeUser{
 		this.type = type;
 	}
 
-	public int getType() {
+	public int getValue() {
 		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
 	}
 
 	/**
@@ -52,7 +48,7 @@ public enum TypeUser{
 		TypeUser typeUser = null;
 		if (value != 0){
 			for (TypeUser typeUsers : values()){
-				if (typeUsers.getType() == value){
+				if (typeUsers.getValue() == value){
 					typeUser = typeUsers;
 				}
 			}

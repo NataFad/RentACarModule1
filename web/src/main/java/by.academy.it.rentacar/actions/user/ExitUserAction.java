@@ -1,6 +1,7 @@
 package by.academy.it.rentacar.actions.user;
 
 import by.academy.it.rentacar.actions.Action;
+import by.academy.it.rentacar.actions.UserService;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 
@@ -24,10 +25,8 @@ public class ExitUserAction extends Action {
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
 
-		User userGuest = new User();
-		userGuest.setName("Гость");
-		userGuest.setAccess(0);
-		
+		User userGuest = UserService.getInstance().exitUser();
+
 		session.setAttribute("access", 0);
 		session.setAttribute("user", userGuest);
 		session.removeAttribute("errorLoginPassMessage");

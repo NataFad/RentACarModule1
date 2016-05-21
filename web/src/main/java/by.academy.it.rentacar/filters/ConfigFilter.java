@@ -2,6 +2,7 @@ package by.academy.it.rentacar.filters;
 
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.managers.ConfigurationManager;
+import by.academy.it.rentacar.util.HibernateUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,7 @@ public class ConfigFilter implements Filter {
 		}
 		// pass the request along the filter chain
 		chain.doFilter(request, response);
+		HibernateUtil.getInstance().closeSession();
 	}
 
 	public void init(FilterConfig filter) throws ServletException {

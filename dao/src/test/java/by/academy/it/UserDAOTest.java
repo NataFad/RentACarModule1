@@ -49,7 +49,7 @@ public class UserDAOTest {
         checkLoginTest();
         addUser();
         getByIdTest();
-        getAccessTest(TypeUser.USER.getType());
+        getAccessTest(TypeUser.USER.getValue());
         getUserTest();
         updateAccessTest();
         deleteTest();
@@ -83,9 +83,9 @@ public class UserDAOTest {
     }
 
     private void updateAccessTest() throws Exception {
-        userTest.setAccess(TypeUser.ADMINISTRATOR.getType());
+        userTest.setAccess(TypeUser.ADMINISTRATOR.getValue());
         userDAO.saveOrUpdate(userTest);
-        getAccessTest(TypeUser.ADMINISTRATOR.getType());
+        getAccessTest(TypeUser.ADMINISTRATOR.getValue());
     }
 
     private void getUserTest() throws Exception {
