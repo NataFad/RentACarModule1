@@ -6,10 +6,12 @@ package by.academy.it.rentacar.dao;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.CoderManager;
+import by.academy.it.rentacar.util.HibernateUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -45,6 +47,7 @@ public class UserDAO extends DAO<User> {
      * Method getUser() searches user by login and password
      */
     public User getUser(String login, String password) throws DAOException {
+        Session session = HibernateUtil.getInstance().getSession();
         User user = null;
         /**
         Criteria criteria = createEntityCriteria();
@@ -98,6 +101,7 @@ public class UserDAO extends DAO<User> {
      * Method getAccess() gets the type of user access
      */
     public int getAccess(String id) throws DAOException {
+        Session session = HibernateUtil.getInstance().getSession();
         String hql = "SELECT U.access FROM User as U "
                 + "WHERE U.id = :id";
         Query query = session.createQuery(hql);

@@ -2,9 +2,11 @@ package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.exceptions.DAOException;
+import by.academy.it.rentacar.util.HibernateUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ public class FuelDAO extends DAO<Fuel>{
      *
      */
     public List<Fuel> searchByName(String nameSearch) throws DAOException {
+        Session session = HibernateUtil.getInstance().getSession();
         String hql = "SELECT F FROM Fuel as F WHERE F.name = :nameFuel";
         Query query = session.createQuery(hql);
         query.setParameter("nameFuel", nameSearch);

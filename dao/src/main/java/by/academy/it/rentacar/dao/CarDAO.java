@@ -5,10 +5,12 @@ package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.exceptions.DAOException;
+import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 
@@ -96,6 +98,7 @@ public class CarDAO extends DAO<Car> {
 	 * @throws SQLException
      */
 	public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
+		Session session = HibernateUtil.getInstance().getSession();
 		long difference = byDate.getTime() - fromDate.getTime();
 		int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
 		// query text writing
@@ -149,6 +152,7 @@ public class CarDAO extends DAO<Car> {
 	 * @throws SQLException
 	 */
 	public BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
+		Session session = HibernateUtil.getInstance().getSession();
 		// query text writing
 		String sqlQuery = "SELECT count(*) "
 				+ sqlQueryStringByFilter(fromDate, byDate, filterValues);

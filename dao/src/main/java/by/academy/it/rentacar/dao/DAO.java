@@ -28,7 +28,7 @@ import java.util.List;
 public abstract class DAO<T> implements IDAO<T> {
 
     private static Logger log = Logger.getLogger(DAO.class);
-    protected static Session session = HibernateUtil.getInstance().getSession();
+   // protected static Session session = HibernateUtil.getInstance().getSession();
 
     /**
      * Method saveOrUpdate() saves or updates object T from the table
@@ -36,6 +36,7 @@ public abstract class DAO<T> implements IDAO<T> {
      * @param entity
      */
     public void saveOrUpdate(T entity) throws DAOException {
+        Session session = HibernateUtil.getInstance().getSession();
         try {
             session.saveOrUpdate(entity);
             log.info("saveOrUpdate(entity):" + entity);
@@ -54,6 +55,7 @@ public abstract class DAO<T> implements IDAO<T> {
      * @return entity
      */
     public T get(Serializable id) throws DAOException {
+        Session session = HibernateUtil.getInstance().getSession();
         log.info("Get class by id:" + id);
         T entity = null;
         try {
@@ -74,6 +76,7 @@ public abstract class DAO<T> implements IDAO<T> {
      * @return entity
      */
     public T load(Serializable id) throws DAOException {
+        Session session = HibernateUtil.getInstance().getSession();
         log.info("Load class by id:" + id);
         T entity = null;
         try {
@@ -93,6 +96,7 @@ public abstract class DAO<T> implements IDAO<T> {
      * @param entity
      */
     public void delete(T entity) throws DAOException {
+        Session session = HibernateUtil.getInstance().getSession();
         try {
             session.delete(entity);
             log.info("Delete:" + entity);
@@ -143,6 +147,7 @@ public abstract class DAO<T> implements IDAO<T> {
      * @return results
      */
     protected Criteria createEntityCriteria() {
+        Session session = HibernateUtil.getInstance().getSession();
         return session.createCriteria(getPersistentClass());
     }
 

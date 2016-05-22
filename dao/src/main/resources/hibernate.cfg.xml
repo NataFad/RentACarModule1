@@ -13,7 +13,7 @@
         <property name="transaction.auto_close_session">false</property>
         <property name="show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">validate</property>
-        <property name="hibernate.c3p0.timeout">10000</property>
+        <property name="hibernate.c3p0.timeout">1000</property>
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.bytecode.use_reflection_optimizer">true</property>
         <!-- Mapping class -->
