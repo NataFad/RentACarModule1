@@ -15,7 +15,7 @@
         <property name="hibernate.hbm2ddl.auto">validate</property>
         <property name="hibernate.c3p0.timeout">10000</property>
         <property name="hibernate.format_sql">true</property>
-        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.bytecode.use_reflection_optimizer">true</property>
         <!-- Mapping class -->
         <mapping class="by.academy.it.rentacar.entity.Fuel"/>
         <mapping class="by.academy.it.rentacar.entity.ModelAndMark"/>

@@ -47,20 +47,4 @@ public class FuelService {
         }
         return fuelList;
     }
-
-    /**
-     * Method getById calls the method in FuelDAO
-     *
-     * @param id
-     * @return
-     */
-    public Fuel getById(int id){
-        Fuel fuel = null;
-        try {
-            fuel = FuelDAO.getInstance().get(id);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-        return fuel;
-    }
 }

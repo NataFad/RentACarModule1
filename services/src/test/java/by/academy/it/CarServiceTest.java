@@ -4,6 +4,7 @@ import by.academy.it.rentacar.actions.CarService;
 import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
+import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -51,17 +52,31 @@ public class CarServiceTest {
   }
 
   @Test
-  public void registerCarTest() throws Exception {
-    int success = carService.register(testCar);
-    Assert.assertEquals("Registered the car", 1, success);
+  public void CarServiceTest() throws Exception{
+    registerCarTest();
+    getAllCarsServiceTest();
   }
 
-  @Test
-  public void getAllCarsServiceTest() throws Exception {
+  private void registerCarTest() throws Exception {
+    HibernateUtil.getInstance().getSession().beginTransaction();
+
+    HashMap<String, String> parametresCar = new HashMap<String, String>();
+    parametresCar.put("transmission", transTest.name());
+    parametresCar.put("fuelId", "1");
+    parametresCar.put("typeId", "1");
+    parametresCar.put("ratingId", "1");
+    parametresCar.put("registrationNumber",	"00-00 TE");
+    parametresCar.put("modelId", "1");
+    parametresCar.put("description", "test");
+
+    testCar = carService.registeredCar(parametresCar);
+    Assert.assertNotNull(testCar);
+  }
+
+  private void getAllCarsServiceTest() throws Exception {
+    HibernateUtil.getInstance().getSession().beginTransaction();
     ArrayList<Car> carsList = carService.getAllCars();
     Assert.assertNotNull(carsList);
-    Car car = carsList.get(carsList.size()-1);
-    testCar.setId(car.getId());
 
     // period
     Date fromDate = Date.valueOf("2016-01-01");
@@ -77,11 +92,12 @@ public class CarServiceTest {
     // Rating
     filterValues.put("ratingId", foreign_id);
 
+    HibernateUtil.getInstance().getSession().beginTransaction();
     List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
     Assert.assertNotNull(list);
     CarViewObject carVO = list.get(list.size()-1);
 
-    Assert.assertEquals("Registered car: registration number", true, testCar.getRegistrationNumber().equals(car.getRegistrationNumber()));
+    Assert.assertEquals("Registered car: registration number", true, testCar.getRegistrationNumber().equals(carVO.getRegistrationNumber()));
     Assert.assertEquals("Registered car: fuel", testCar.getFuel().getName(), carVO.getFuel());
     Assert.assertEquals("Registered car: type", testCar.getType().getName(), carVO.getType());
     Assert.assertEquals("Registered car: rating", testCar.getRating().getName(), carVO.getRating());
@@ -90,6 +106,8 @@ public class CarServiceTest {
 
   @AfterClass
   public static void tearDown() throws Exception {
+    HibernateUtil.getInstance().getSession().beginTransaction();
     carDAO.delete(testCar);
+    HibernateUtil.getInstance().getSession().getTransaction().commit();
   }
 }

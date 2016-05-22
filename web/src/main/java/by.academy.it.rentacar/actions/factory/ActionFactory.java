@@ -11,7 +11,6 @@ import by.academy.it.rentacar.actions.user.LoginUserAction;
 import by.academy.it.rentacar.actions.user.RegisterUserAction;
 import by.academy.it.rentacar.exceptions.ActionNotFoundException;
 import by.academy.it.rentacar.util.HibernateUtil;
-import org.hibernate.Session;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -57,9 +56,8 @@ public class ActionFactory {
 
 	public Action getAction(HttpServletRequest request) throws ActionNotFoundException {
 		String actionName = request.getParameter("command");// 'command' means action name
+		HibernateUtil.getInstance().getSession();
 		if (actionName != null) {
-			Session session = HibernateUtil.getInstance().getSession();
-			session.beginTransaction();
 			Action action = container.get(actionName);
 			if (action == null) {
 				throw new ActionNotFoundException(actionName);

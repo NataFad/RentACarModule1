@@ -60,20 +60,10 @@ public class Controller extends HttpServlet {
 			page = ConfigurationManager.getProperty("page.index");
 			// установка страницы c cообщением об ошибке
 			response.sendRedirect(request.getContextPath() + page);
+		} else {
+			// метод возвращает страницу ответа
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+			dispatcher.forward(request, response);
 		}
-//		// Цикл по всем данным сессии:
-//		System.out.println("Цикл по всем данным сессии:");
-//		HttpSession session = request.getSession();
-//		@SuppressWarnings("rawtypes")
-//		Enumeration sesNames = session.getAttributeNames();
-//		while (sesNames.hasMoreElements()) {
-//			String name = sesNames.nextElement().toString();
-//			Object value = session.getAttribute(name);
-//			System.out.println(name + " = " + value);
-//		}
-
-		// метод возвращает страницу ответа
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-		dispatcher.forward(request, response);
 	}
 }

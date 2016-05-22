@@ -36,8 +36,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void userDAOTest() throws Exception {
-        registerUserTest();
+    public void userServiceTest() throws Exception {
+        registeredUserTest();
         loginUserTest();
         exitUserTest();
     }
@@ -49,10 +49,10 @@ public class UserServiceTest {
         HibernateUtil.getInstance().getSession().getTransaction().commit();
     }
 
-    public void registerUserTest() throws Exception {
+    public void registeredUserTest() throws Exception {
         HibernateUtil.getInstance().getSession().beginTransaction();
         password = userTest.getPassword();
-        int registerSuccess = userService.registerUser(userTest);
+        int registerSuccess = userService.registeredUser(userTest);
 
         Assert.assertEquals(registerSuccess, 1);
     }

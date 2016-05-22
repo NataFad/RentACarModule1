@@ -42,12 +42,12 @@ public class UserService implements IUserService{
 	}
 
 	/**
-	 * Method registerUser() registers user
+	 * Method registeredUser() registers user
 	 *
 	 * @param user
 	 * @return successRegistrate
      */
-	public int registerUser(User user) {
+	public int registeredUser(User user) {
 		int successRegistrate = 1;
 		Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
         if (!transaction.isActive()){
@@ -58,7 +58,7 @@ public class UserService implements IUserService{
 		try {
 			if (!userDAO.checkLogin(user.getLogin().trim())) {
                 successRegistrate = -1;
-                log.error("User has yet registered with the login");
+                log.error("User has yet registeredCar with the login");
                 transaction.rollback();
             } else {
                 try {
@@ -110,7 +110,9 @@ public class UserService implements IUserService{
 			try {
 				userReg = UserDAO.getInstance().getUser(login, password);
 				if (!transaction.wasCommitted()) {
-					transaction.commit();
+					if (!transaction.wasCommitted()) {
+						transaction.commit();
+					}
 				}
 			} catch (DAOException ex) {
 				log.error(ex.getMessage());
@@ -118,7 +120,9 @@ public class UserService implements IUserService{
 			}
 		} else if (type != null) {
 			userReg = user;
-			transaction.commit();
+			if (!transaction.wasCommitted()) {
+				transaction.commit();
+			}
 		}
 		return userReg;
 	}

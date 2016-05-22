@@ -7,7 +7,7 @@ import by.academy.it.rentacar.entity.User;
  */
 public interface IUserService {
 
-    int registerUser(User user);
+    int registeredUser(User user);
     User loginUser(String login, String password, User user);
     User exitUser();
 }
