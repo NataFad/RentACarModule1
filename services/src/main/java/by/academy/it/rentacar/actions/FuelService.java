@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * Class RatingService induces RatingDAO
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  *
  */
-public class FuelService {
+public class FuelService implements IFuelService{
 
     private volatile static FuelService instance;
 

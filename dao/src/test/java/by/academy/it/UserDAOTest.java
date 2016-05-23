@@ -111,10 +111,17 @@ public class UserDAOTest {
     }
 
     private void deleteTest() throws DAOException {
+        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        if (!transaction.isActive()){
+            transaction.begin();
+        }
         try {
             userDAO.delete(userTest);
         } catch (DAOException e) {
             e.printStackTrace();
+        }
+        if (!transaction.wasCommitted()) {
+            transaction.commit();
         }
     }
 }

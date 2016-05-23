@@ -22,8 +22,8 @@ import java.util.List;
  * Class CarService induces CarDAO
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  */
 public class CarService implements ICarService{
 
@@ -103,13 +103,7 @@ public class CarService implements ICarService{
 
         // price
         Price priceCar = null;
-        try {
-            priceCar = PriceService.getInstance().getByTransmissionAndFuel(transmission, fuel);
-        } catch (DAOException e) {
-            transaction.rollback();
-            log.error("Price is not found by transmission " + transmission.getName()
-                    + " and fuel " + fuel.toString());
-        }
+        priceCar = PriceService.getInstance().getByTransmissionAndFuel(transmission, fuel);
         if (priceCar == null) {
             transaction.rollback();
             log.error("Price is not found by transmission " + transmission.getName()

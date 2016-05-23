@@ -1,8 +1,8 @@
 package by.academy.it.rentacar.actions;
 
+import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
-import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.exceptions.DAOException;
 
@@ -10,11 +10,11 @@ import by.academy.it.rentacar.exceptions.DAOException;
  * Class PriceService induces PriceDAO
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  *
  */
-public class PriceService {
+public class PriceService implements IPriceService{
 
     private volatile static PriceService instance;
 
@@ -38,9 +38,13 @@ public class PriceService {
      * @param fuel
      * @return
      */
-    public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) throws DAOException {
+    public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) {
         Price price = null;
-        price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuel);
+        try {
+            price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuel);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return price;
     }
 }

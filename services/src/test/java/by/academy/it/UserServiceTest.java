@@ -4,6 +4,7 @@ import by.academy.it.rentacar.actions.UserService;
 import by.academy.it.rentacar.dao.UserDAO;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.util.HibernateUtil;
+import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -44,13 +45,21 @@ public class UserServiceTest {
 
     @After
     public void tearDown() throws Exception {
-        HibernateUtil.getInstance().getSession().beginTransaction();
+        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        if (!transaction.isActive()){
+            transaction.begin();
+        }
         UserDAO.getInstance().delete(userTest);
-        HibernateUtil.getInstance().getSession().getTransaction().commit();
+        if (!transaction.wasCommitted()) {
+            transaction.commit();
+        }
     }
 
     public void registeredUserTest() throws Exception {
-        HibernateUtil.getInstance().getSession().beginTransaction();
+        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        if (!transaction.isActive()){
+            transaction.begin();
+        }
         password = userTest.getPassword();
         int registerSuccess = userService.registeredUser(userTest);
 
@@ -58,7 +67,10 @@ public class UserServiceTest {
     }
 
     public void loginUserTest() throws Exception {
-        HibernateUtil.getInstance().getSession().beginTransaction();
+        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        if (!transaction.isActive()){
+            transaction.begin();
+        }
         User userReg = UserService.getInstance().loginUser(userTest.getLogin(), password, userTest);
 
         Assert.assertNotNull(userReg);
@@ -66,7 +78,6 @@ public class UserServiceTest {
     }
 
     public void exitUserTest() throws Exception {
-        HibernateUtil.getInstance().getSession().beginTransaction();
         User userGuest = UserService.getInstance().exitUser();
 
         Assert.assertNotNull(userGuest);

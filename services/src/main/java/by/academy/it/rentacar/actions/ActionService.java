@@ -13,11 +13,11 @@ import java.util.ArrayList;
  * Class Action makes requests to the DAO to create filter lists on the form
  * 
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  * 
  */
-public class ActionService {
+public class ActionService implements IActionService{
 
 	private volatile static ActionService instance;
 

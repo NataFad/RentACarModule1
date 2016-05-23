@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * Class TypeService induces TypeDAO
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  *
  */
-public class TypeService {
+public class TypeService implements ITypeService{
 
     private volatile static TypeService instance;
 
@@ -47,21 +47,4 @@ public class TypeService {
         }
         return typeList;
     }
-
-    /**
-     * Method getById() calls the method in TypesDAO
-     *
-     * @param id
-     * @return Type
-     */
-    public Type getById(int id){
-        Type type = null;
-        try {
-            type = TypeDAO.getInstance().get(id);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-        return type;
-    }
-
 }

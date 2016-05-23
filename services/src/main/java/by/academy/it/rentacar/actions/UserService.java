@@ -19,8 +19,8 @@ import org.hibernate.Transaction;
  * Class UserService responsible for user login to the site
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  *
  */
 public class UserService implements IUserService{

@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * Class RatingService induces RatingDAO
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  *
  */
-public class RatingService {
+public class RatingService implements IRatingService{
 
     private volatile static RatingService instance;
 
@@ -47,21 +47,4 @@ public class RatingService {
         }
         return ratingList;
     }
-
-    /**
-     * Method getById calls the method in RatingDAO
-     *
-     * @param id
-     * @return
-     */
-    public Rating getById(int id){
-        Rating rating = null;
-        try {
-            rating = RatingDAO.getInstance().get(id);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-        return rating;
-    }
-
 }
