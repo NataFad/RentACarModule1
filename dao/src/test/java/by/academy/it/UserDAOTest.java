@@ -5,6 +5,8 @@ import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.CoderManager;
+import by.academy.it.rentacar.util.HibernateUtil;
+import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,12 +58,19 @@ public class UserDAOTest {
     }
 
     private void addUser() {
+        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        if (!transaction.isActive()){
+            transaction.begin();
+        }
         String password = userTest.getPassword();
         userTest.setPassword(CoderManager.getHashCode(password));
         try {
             userDAO.saveOrUpdate(userTest);
         } catch (DAOException e) {
             e.printStackTrace();
+        }
+        if (!transaction.wasCommitted()) {
+            transaction.commit();
         }
         userTest.setPassword(password);
     }
@@ -83,15 +92,20 @@ public class UserDAOTest {
     }
 
     private void updateAccessTest() throws Exception {
+        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        if (!transaction.isActive()){
+            transaction.begin();
+        }
         userTest.setAccess(TypeUser.ADMINISTRATOR.getValue());
         userDAO.saveOrUpdate(userTest);
+        if (!transaction.wasCommitted()) {
+            transaction.commit();
+        }
         getAccessTest(TypeUser.ADMINISTRATOR.getValue());
     }
 
     private void getUserTest() throws Exception {
-        System.out.println(userTest);
         User userExpected = userDAO.getUser("testNata", "filimon");
-        System.out.println(userExpected);
         Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }

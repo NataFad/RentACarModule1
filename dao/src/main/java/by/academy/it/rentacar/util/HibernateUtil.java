@@ -33,8 +33,7 @@ public class HibernateUtil {
 
     private HibernateUtil() {
         try {
-            Configuration configuration = new Configuration().configure().
-                    setNamingStrategy(new CustomNamingStrategy());
+            Configuration configuration = new Configuration().configure(HibernateUtil.class.getResource("/hibernate.cfg.xml"));
             StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().
                     applySettings(configuration.getProperties());
             sessionFactory = configuration.buildSessionFactory(builder.build());

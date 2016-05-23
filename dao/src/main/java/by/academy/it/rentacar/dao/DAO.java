@@ -28,7 +28,6 @@ import java.util.List;
 public abstract class DAO<T> implements IDAO<T> {
 
     private static Logger log = Logger.getLogger(DAO.class);
-   // protected static Session session = HibernateUtil.getInstance().getSession();
 
     /**
      * Method saveOrUpdate() saves or updates object T from the table
@@ -40,8 +39,6 @@ public abstract class DAO<T> implements IDAO<T> {
         try {
             session.saveOrUpdate(entity);
             log.info("saveOrUpdate(entity):" + entity);
-            session.flush();
-            log.info("Save or update (commit):" + entity);
         } catch (HibernateException e) {
             log.error("Error save or update " + getPersistentClass() + " in DAO " + e);
             throw new DAOException(e.getMessage());

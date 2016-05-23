@@ -1,9 +1,7 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.dao.CarDAO;
-import by.academy.it.rentacar.dao.FuelDAO;
-import by.academy.it.rentacar.dao.ModelAndMarkDAO;
+import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.exceptions.DAOException;
@@ -56,6 +54,9 @@ public class CarService implements ICarService{
     public Car registeredCar(HashMap<String, String> parametresCar) {
         Car car = null;
         Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        if (!transaction.isActive()){
+            transaction.begin();
+        }
 
         Transmission transmission = null;
         String transmissionString = parametresCar.get("transmission");
@@ -70,7 +71,7 @@ public class CarService implements ICarService{
         // get ratecost by rating
         int ratingId = Integer.parseInt(parametresCar.get("ratingId"));
         BigDecimal ratecostByRating = new BigDecimal(0);
-        Rating rating = RatingService.getInstance().getById(ratingId);
+        Rating rating = RatingDAO.getInstance().getById(ratingId);
         if (rating == null) {
             transaction.rollback();
             log.error("Rating is not set");
@@ -82,7 +83,7 @@ public class CarService implements ICarService{
         int typeId = Integer.parseInt(parametresCar.get("typeId"));
         BigDecimal ratecostByType = new BigDecimal(0);
         BigDecimal rateDiscountByType = new BigDecimal(0);
-        Type type = TypeService.getInstance().getById(typeId);
+        Type type = TypeDAO.getInstance().getById(typeId);
         if (type == null) {
             transaction.rollback();
             log.error("Type is not set");
@@ -153,7 +154,7 @@ public class CarService implements ICarService{
         car.setPrice(priceCar);
         car.setCostOfDay(costOfDay);
         car.setDiscount(priceCar.getDiscount().multiply(rateDiscountByType).multiply(new BigDecimal(100)));
-
+        log.error(car);
         try {
             CarDAO.getInstance().saveOrUpdate(car);
             if (!transaction.wasCommitted()) {
