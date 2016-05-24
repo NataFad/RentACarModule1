@@ -25,7 +25,7 @@ import org.hibernate.cfg.Configuration;
  * @version 1.1
  * @since 2016-04
  */
-public class HibernateUtil {
+public class HibernateUtil{
     private static HibernateUtil util = null;
     private static Logger log = Logger.getLogger(HibernateUtil.class);
     private SessionFactory sessionFactory = null;
@@ -33,7 +33,9 @@ public class HibernateUtil {
 
     private HibernateUtil() {
         try {
-            Configuration configuration = new Configuration().configure(HibernateUtil.class.getResource("/hibernate.cfg.xml"));
+            Configuration configuration = new Configuration().setProperty("hibernate.cache.region.factory_class",
+                    "org.hibernate.cache.ehcache.EhCacheRegionFactory")
+                    .configure(HibernateUtil.class.getResource("/hibernate.cfg.xml"));
             StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().
                     applySettings(configuration.getProperties());
             sessionFactory = configuration.buildSessionFactory(builder.build());
