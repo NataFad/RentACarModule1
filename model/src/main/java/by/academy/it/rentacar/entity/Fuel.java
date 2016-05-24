@@ -3,6 +3,9 @@
  */
 package by.academy.it.rentacar.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,6 +17,7 @@ import java.io.Serializable;
  * @since 2016-05
  */
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "fuels")
 @Table(name = "fuels")
 public class Fuel implements Serializable{
     private static final long serialVersionUID = 1L;

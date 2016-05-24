@@ -59,7 +59,7 @@ public class PriceDAO extends DAO<Price> {
         criteria.add(Restrictions.and(Restrictions.eq("fuel", fuel), Restrictions.eq("transmission", transmission)));
 
         try {
-            price = (Price) criteria.uniqueResult();
+            price = (Price) criteria.setCacheable(true).uniqueResult();
         } catch (HibernateException e) {
             log.error("Error get by transmission and fuel in PriceDAO " + e);
             throw new DAOException(e.getMessage());
