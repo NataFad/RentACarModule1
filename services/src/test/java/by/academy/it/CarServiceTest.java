@@ -91,6 +91,8 @@ public class CarServiceTest {
     filterValues.put("typeId", foreign_id);
     // Rating
     filterValues.put("ratingId", foreign_id);
+    filterValues.put("page", "1");
+    filterValues.put("recordsPerPage", "10");
 
     HibernateUtil.getInstance().getSession().beginTransaction();
     List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);

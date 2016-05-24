@@ -72,4 +72,18 @@ public class ActionService implements IActionService{
 		}
 		return modelList;
 	}
+
+	/**
+	 * Method getListPerPage() gets list per page
+	 *
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> getListPerPage(){
+		// List per page
+		ArrayList<String> perPageList = new ArrayList<String>();
+		perPageList.add("3");
+		perPageList.add("5");
+		perPageList.add("10");
+		return perPageList;
+	}
 }

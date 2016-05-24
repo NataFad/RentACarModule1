@@ -5,11 +5,14 @@ package by.academy.it.rentacar.actions.car;
 
 import by.academy.it.rentacar.actions.Action;
 import by.academy.it.rentacar.actions.CarService;
+import by.academy.it.rentacar.dao.CarDAO;
+import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,11 +55,23 @@ public class SearchCarAction extends Action {
 		if (!ratingId.equals("0")) {
 			filterValues.put("ratingId", ratingId);
 		}
+		// recordsPerPage
+		String recordPerPage = request.getParameter("recordPerPage");
+		filterValues.put("recordsPerPage", recordPerPage);
+		filterValues.put("page", "1");
 
 		// period
 		request.setAttribute("fromDate", formateDate(fromDate));
 		request.setAttribute("byDate", formateDate(byDate));
 		getListFilterCar(request, 0);
+
+		BigInteger count;
+		try {
+			count = CarDAO.getInstance().countCarByFilter(fromDate, byDate, filterValues);
+			request.getSession().setAttribute("errorFilterCarMassager", "Count by filter " + count);
+		} catch (DAOException e) {
+			request.getSession().setAttribute("errorFilterCarMassager", "Null count");
+		}
 
 		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
 		if (list.isEmpty()) {

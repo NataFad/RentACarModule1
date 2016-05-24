@@ -57,10 +57,10 @@
 		<fieldset>
 			<legend>Фильтры поиска</legend>
 			<label>С:&nbsp;&nbsp;
-			 <input type="date" name="fromDate" id="fromDate" value="${requestScope.fromDate}" width="7%" min="2000-01-01" required AUTOFOCUS />&nbsp;&nbsp;&nbsp;
+			 <input type="date" name="fromDate" id="fromDate" value="${requestScope.fromDate}" min="2000-01-01" required AUTOFOCUS />&nbsp;&nbsp;&nbsp;
 			</label> 
 			<label>По:&nbsp;
-			 <input type="date" name="byDate" id="byDate" value="${requestScope.byDate}" width="7%" min="2000-01-01" required AUTOFOCUS />&nbsp;&nbsp;&nbsp;
+			 <input type="date" name="byDate" id="byDate" value="${requestScope.byDate}" min="2000-01-01" required AUTOFOCUS />&nbsp;&nbsp;&nbsp;
 			</label> 
 			
 			<label>Transmission:&nbsp; 
@@ -69,7 +69,7 @@
 				<c:forEach var="trans" items="${requestScope.transList}">
 					<option value="${trans}"><c:out value="${trans}" /></option>
 				</c:forEach>
-			</select>&nbsp;&nbsp;&nbsp;
+			</select>&nbsp;&nbsp;
 			</label> 
 			
 			<label>Fuel:&nbsp; 
@@ -78,7 +78,7 @@
 				<c:forEach var="fuel" items="${requestScope.fuelsList}">
 					<option value="${fuel.id}"><c:out value="${fuel.name}" /></option>
 				</c:forEach>
-			</select>&nbsp;&nbsp;&nbsp;
+			</select>&nbsp;&nbsp;
 			</label> 
 			
 			<label>Type:&nbsp; 
@@ -87,19 +87,28 @@
 				<c:forEach var="type" items="${requestScope.typeList}">
 					<option value="${type.id}"><c:out value="${type.name}" /></option>
 				</c:forEach>
-			</select>&nbsp;&nbsp;&nbsp;
+			</select>&nbsp;&nbsp;
 			</label> 
 			
 			<label>Rating:&nbsp; 
 			<select name="ratingId" id="ratingId">
-			  <option value="0" selected>Все виды рейтинга</option>
+			  <option value="0" selected>Все виды</option>
 				<c:forEach var="rating" items="${requestScope.ratingList}">
 					<option value="${rating.id}"><c:out value="${rating.name}" /></option>
 				</c:forEach>
-			</select>&nbsp;&nbsp;&nbsp;
+			</select>&nbsp;&nbsp;
 			</label>
-			
-			<input type="submit" width="15%" size="12%" value="Найти" />
+
+			<label>По:&nbsp;
+				<select name="recordPerPage" id="recordPerPage">
+					<option value=${requestScope.recordPerPage} selected></option>
+					<c:forEach var="perPage" items="${requestScope.perPageList}">
+						<option value="${perPage}"><c:out value="${perPage}" /></option>
+					</c:forEach>
+				</select>&nbsp;&nbsp;
+			</label>
+
+			<input type="submit" width="8%" size="12%" value="Найти" />
 		</fieldset>
 	</form>
 	<c:if test="${!empty errorFilterCarMassager}">
