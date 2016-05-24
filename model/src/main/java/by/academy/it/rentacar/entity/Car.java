@@ -19,7 +19,7 @@ import java.math.BigDecimal;
  *
  */
 @Entity
-@Table(name = "cars")
+@Table(name = "cars", uniqueConstraints = @UniqueConstraint(name = "regNumber", columnNames = "registrationNumber"))
 public class Car implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;

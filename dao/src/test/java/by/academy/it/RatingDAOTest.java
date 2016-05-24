@@ -22,12 +22,12 @@ public class RatingDAOTest {
         Rating rating = new Rating("test", new BigDecimal(5).setScale(2, BigDecimal.ROUND_HALF_UP));
         ratingDAO.saveOrUpdate(rating);
 
-        Rating  ratingTest = ratingDAO.getById(rating.getId());
+        Rating ratingTest = ratingDAO.getById(rating.getId());
 
         Assert.assertNotNull(ratingTest);
         Assert.assertEquals(ratingTest, rating);
 
         ratingDAO.delete(rating);
-       // HibernateUtil.getInstance().closeSession();
+        //HibernateUtil.getInstance().closeSession();
     }
 }
