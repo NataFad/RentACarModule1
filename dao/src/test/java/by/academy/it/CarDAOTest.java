@@ -32,6 +32,8 @@ public class CarDAOTest {
         filterValues.put("typeId", "1");
         filterValues.put("ratingId", "1");
         filterValues.put("orderBy", "F.name ASC, MAndM.mark ASC");
+        filterValues.put("page", "1");
+        filterValues.put("recordsPerPage", "10");
 
         List<CarViewObject> list = CarDAO.getInstance().searchCar(dateForTest, dateForTest, filterValues);
         BigInteger countCar = CarDAO.getInstance().countCarByFilter(dateForTest, dateForTest, filterValues);
