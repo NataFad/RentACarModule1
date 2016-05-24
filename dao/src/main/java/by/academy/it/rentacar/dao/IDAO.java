@@ -1,6 +1,9 @@
 package by.academy.it.rentacar.dao;
 
-import java.util.ArrayList;
+import by.academy.it.rentacar.exceptions.DAOException;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Interface IDAO
@@ -13,11 +16,17 @@ import java.util.ArrayList;
  */
 public interface IDAO<T> {
 
-    void add(T t);
+    void saveOrUpdate(T entity) throws DAOException;
 
-    void update(T t);
+    T get(Serializable id) throws DAOException;
 
-    void delete(T t);
+    T load(Serializable id) throws DAOException;
 
-    ArrayList<T> getAll();
+    T getByKey(String key, Serializable value) throws DAOException;
+
+    void delete(T entity) throws DAOException;
+
+    List<T> getAll() throws DAOException;
+
+    long count() throws DAOException;
 }

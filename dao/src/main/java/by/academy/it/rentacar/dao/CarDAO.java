@@ -3,18 +3,22 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.beans.Car;
-import by.academy.it.rentacar.connectionpool.DBConnectionPool;
-import by.academy.it.rentacar.constants.ISqlQuery;
-import by.academy.it.rentacar.enums.Transmission;
+import by.academy.it.rentacar.entity.Car;
+import by.academy.it.rentacar.exceptions.DAOException;
+import by.academy.it.rentacar.util.HibernateUtil;
+import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.*;
-import java.util.ArrayList;
+import java.math.BigInteger;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class CarDAO
@@ -22,30 +26,14 @@ import java.util.HashMap;
  * Class CarDAO creates object Car and executes queries the table Cars.
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  * 
  */
-public class CarDAO extends DAO {
+public class CarDAO extends DAO<Car> {
 
 	private volatile static CarDAO instance;
-
-	private final String COLUMN_NAME_ID = "id";
-	private final String COLUMN_NAME_REGNUMBER = "registrationNumber";
-	private final String COLUMN_NAME_TRANSMISSION = "transmission";
-	private final String COLUMN_NAME_RATING_ID = "ratings_id";
-	private final String COLUMN_NAME_RATING = "rating";
-	private final String COLUMN_NAME_TYPE_ID = "types_id";
-	private final String COLUMN_NAME_TYPE_NAME = "type_name";
-	private final String COLUMN_NAME_MODEL_ID = "modelsAndMarks_id";
-	private final String COLUMN_NAME_MODEL = "model";
-	private final String COLUMN_NAME_MARKA = "marka";
-	private final String COLUMN_NAME_FUEL_ID = "fuels_id";
-	private final String COLUMN_NAME_FUEL = "fuel";
-	private final String COLUMN_NAME_PRICE_ID = "price_id";
-	private final String COLUMN_NAME_DESCRIPTION = "description";
-	private final String COLUMN_NAME_COSTOFDAY = "costOfDay";
-	private final String COLUMN_NAME_DISCOUNT = "discount";
+	private static Logger log = Logger.getLogger(CarDAO.class);
 
 	private CarDAO() {
 		super();
@@ -63,85 +51,40 @@ public class CarDAO extends DAO {
 	}
 
 	/**
-	 * Method add() writes object car in the table
+	 * Method sqlQueryStringByFilter()
+	 * returns string of sql-query based on the rental dates and defined filters
 	 *
-	 * Implements #ADD_CAR
+	 * @param fromDate
+	 * @param byDate
+	 * @param filterValues
+	 * @return String
 	 */
-	public void add(Object o){
-		Car car = (Car) o;
-		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
-			PreparedStatement	ps = connection.prepareStatement(ISqlQuery.ADD_CAR)){
-		
-			ps.setString(1, car.getRegistrationNumber());
-			ps.setString(2, car.getTransmission().value().toLowerCase());
-			ps.setInt(3, car.getRatingId());
-			ps.setInt(4, car.getTypeId());
-			ps.setInt(5, car.getModelAndMarkId());
-			ps.setInt(6, car.getPriceId());
-			ps.setInt(7, car.getFuelId());
-			ps.setBigDecimal(8, car.getCostOfDay());
-			ps.setBigDecimal(9, car.getDiscount());
-			ps.setString(10, car.getDescription());
-			ps.executeUpdate();
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error(e.getMessage());
-			e.printStackTrace();
+	public String sqlQueryStringByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+		String sqlQueryFromWhere = "FROM cars AS CarVO " +
+				"LEFT JOIN ratings AS R ON CarVO.ratings_id = R.id " +
+				"LEFT JOIN types AS T ON CarVO.types_id = T.id " +
+				"LEFT JOIN modelsandmarks AS MAndM ON CarVO.ModelsAndMarks_id = MAndM.id " +
+				"LEFT JOIN fuels AS F ON CarVO.Fuels_id = F.id "
+				+ "WHERE NOT EXISTS (SELECT O.cars_id FROM orders AS O "
+				+		"WHERE NOT (O.fromdate >= '" + byDate + "' OR O.bydate <= '" + fromDate + "') AND O.cars_id = CarVO.id)";
+		String transmission = filterValues.get("transmission");
+		if (transmission != null) {
+			sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.transmission= '" + transmission.toLowerCase() + "'";
 		}
-	}
-
-	/**
-	 * Method getListCarFromResult()
-	 * transforms result of sql-query in object car and adds in list
-	 *
-	 * @param result
-	 * @param countDays
-	 * @return ArrayList<Car>
-	 * @throws SQLException
-     */
-	private ArrayList<Car> getListCarFromResult(ResultSet result, int countDays) throws SQLException{
-		ArrayList<Car> list = new ArrayList<Car>();
-
-		while (result.next()) {
-			Car car = new Car();
-			car.setId(result.getInt(COLUMN_NAME_ID));
-			car.setRegistrationNumber(result.getString(COLUMN_NAME_REGNUMBER));
-			car.setTransmission(Transmission.valueOf(result.getString(COLUMN_NAME_TRANSMISSION).trim().toUpperCase()));
-			car.setRatingId(result.getInt(COLUMN_NAME_RATING_ID));
-			car.setRatingName(result.getString(COLUMN_NAME_RATING));
-			car.setTypeId(result.getInt(COLUMN_NAME_TYPE_ID));
-			car.setTypeName(result.getString(COLUMN_NAME_TYPE_NAME));
-			car.setModelAndMarkId(result.getInt(COLUMN_NAME_MODEL_ID));
-			car.setModelName(result.getString(COLUMN_NAME_MARKA)+", " +result.getString(COLUMN_NAME_MODEL));
-			car.setFuelId(result.getInt(COLUMN_NAME_FUEL_ID));
-			car.setFuelName(result.getString(COLUMN_NAME_FUEL));
-			car.setPriceId(result.getInt(COLUMN_NAME_PRICE_ID));
-			car.setDescription(result.getString(COLUMN_NAME_DESCRIPTION));
-			car.setCostOfDay(result.getBigDecimal(COLUMN_NAME_COSTOFDAY));
-			car.setDiscount(result.getBigDecimal(COLUMN_NAME_DISCOUNT));
-			BigDecimal costOfDay =  car.getCostOfDay();
-			car.setCost(costOfDay.multiply(new BigDecimal(Integer.toString(countDays))));
-
-			list.add(car);
+		String fuelId = filterValues.get("fuelId");
+		if (fuelId != null){
+			sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.fuels_id= " + Integer.parseInt(fuelId);
 		}
-		return list;
-	}
-
-	/**
-	 * Method getAllCars() reads from the table Car and add in the list
-	 *
-	 * Implements #GET_ALL_CARS
-	 */
-	public ArrayList<Car> getAll() {
-		ArrayList<Car> list = new ArrayList<Car>();
-		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
-			PreparedStatement ps = connection.prepareStatement(ISqlQuery.GET_ALL_CARS);
-			ResultSet result = ps.executeQuery()){
-			list = getListCarFromResult(result, 1);
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error(e.getMessage());
-			e.printStackTrace();
+		String typeId = filterValues.get("typeId");
+		if (typeId != null) {
+			sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.types_id = " + Integer.parseInt(typeId);
 		}
-		return list;
+		String ratingId = filterValues.get("ratingId");
+		if (ratingId != null) {
+			sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.ratings_id = " + Integer.parseInt(ratingId);
+		}
+
+		return sqlQueryFromWhere;
 	}
 
 	/**
@@ -151,69 +94,79 @@ public class CarDAO extends DAO {
 	 * @param fromDate
 	 * @param byDate
 	 * @param filterValues
-	 * @return
+	 * @return list
 	 * @throws SQLException
      */
-	public ArrayList<Car> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues){
+	public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
+		Session session = HibernateUtil.getInstance().getSession();
+		long difference = byDate.getTime() - fromDate.getTime();
+		int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
 		// query text writing
-		String query = "SELECT cars.*, ratings.name as rating, fuels.name as fuel, types.name as type_name, "
-				+ " modelsandmarks.mark as marka, modelsandmarks.model as model FROM cars "
-				+ "left join ratings on ratings.id = cars.ratings_id "
-				+ "left join types on types.id = cars.types_id "
-				+ "left join modelsandmarks on modelsandmarks.id = cars.modelsandmarks_id "
-				+ "left join fuels on fuels.id = cars.fuels_id "
-				+ "WHERE NOT EXISTS (SELECT cars_id FROM orders "
-				+ "WHERE NOT (fromdate > '" + byDate + "' OR bydate < '" + fromDate + "') AND cars_id = cars.id)";
-		String transmission = filterValues.get("transmission");
-		if (transmission != null) {
-			query = query + " AND transmission='" + transmission.toLowerCase() + "'";
-		}
-		String fuelId = filterValues.get("fuelId");
-		if (fuelId != null) {
-			query = query + " AND fuels_id=" + Integer.parseInt(fuelId);
-		}
-		String typeId = filterValues.get("typeId");
-		if (typeId != null) {
-			query = query + " AND types_id=" + Integer.parseInt(typeId);
-		}
-		String ratingId = filterValues.get("ratingId");
-		if (ratingId != null) {
-			query = query + " AND ratings_id=" + Integer.parseInt(ratingId);
-		}
-		query = query + " ORDER BY cars.id";
+		String sqlQuery = "SELECT CarVO.id AS id, " +
+				"CarVO.registrationNumber AS registrationNumber, " +
+				"CarVO.transmission AS transmission, " +
+				"R.name AS rating, " +
+				"T.name AS typeCar, " +
+				"MAndM.model AS model," +
+				"MAndM.mark AS marka," +
+				"F.name AS fuel," +
+				"CarVO.description AS description, " +
+				"ROUND(CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days-1) + ")/100, 2) AS cost "
+				+ sqlQueryStringByFilter(fromDate, byDate, filterValues);
 
-		ArrayList<Car> list = new ArrayList<Car>();
-		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
-			PreparedStatement ps = connection.prepareStatement(query);
-			ResultSet result = ps.executeQuery()){
-				long difference = byDate.getTime() - fromDate.getTime();
-				int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
-				list = getListCarFromResult(result, days);
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error(e.getMessage());
-			e.printStackTrace();
+		String orderBy = filterValues.get("orderBy");
+		if (orderBy != null) {
+			sqlQuery = sqlQuery + " ORDER BY " + orderBy;
+		}else{
+			sqlQuery = sqlQuery + " ORDER BY CarVO.transmission, F.name, T.name, R.name";
+		}
+
+		List<CarViewObject> list = null;
+		try {
+			list = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+					.addScalar("registrationNumber", StandardBasicTypes.STRING)
+					.addScalar("transmission", StandardBasicTypes.STRING)
+					.addScalar("rating", StandardBasicTypes.STRING)
+					.addScalar("typeCar", StandardBasicTypes.STRING)
+					.addScalar("model", StandardBasicTypes.STRING)
+					.addScalar("marka", StandardBasicTypes.STRING)
+					.addScalar("fuel", StandardBasicTypes.STRING)
+					.addScalar("description", StandardBasicTypes.STRING)
+					.addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
+					.setResultTransformer(Transformers.aliasToBean(CarViewObject.class)).list();
+		} catch (HibernateException e){
+			log.error("Error search cars in CarDAO " + e);
+			throw new DAOException(e.getMessage());
 		}
 		return list;
 	}
 
-	public void update(Object o) {
-	}
-
 	/**
-	 * Method delete() deletes object car from the table
-	 * Implements #DELETE_CAR
+	 * Method countCarByFilter()
+	 * performs a search based on the rental dates and defined filters
 	 *
-	 * @param o
-   */
-	public void delete(Object o) {
-		Car car = (Car) o;
-		try (Connection	connection = DBConnectionPool.getInstance().getConnection();
-			PreparedStatement ps = connection.prepareStatement(ISqlQuery.DELETE_CAR)){
-				ps.setInt(1, car.getId());
-				ps.executeUpdate();
-		} catch (SQLException | IOException | PropertyVetoException e) {
-			Logger.getLogger(CarDAO.class).error(e.getMessage());
-			e.printStackTrace();
+	 * @param fromDate
+	 * @param byDate
+	 * @param filterValues
+	 * @return
+	 * @throws SQLException
+	 */
+	public BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
+		Session session = HibernateUtil.getInstance().getSession();
+		// query text writing
+		String sqlQuery = "SELECT count(*) "
+				+ sqlQueryStringByFilter(fromDate, byDate, filterValues);
+
+		Query query = session.createSQLQuery(sqlQuery);
+		BigInteger countCar = BigInteger.ZERO;
+
+		try {
+		List results = query.list();
+		countCar = (BigInteger) results.get(0);
+		} catch (HibernateException e){
+			log.error("Error count of the cars by filter in CarDAO " + e);
+			throw new DAOException(e.getMessage());
 		}
+		return countCar;
 	}
 }

@@ -1,8 +1,9 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.beans.Type;
+import by.academy.it.rentacar.entity.Type;
 import by.academy.it.rentacar.dao.TypeDAO;
+import by.academy.it.rentacar.exceptions.DAOException;
 
 import java.util.ArrayList;
 
@@ -10,11 +11,11 @@ import java.util.ArrayList;
  * Class TypeService induces TypeDAO
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  *
  */
-public class TypeService {
+public class TypeService implements ITypeService{
 
     private volatile static TypeService instance;
 
@@ -39,20 +40,11 @@ public class TypeService {
     public ArrayList<Type> getListType(){
         // List of types
         ArrayList<Type> typeList = new ArrayList<Type>();
-        typeList = TypeDAO.getInstance().getAll();
+        try {
+            typeList = (ArrayList<Type>) TypeDAO.getInstance().getAll();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return typeList;
     }
-
-    /**
-     * Method getById() calls the method in TypesDAO
-     *
-     * @param id
-     * @return Type
-     */
-    public Type getById(int id){
-        Type type = null;
-        type = TypeDAO.getInstance().getById(id);
-        return type;
-    }
-
 }

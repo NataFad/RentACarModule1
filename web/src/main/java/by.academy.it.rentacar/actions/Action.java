@@ -1,10 +1,10 @@
 
 package by.academy.it.rentacar.actions;
 
-import by.academy.it.rentacar.beans.Fuel;
-import by.academy.it.rentacar.beans.ModelAndMark;
-import by.academy.it.rentacar.beans.Rating;
-import by.academy.it.rentacar.beans.Type;
+import by.academy.it.rentacar.entity.Fuel;
+import by.academy.it.rentacar.entity.ModelAndMark;
+import by.academy.it.rentacar.entity.Rating;
+import by.academy.it.rentacar.entity.Type;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.managers.ErrorManager;
 

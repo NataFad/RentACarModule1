@@ -1,11 +1,11 @@
 
 package by.academy.it.rentacar.actions;
 
-import by.academy.it.rentacar.beans.Fuel;
-import by.academy.it.rentacar.beans.ModelAndMark;
-import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.dao.ModelAndMarkDAO;
+import by.academy.it.rentacar.entity.Fuel;
+import by.academy.it.rentacar.entity.ModelAndMark;
 import by.academy.it.rentacar.enums.Transmission;
+import by.academy.it.rentacar.exceptions.DAOException;
 
 import java.util.ArrayList;
 
@@ -13,11 +13,11 @@ import java.util.ArrayList;
  * Class Action makes requests to the DAO to create filter lists on the form
  * 
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  * 
  */
-public class ActionService {
+public class ActionService implements IActionService{
 
 	private volatile static ActionService instance;
 
@@ -54,8 +54,7 @@ public class ActionService {
 	 */
 	public ArrayList<Fuel> getListFuel(){
 		// List of fuels
-		ArrayList<Fuel> fuelsList = new ArrayList<Fuel>();
-		fuelsList = FuelDAO.getInstance().getAll();
+		ArrayList<Fuel> fuelsList = FuelService.getInstance().getListFuel();
 		return fuelsList;
 	}
 
@@ -65,8 +64,12 @@ public class ActionService {
 	 * @return ArrayList<ModelAndMark>
 	 */
 	public ArrayList<ModelAndMark> getListModel(){
-		ArrayList<ModelAndMark> modelList = new ArrayList<ModelAndMark>();
-		modelList = ModelAndMarkDAO.getInstance().getAll();
+		ArrayList<ModelAndMark> modelList = null;
+		try {
+			modelList = (ArrayList<ModelAndMark>) ModelAndMarkDAO.getInstance().getAll();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 		return modelList;
 	}
 }
