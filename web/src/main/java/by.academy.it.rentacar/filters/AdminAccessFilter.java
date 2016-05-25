@@ -2,6 +2,7 @@ package by.academy.it.rentacar.filters;
 
 import by.academy.it.rentacar.managers.ConfigurationManager;
 import by.academy.it.rentacar.managers.ErrorManager;
+import by.academy.it.rentacar.util.HibernateUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -36,14 +37,15 @@ public class AdminAccessFilter implements Filter {
 		int access = Integer.parseInt(session.getAttribute("access").toString());
 		session.removeAttribute("addCarMessage");
 		
-		if (access == 2) {
-			chain.doFilter(request, response);
-		}else{
+		if (access != 2) {
 			session.setAttribute("errorLoginPassMessage", ErrorManager.getInstance().getProperty("error.access"));
 			ConfigurationManager.getInstance();
 			RequestDispatcher dispatcher = request.getRequestDispatcher(ConfigurationManager.getProperty("page.main"));
 			dispatcher.forward(request, response);
+			return;
 		}
+		chain.doFilter(request, response);
+		HibernateUtil.getInstance().closeSession();
 	}
 
 	/**

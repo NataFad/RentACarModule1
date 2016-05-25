@@ -12,7 +12,18 @@ import by.academy.it.rentacar.exceptions.EnumNotFindException;
  *
  */
 public enum TypeUser{
-	GUEST, USER, ADMINISTRATOR;
+	GUEST(0), USER(1), ADMINISTRATOR(2);
+
+	private int type;
+
+	TypeUser(final int type){
+		this.type = type;
+	}
+
+	public int getValue() {
+		return type;
+	}
+
 	/**
 	 * The method determines the resulting string value for the type of user
 	 * 
@@ -33,11 +44,28 @@ public enum TypeUser{
 		}
 	}
 
+	public static TypeUser fromValue(int value){
+		TypeUser typeUser = null;
+		if (value != 0){
+			for (TypeUser typeUsers : values()){
+				if (typeUsers.getValue() == value){
+					typeUser = typeUsers;
+				}
+			}
+		}
+		return typeUser;
+	}
+
 	public String value() {
 		return name();
 	}
 
-	public static TypeUser fromValue(String v) {
-		return valueOf(v);
+	public String getName(){
+		return this.name();
+	}
+
+	@Override
+	public String toString(){
+		return this.name();
 	}
 }

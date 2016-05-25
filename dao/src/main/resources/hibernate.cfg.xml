@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3307/rentacar</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">fadeeva</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.pool_size">30</property>
+        <property name="hibernate.connection.isolation">2</property>
+        <property name="transaction.auto_close_session">false</property>
+        <property name="show_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+        <property name="hibernate.c3p0.timeout">1000</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.bytecode.use_reflection_optimizer">true</property>
+        <!-- Ehcache configuration -->
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
+        </property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property>
+        <!-- Mapping class -->
+        <mapping class="by.academy.it.rentacar.entity.Fuel"/>
+        <mapping class="by.academy.it.rentacar.entity.ModelAndMark"/>
+        <mapping class="by.academy.it.rentacar.entity.Rating"/>
+        <mapping class="by.academy.it.rentacar.entity.Type"/>
+        <mapping class="by.academy.it.rentacar.entity.Price"/>
+        <mapping class="by.academy.it.rentacar.entity.User"/>
+        <mapping class="by.academy.it.rentacar.entity.Car"/>
+        <mapping class="by.academy.it.rentacar.entity.Order"/>
+        <mapping class="by.academy.it.rentacar.entity.Bill"/>
+    </session-factory>
+</hibernate-configuration>
+

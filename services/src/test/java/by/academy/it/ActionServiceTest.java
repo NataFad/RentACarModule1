@@ -1,8 +1,8 @@
 package by.academy.it;
 
 import by.academy.it.rentacar.actions.ActionService;
-import by.academy.it.rentacar.beans.Fuel;
-import by.academy.it.rentacar.beans.ModelAndMark;
+import by.academy.it.rentacar.entity.Fuel;
+import by.academy.it.rentacar.entity.ModelAndMark;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.enums.Transmission;
 import org.junit.Assert;
@@ -28,7 +28,7 @@ public class ActionServiceTest {
   @Test
   public void getListFuelTest() throws Exception {
     ArrayList<Fuel> fuelsListTest = actionService.getListFuel();
-    ArrayList<Fuel> fuelsListExpected = FuelDAO.getInstance().getAll();
+    ArrayList<Fuel> fuelsListExpected = (ArrayList<Fuel>) FuelDAO.getInstance().getAll();
     Assert.assertNotNull(fuelsListTest);
     Assert.assertEquals("Size of the list of the fuels", fuelsListTest.size(), fuelsListExpected.size());
   }

@@ -1,8 +1,9 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.beans.Rating;
+import by.academy.it.rentacar.entity.Rating;
 import by.academy.it.rentacar.dao.RatingDAO;
+import by.academy.it.rentacar.exceptions.DAOException;
 
 import java.util.ArrayList;
 
@@ -10,11 +11,11 @@ import java.util.ArrayList;
  * Class RatingService induces RatingDAO
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.2
+ * @since 2016-05
  *
  */
-public class RatingService {
+public class RatingService implements IRatingService{
 
     private volatile static RatingService instance;
 
@@ -39,20 +40,27 @@ public class RatingService {
     public ArrayList<Rating> getListRating(){
         // List of ratings
         ArrayList<Rating> ratingList = new ArrayList<Rating>();
-        ratingList = RatingDAO.getInstance().getAll();
+        try {
+            ratingList = (ArrayList<Rating>) RatingDAO.getInstance().getAll();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return ratingList;
     }
 
     /**
-     * Method getById calls the method in RatingDAO
+     * Method getRatingById() gets fuel by id
      *
-     * @param id
-     * @return
+     * @param ratingId
+     * @return rating
      */
-    public Rating getById(int id){
+    public Rating getRatingById(int ratingId){
         Rating rating = null;
-        rating = RatingDAO.getInstance().getById(id);
+        try {
+            rating = RatingDAO.getInstance().getByKey("id", ratingId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return rating;
     }
-
 }
