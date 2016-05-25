@@ -181,10 +181,28 @@ public class CarService implements ICarService{
         return carList;
     }
 
-    public List<CarViewObject> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+    public List<CarViewObject> getSearchCar(Date fromDate, Date byDate,
+                                            HashMap<String, String> filterValues, HashMap<String, Object> filterResponse) {
         Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
+        }
+
+        String transmission = filterValues.get("transmission");
+        if (transmission != null) {
+            filterResponse.put("transmission", Transmission.valueOf(transmission));
+        }
+        String fuelId = filterValues.get("fuelId");
+        if (fuelId != null) {
+           filterResponse.put("fuel", FuelService.getInstance().getFuelById(Integer.parseInt(fuelId)));
+        }
+        String typeId = filterValues.get("typeId");
+        if (typeId != null) {
+           filterResponse.put("type", TypeService.getInstance().getTypeById(Integer.parseInt(typeId)));
+        }
+        String ratingId = filterValues.get("ratingId");
+        if (ratingId != null) {
+           filterResponse.put("rating", RatingService.getInstance().getRatingById(Integer.parseInt(ratingId)));
         }
 
         List<CarViewObject> carList = null;

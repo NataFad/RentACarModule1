@@ -94,9 +94,12 @@ public class CarServiceTest {
     filterValues.put("page", "1");
     filterValues.put("recordsPerPage", "10");
 
+    HashMap<String, Object> filterResponse = new HashMap<String, Object>();
     HibernateUtil.getInstance().getSession().beginTransaction();
-    List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
+    List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues, filterResponse);
     Assert.assertNotNull(list);
+    Assert.assertNotNull(filterResponse);
+
     CarViewObject carVO = list.get(list.size()-1);
 
     Assert.assertEquals("Registered car: registration number", true, testCar.getRegistrationNumber().equals(carVO.getRegistrationNumber()));

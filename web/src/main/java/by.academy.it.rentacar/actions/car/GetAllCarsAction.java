@@ -40,7 +40,9 @@ public class GetAllCarsAction extends Action {
 		filterValues.put("page", Integer.toString(page));
 		filterValues.put("recordsPerPage", Integer.toString(recordsPerPage));
 
-		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, fromDate, filterValues);
+        HashMap<String, Object> filterResponse = new HashMap<String, Object>();
+
+		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, fromDate, filterValues, filterResponse);
 		if (list.isEmpty()) {
 			list = null;
 			request.setAttribute("search_result", list);

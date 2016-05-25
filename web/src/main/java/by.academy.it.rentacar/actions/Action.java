@@ -77,7 +77,6 @@ public abstract class Action {
         }
         // List of transmission
         ArrayList<String> perPageList = ActionService.getInstance().getListPerPage();
-        System.out.println(perPageList);
         request.setAttribute("perPageList", perPageList);
         request.setAttribute("recordPerPage", request.getParameter("recordPerPage"));
     }

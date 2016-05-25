@@ -37,24 +37,27 @@ public class SearchCarAction extends Action {
 		HashMap<String, String> filterValues = new HashMap<String, String>();
 		// Transmission
 		String transmission = request.getParameter("transmission").trim();
-		if (!transmission.equals("0")) {
+		if (!transmission.equals("")) {
 			filterValues.put("transmission", transmission);
 		}
 		// Fuels
 		String fuelId = request.getParameter("fuelId").trim();
-		if (!fuelId.equals("0")) {
+		if (!fuelId.equals("")) {
 			filterValues.put("fuelId", fuelId);
 		}
+
 		// Type
 		String typeId = request.getParameter("typeId").trim();
-		if (!typeId.equals("0")) {
+		if (!typeId.equals("")) {
 			filterValues.put("typeId", typeId);
 		}
+
 		// Rating
 		String ratingId = request.getParameter("ratingId");
-		if (!ratingId.equals("0")) {
+		if (!ratingId.equals("")) {
 			filterValues.put("ratingId", ratingId);
 		}
+
 		// recordsPerPage
 		String recordPerPage = request.getParameter("recordPerPage");
 		filterValues.put("recordsPerPage", recordPerPage);
@@ -73,13 +76,18 @@ public class SearchCarAction extends Action {
 			request.getSession().setAttribute("errorFilterCarMassager", "Null count");
 		}
 
-		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
+		HashMap<String, Object> filterResponse = new HashMap<String, Object>();
+		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues, filterResponse);
 		if (list.isEmpty()) {
 			list = null;
 			request.setAttribute("search_result", list);
 			request.getSession().setAttribute("errorSearchCarMessage", errorManager.getProperty("search.nullsearch"));
 		}
 		request.setAttribute("search_result", list);
+
+		for (String key: filterResponse.keySet()) {
+			request.setAttribute(key, filterResponse.get(key));
+		}
 		return ConfigurationManager.getProperty("page.search");
 	}
 

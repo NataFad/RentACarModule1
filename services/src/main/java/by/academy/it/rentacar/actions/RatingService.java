@@ -47,4 +47,20 @@ public class RatingService implements IRatingService{
         }
         return ratingList;
     }
+
+    /**
+     * Method getRatingById() gets fuel by id
+     *
+     * @param ratingId
+     * @return rating
+     */
+    public Rating getRatingById(int ratingId){
+        Rating rating = null;
+        try {
+            rating = RatingDAO.getInstance().getByKey("id", ratingId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rating;
+    }
 }
