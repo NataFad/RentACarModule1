@@ -47,4 +47,20 @@ public class TypeService implements ITypeService{
         }
         return typeList;
     }
+
+    /**
+     * Method getTypeById() gets type by id
+     *
+     * @param typeId
+     * @return type
+     */
+    public Type getTypeById(int typeId){
+        Type type = null;
+        try {
+            type = TypeDAO.getInstance().getByKey("id", typeId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return type;
+    }
 }

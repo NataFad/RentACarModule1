@@ -33,7 +33,7 @@ public class FuelService implements IFuelService{
     }
 
     /**
-     * Method getListFuel() gets list of ratings
+     * Method getListFuel() gets list of fuels
      *
      * @return ArrayList<Fuel>
      */
@@ -46,5 +46,21 @@ public class FuelService implements IFuelService{
             e.printStackTrace();
         }
         return fuelList;
+    }
+
+    /**
+     * Method getFuelById() gets fuel by id
+     *
+     * @param fuelId
+     * @return fuel
+     */
+    public Fuel getFuelById(int fuelId){
+       Fuel fuel = null;
+        try {
+            fuel = FuelDAO.getInstance().getByKey("id", fuelId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fuel;
     }
 }

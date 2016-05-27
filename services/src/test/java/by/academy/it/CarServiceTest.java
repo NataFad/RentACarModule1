@@ -97,6 +97,7 @@ public class CarServiceTest {
     HibernateUtil.getInstance().getSession().beginTransaction();
     List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
     Assert.assertNotNull(list);
+
     CarViewObject carVO = list.get(list.size()-1);
 
     Assert.assertEquals("Registered car: registration number", true, testCar.getRegistrationNumber().equals(carVO.getRegistrationNumber()));

@@ -98,6 +98,11 @@ public class CarDAO extends DAO<Car> {
      */
     public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
         Session session = HibernateUtil.getInstance().getSession();
+
+        String orderBy = filterValues.get("orderBy");
+        int page = Integer.parseInt(filterValues.get("page"));
+        int recordsPerPage = Integer.parseInt(filterValues.get("recordsPerPage"));
+
         long difference = byDate.getTime() - fromDate.getTime();
         int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
         // query text writing
@@ -113,15 +118,11 @@ public class CarDAO extends DAO<Car> {
                 "ROUND(CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days - 1) + ")/100, 2) AS cost "
                 + sqlQueryStringByFilter(fromDate, byDate, filterValues);
 
-        String orderBy = filterValues.get("orderBy");
         if (orderBy != null) {
             sqlQuery = sqlQuery + " ORDER BY " + orderBy;
         } else {
             sqlQuery = sqlQuery + " ORDER BY CarVO.transmission, F.name, T.name, R.name";
         }
-
-        int page = Integer.parseInt(filterValues.get("page"));
-        int recordsPerPage = Integer.parseInt(filterValues.get("recordsPerPage"));
 
         List<CarViewObject> list = null;
         try {
