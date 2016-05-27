@@ -71,15 +71,15 @@ public class CarDAO extends DAO<Car> {
             sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.transmission= '" + transmission.toLowerCase() + "'";
         }
         String fuelId = filterValues.get("fuelId");
-        if (!fuelId.equals("")) {
+        if (fuelId != null) {
             sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.fuels_id= " + Integer.parseInt(fuelId);
         }
         String typeId = filterValues.get("typeId");
-        if (!typeId.equals("")) {
+        if (typeId != null) {
             sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.types_id = " + Integer.parseInt(typeId);
         }
         String ratingId = filterValues.get("ratingId");
-        if (!ratingId.equals("")) {
+        if (ratingId != null) {
             sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.ratings_id = " + Integer.parseInt(ratingId);
         }
 

@@ -14,6 +14,6 @@ import java.util.List;
  */
 public interface ICarService {
     Car registeredCar(HashMap<String, String> parametresCar);
-    List<CarViewObject> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues, HashMap<String, Object> filterResponse);
+    List<CarViewObject> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues);
     ArrayList<Car> getAllCars();
 }

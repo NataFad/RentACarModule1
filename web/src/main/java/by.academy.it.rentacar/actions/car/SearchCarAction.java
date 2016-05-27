@@ -39,29 +39,35 @@ public class SearchCarAction extends Action {
 		String transmission = request.getParameter("transmission").trim();
 		if (!transmission.equals("")) {
 			filterValues.put("transmission", transmission);
+			request.setAttribute("transmission", transmission);
 		}
 		// Fuels
 		String fuelId = request.getParameter("fuelId").trim();
-		if (!fuelId.equals("")) {
+		if (!fuelId.equals("0")) {
 			filterValues.put("fuelId", fuelId);
+			request.setAttribute("fuelId", Integer.parseInt(fuelId));
 		}
 
 		// Type
 		String typeId = request.getParameter("typeId").trim();
-		if (!typeId.equals("")) {
+		if (!typeId.equals("0")) {
 			filterValues.put("typeId", typeId);
+			request.setAttribute("typeId", Integer.parseInt(typeId));
 		}
 
 		// Rating
 		String ratingId = request.getParameter("ratingId");
-		if (!ratingId.equals("")) {
+		if (!ratingId.equals("0")) {
 			filterValues.put("ratingId", ratingId);
+			request.setAttribute("ratingId", Integer.parseInt(ratingId));
 		}
 
 		// recordsPerPage
 		String recordPerPage = request.getParameter("recordPerPage");
 		filterValues.put("recordsPerPage", recordPerPage);
+		request.setAttribute("recordPerPage", Integer.parseInt(recordPerPage));
 		filterValues.put("page", "1");
+		request.setAttribute("page", 1);
 
 		// period
 		request.setAttribute("fromDate", formateDate(fromDate));
@@ -77,7 +83,7 @@ public class SearchCarAction extends Action {
 		}
 
 		HashMap<String, Object> filterResponse = new HashMap<String, Object>();
-		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues, filterResponse);
+		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
 		if (list.isEmpty()) {
 			list = null;
 			request.setAttribute("search_result", list);
@@ -85,9 +91,6 @@ public class SearchCarAction extends Action {
 		}
 		request.setAttribute("search_result", list);
 
-		for (String key: filterResponse.keySet()) {
-			request.setAttribute(key, filterResponse.get(key));
-		}
 		return ConfigurationManager.getProperty("page.search");
 	}
 
