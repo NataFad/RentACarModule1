@@ -12,11 +12,12 @@ import java.util.List;
  * Created by Nata on 23.05.2016.
  */
 public class FuelServiceTest {
+    private static FuelDAO fuelDAO;
     @Test
     public void getListFuel() throws Exception {
         List<Fuel> list = FuelService.getInstance().getListFuel();
         Assert.assertNotNull(list);
-        int count = (int) FuelDAO.getInstance().count();
+        int count = (int) fuelDAO.count();
         Assert.assertEquals(count, list.size());
     }
 

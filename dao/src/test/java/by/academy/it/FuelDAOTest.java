@@ -7,6 +7,15 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -16,19 +25,25 @@ import java.util.ArrayList;
  * Created by Nata on 12.04.2016.
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/testDaoContext.xml")
+@Transactional
+@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
+       DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class FuelDAOTest {
 
-    private static FuelDAO fuelDAO;
+    @Autowired
+    public FuelDAO fuelDAO;
+
     private static Fuel testFuel;
     private static Fuel expectedFuel;
     private static ArrayList<Fuel> fuelList;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        fuelDAO = FuelDAO.getInstance();
         testFuel = new Fuel();
         testFuel.setName("test");
     }

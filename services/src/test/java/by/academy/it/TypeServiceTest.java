@@ -12,11 +12,12 @@ import java.util.List;
  * Created by Nata on 23.05.2016.
  */
 public class TypeServiceTest {
+    private static TypeDAO typeDAO;
     @Test
     public void getListType() throws Exception {
         List<Type> list = TypeService.getInstance().getListType();
         Assert.assertNotNull(list);
-        int count = (int) TypeDAO.getInstance().count();
+        int count = (int) typeDAO.count();
         Assert.assertEquals(count, list.size());
     }
 

@@ -12,9 +12,8 @@
     <context:component-scan base-package="by.academy.it.rentacar.dao"/>
     <aop:aspectj-autoproxy/>
     <!--Translate exceptions to Spring-exceptions -->
-    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="url" value="jdbc:mysql://localhost:3306/rentacar"/>
+        <property name="url" value="jdbc:mysql://localhost:3307/rentacar"/>
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="username" value="root"/>
         <property name="password" value="fadeeva"/>
@@ -28,7 +27,8 @@
                 <value>by.academy.it.rentacar.enums</value>
             </list>
         </property>
-        <property name="configLocation" value="hibernate.cfg.xml"></property>
+       <property name="configLocation" value="hibernate.cfg.xml"></property>
+
         <!--
         <property name="hibernateProperties">
             <props>

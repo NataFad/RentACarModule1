@@ -29,7 +29,6 @@
         <aspectj.version>1.8.9</aspectj.version>
         <cglib.version>3.2.2</cglib.version>
         <tiles.version>2.2.2</tiles.version>
-        <spring.security>3.2.5.RELEASE</spring.security>
     </properties>
 
     <dependencies>
@@ -110,6 +109,18 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

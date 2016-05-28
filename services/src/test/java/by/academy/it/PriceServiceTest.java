@@ -25,13 +25,12 @@ public class PriceServiceTest {
   private static Fuel testFuel;
   private static Price testPrice;
   private static Price expectedPrice;
-  private static PriceDAO priceDAO = PriceDAO.getInstance();
+  private static PriceDAO priceDAO;
   private static PriceService priceService = PriceService.getInstance();
 
   @BeforeClass
   public static void setUp() throws Exception {
     // add new fuel
-    fuelDAO  = FuelDAO.getInstance();
     testFuel = new Fuel();
     testFuel.setName("new test");
     fuelDAO.saveOrUpdate(testFuel);

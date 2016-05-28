@@ -1,9 +1,8 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.exceptions.DAOException;
-import by.academy.it.rentacar.entity.Rating;
 import by.academy.it.rentacar.dao.RatingDAO;
+import by.academy.it.rentacar.entity.Rating;
 
 import java.util.ArrayList;
 
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 public class RatingService implements IRatingService{
 
     private volatile static RatingService instance;
+    private RatingDAO ratingDAO;
 
     private RatingService(){}
 
@@ -40,11 +40,11 @@ public class RatingService implements IRatingService{
     public ArrayList<Rating> getListRating(){
         // List of ratings
         ArrayList<Rating> ratingList = new ArrayList<Rating>();
-        try {
-            ratingList = (ArrayList<Rating>) RatingDAO.getInstance().getAll();
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
+        //try {
+            ratingList = (ArrayList<Rating>) ratingDAO.getAll();
+//        } catch (DAOException e) {
+//            e.printStackTrace();
+//        }
         return ratingList;
     }
 
@@ -56,11 +56,11 @@ public class RatingService implements IRatingService{
      */
     public Rating getRatingById(int ratingId){
         Rating rating = null;
-        try {
-            rating = RatingDAO.getInstance().getByKey("id", ratingId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //try {
+            rating = ratingDAO.getByKey("id", ratingId);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return rating;
     }
 }

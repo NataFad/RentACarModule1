@@ -22,6 +22,7 @@ import java.util.List;
  */
 public class CarDAOTest {
 
+    private static CarDAO carDAO;
     @Test
     public void searchCarTest() throws Exception {
         Date dateForTest  =  Date.valueOf("2016-01-01");
@@ -35,8 +36,8 @@ public class CarDAOTest {
         filterValues.put("page", "1");
         filterValues.put("recordsPerPage", "10");
 
-        List<CarViewObject> list = CarDAO.getInstance().searchCar(dateForTest, dateForTest, filterValues);
-        BigInteger countCar = CarDAO.getInstance().countCarByFilter(dateForTest, dateForTest, filterValues);
+        List<CarViewObject> list = carDAO.searchCar(dateForTest, dateForTest, filterValues);
+        BigInteger countCar = carDAO.countCarByFilter(dateForTest, dateForTest, filterValues);
 
         Assert.assertNotNull(list);
         Assert.assertNotNull(countCar);
@@ -45,8 +46,8 @@ public class CarDAOTest {
 
     @Test
     public void getAllCarsTest() throws Exception{
-        List<Car> list = (ArrayList<Car>) CarDAO.getInstance().getAll();
-        long count = CarDAO.getInstance().count();
+        List<Car> list = (ArrayList<Car>) carDAO.getAll();
+        long count = carDAO.count();
 
         Assert.assertNotNull(list);
         Assert.assertNotNull(count);

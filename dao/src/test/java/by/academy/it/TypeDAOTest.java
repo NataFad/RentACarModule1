@@ -16,10 +16,9 @@ import java.math.BigDecimal;
  */
 public class TypeDAOTest {
 
+    private static TypeDAO typeDAO;
     @Test
     public void getByIdTest() throws Exception {
-        TypeDAO typeDAO = TypeDAO.getInstance();
-
         Type type = new Type("test", new BigDecimal(5).setScale(2, BigDecimal.ROUND_HALF_UP),
                 new BigDecimal(1.3).setScale(2, BigDecimal.ROUND_HALF_UP));
         typeDAO.saveOrUpdate(type);

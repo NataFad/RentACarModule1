@@ -17,6 +17,7 @@ import java.util.ArrayList;
  */
 public class ActionServiceTest {
   private ActionService actionService = ActionService.getInstance();
+  private FuelDAO fuelDAO;
 
   @Test
   public void getListTransmissionTest() throws Exception {
@@ -28,7 +29,7 @@ public class ActionServiceTest {
   @Test
   public void getListFuelTest() throws Exception {
     ArrayList<Fuel> fuelsListTest = actionService.getListFuel();
-    ArrayList<Fuel> fuelsListExpected = (ArrayList<Fuel>) FuelDAO.getInstance().getAll();
+    ArrayList<Fuel> fuelsListExpected = (ArrayList<Fuel>) fuelDAO.getAll();
     Assert.assertNotNull(fuelsListTest);
     Assert.assertEquals("Size of the list of the fuels", fuelsListTest.size(), fuelsListExpected.size());
   }

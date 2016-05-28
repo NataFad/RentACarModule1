@@ -3,6 +3,8 @@ package by.academy.it.rentacar.dao;
 import by.academy.it.rentacar.entity.Fuel;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -20,13 +22,15 @@ import java.util.List;
 @Repository("fuelDAO")
 public class FuelDAO extends DAO<Fuel> implements IFuelDAO{
 
-    private volatile static FuelDAO instance;
     private static Logger log = Logger.getLogger(FuelDAO.class);
 
-    private FuelDAO() {
+    @Autowired
+    public FuelDAO(SessionFactory sessionFactory) {
         super();
+        this.sessionFactory = sessionFactory;
     }
 
+/**
     public static FuelDAO getInstance() {
         if (instance == null) {
             synchronized (FuelDAO.class) {
@@ -37,14 +41,14 @@ public class FuelDAO extends DAO<Fuel> implements IFuelDAO{
         }
         return instance;
     }
-
+*/
     @Override
     public List<Fuel> searchByName(String nameSearch){
         String hql = "SELECT F FROM Fuel as F WHERE F.name = :nameFuel";
         Query query = getSession().createQuery(hql);
         query.setParameter("nameFuel", nameSearch);
         List<Fuel> list = null;
-        list = (ArrayList<Fuel>) query.setCacheable(true).list();
+        list = (ArrayList<Fuel>) query.list();
         log.info("Results:" + list);
         return list;
     }

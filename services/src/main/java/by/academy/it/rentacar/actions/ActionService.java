@@ -5,7 +5,6 @@ import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.exceptions.DAOException;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 public class ActionService implements IActionService{
 
 	private volatile static ActionService instance;
-
+	private ModelAndMarkDAO modelAndMarkDAO;
 	private ActionService(){}
 
 	public static ActionService getInstance() {
@@ -65,11 +64,11 @@ public class ActionService implements IActionService{
 	 */
 	public ArrayList<ModelAndMark> getListModel(){
 		ArrayList<ModelAndMark> modelList = null;
-		try {
-			modelList = (ArrayList<ModelAndMark>) ModelAndMarkDAO.getInstance().getAll();
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+		//try {
+			modelList = (ArrayList<ModelAndMark>) modelAndMarkDAO.getAll();
+//		} catch (DAOException e) {
+//			e.printStackTrace();
+//		}
 		return modelList;
 	}
 

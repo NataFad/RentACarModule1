@@ -4,6 +4,8 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Rating;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,22 +21,22 @@ import org.springframework.stereotype.Repository;
 @Repository("ratingDAO")
 public class RatingDAO extends DAO<Rating> implements IRatingDAO{
 
-	private volatile static RatingDAO instance;
-
-	private RatingDAO() {
+	@Autowired
+	public RatingDAO(SessionFactory sessionFactory) {
 		super();
+		this.sessionFactory = sessionFactory;
 	}
 
-	public static RatingDAO getInstance() {
-		if (instance == null) {
-			synchronized (RatingDAO.class) {
-				if (instance == null) {
-					instance = new RatingDAO();
-				}
-			}
-		}
-		return instance;
-	}
+//	public static RatingDAO getInstance() {
+//		if (instance == null) {
+//			synchronized (RatingDAO.class) {
+//				if (instance == null) {
+//					instance = new RatingDAO();
+//				}
+//			}
+//		}
+//		return instance;
+//	}
 
 	@Override
 	public Rating getById(int id){

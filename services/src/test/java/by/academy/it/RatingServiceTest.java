@@ -12,12 +12,13 @@ import java.util.List;
  * Created by Nata on 23.05.2016.
  */
 public class RatingServiceTest {
+    private static RatingDAO ratingDAO;
     @Test
     public void getListRating() throws Exception {
         List<Rating> list = RatingService.getInstance().getListRating();
         Assert.assertNotNull(list);
 
-        int count = (int) RatingDAO.getInstance().count();
+        int count = (int) ratingDAO.count();
         Assert.assertEquals(count, list.size());
     }
 

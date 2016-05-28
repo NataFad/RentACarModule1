@@ -5,7 +5,6 @@ import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.CoderManager;
-import by.academy.it.rentacar.util.HibernateUtil;
 import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Assert;
@@ -24,7 +23,7 @@ import java.util.GregorianCalendar;
  */
 public class UserDAOTest {
 
-    private static UserDAO userDAO = UserDAO.getInstance();
+    private static UserDAO userDAO;
     private static User userTest;
 
     @Before
@@ -58,17 +57,17 @@ public class UserDAOTest {
     }
 
     private void addUser() {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = userDAO.getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }
         String password = userTest.getPassword();
         userTest.setPassword(CoderManager.getHashCode(password));
-        try {
+       // try {
             userDAO.saveOrUpdate(userTest);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
+//        } catch (DAOException e) {
+//            e.printStackTrace();
+//        }
         if (!transaction.wasCommitted()) {
             transaction.commit();
         }
@@ -92,7 +91,7 @@ public class UserDAOTest {
     }
 
     private void updateAccessTest() throws Exception {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = userDAO.getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }
@@ -111,15 +110,15 @@ public class UserDAOTest {
     }
 
     private void deleteTest() throws DAOException {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = userDAO.getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }
-        try {
+       // try {
             userDAO.delete(userTest);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
+//        } catch (DAOException e) {
+//            e.printStackTrace();
+//        }
         if (!transaction.wasCommitted()) {
             transaction.commit();
         }

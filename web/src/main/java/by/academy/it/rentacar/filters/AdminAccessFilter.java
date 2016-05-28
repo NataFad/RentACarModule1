@@ -2,7 +2,6 @@ package by.academy.it.rentacar.filters;
 
 import by.academy.it.rentacar.managers.ConfigurationManager;
 import by.academy.it.rentacar.managers.ErrorManager;
-import by.academy.it.rentacar.util.HibernateUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +44,7 @@ public class AdminAccessFilter implements Filter {
 			return;
 		}
 		chain.doFilter(request, response);
-		HibernateUtil.getInstance().closeSession();
+
 	}
 
 	/**

@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -24,10 +25,10 @@ import java.util.List;
  * @version 1.3
  * @since 2016-05
  */
+@Repository()
 public abstract class DAO<T> implements IDAO<T> {
 
     private static Logger log = Logger.getLogger(DAO.class);
-
     @Autowired
     protected SessionFactory sessionFactory;
 

@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
@@ -23,10 +24,11 @@ import java.math.BigDecimal;
  */
 public class PriceDAOTest {
 
-    private static FuelDAO fuelDAO = FuelDAO.getInstance();
+    @Autowired
+    private static FuelDAO fuelDAO;
     private static Fuel testFuel;
     private static Price testPrice;
-    private static PriceDAO priceDAO = PriceDAO.getInstance();
+    private static PriceDAO priceDAO;
 
     @BeforeClass
     public static void setUp() throws Exception {

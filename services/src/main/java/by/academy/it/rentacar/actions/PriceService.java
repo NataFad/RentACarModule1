@@ -16,6 +16,7 @@ import by.academy.it.rentacar.enums.Transmission;
 public class PriceService implements IPriceService{
 
     private volatile static PriceService instance;
+    private PriceDAO priceDAO;
 
     private PriceService(){}
 
@@ -40,7 +41,7 @@ public class PriceService implements IPriceService{
     public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) {
         Price price = null;
 //        try {
-            price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuel);
+            price = priceDAO.getByTransmissionAndFuel(transmission, fuel);
 //        } catch (DAOException e) {
 //            e.printStackTrace();
 //        }

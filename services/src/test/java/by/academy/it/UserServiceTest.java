@@ -3,7 +3,6 @@ package by.academy.it;
 import by.academy.it.rentacar.actions.UserService;
 import by.academy.it.rentacar.dao.UserDAO;
 import by.academy.it.rentacar.entity.User;
-import by.academy.it.rentacar.util.HibernateUtil;
 import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Assert;
@@ -19,6 +18,7 @@ import java.util.GregorianCalendar;
 public class UserServiceTest {
 
     private UserService userService = UserService.getInstance();
+    private static UserDAO userDAO;
     private static User userTest;
     private String password;
 
@@ -45,18 +45,18 @@ public class UserServiceTest {
 
     @After
     public void tearDown() throws Exception {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = userDAO.getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }
-        UserDAO.getInstance().delete(userTest);
+        userDAO.delete(userTest);
         if (!transaction.wasCommitted()) {
             transaction.commit();
         }
     }
 
     public void registeredUserTest() throws Exception {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = userDAO.getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }
@@ -67,7 +67,7 @@ public class UserServiceTest {
     }
 
     public void loginUserTest() throws Exception {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = userDAO.getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class TypeService implements ITypeService{
 
     private volatile static TypeService instance;
+    private TypeDAO typeDAO;
 
     private TypeService(){}
 
@@ -40,7 +41,7 @@ public class TypeService implements ITypeService{
         // List of types
         ArrayList<Type> typeList = new ArrayList<Type>();
         //try {
-            typeList = (ArrayList<Type>) TypeDAO.getInstance().getAll();
+            typeList = (ArrayList<Type>) typeDAO.getAll();
 //        } catch (DAOException e) {
 //            e.printStackTrace();
 //        }
@@ -55,11 +56,11 @@ public class TypeService implements ITypeService{
      */
     public Type getTypeById(int typeId){
         Type type = null;
-        try {
-            type = TypeDAO.getInstance().getByKey("id", typeId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      //  try {
+            type = typeDAO.getByKey("id", typeId);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return type;
     }
 }

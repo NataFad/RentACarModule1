@@ -4,7 +4,6 @@ import by.academy.it.rentacar.actions.CarService;
 import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -24,20 +23,24 @@ import java.util.List;
 public class CarServiceTest {
 
   private static CarService carService = CarService.getInstance();
-  private static CarDAO carDAO = CarDAO.getInstance();
+  private static CarDAO carDAO;
+  private static FuelDAO fuelDAO;
+  private static RatingDAO ratingDAO;
+  private static ModelAndMarkDAO modelAndMarkDAO;
+  private static TypeDAO typeDAO;
+  private static PriceDAO priceDAO;
   private static Car testCar;
   private static Transmission transTest = Transmission.AUTO;
 
   @BeforeClass
   public static void setUp() throws Exception {
     int foreign_id = 1;
-    Fuel fuel = FuelDAO.getInstance().getById(foreign_id);
-    Rating rating = RatingDAO.getInstance().getById(foreign_id);
-    ModelAndMark model = ModelAndMarkDAO.getInstance().getById(foreign_id);
-    Type type = TypeDAO.getInstance().getById(foreign_id);
+    Fuel fuel = fuelDAO.getById(foreign_id);
+    Rating rating = ratingDAO.getById(foreign_id);
+    ModelAndMark model = modelAndMarkDAO.getById(foreign_id);
+    Type type = typeDAO.getById(foreign_id);
 
-    Price price = PriceDAO.getInstance().getByTransmissionAndFuel(transTest, fuel);
-    carDAO  = CarDAO.getInstance();
+    Price price = priceDAO.getByTransmissionAndFuel(transTest, fuel);
     testCar = new Car();
     testCar.setRegistrationNumber("00-00 TE");
     testCar.setTransmission(transTest);
@@ -58,7 +61,7 @@ public class CarServiceTest {
   }
 
   private void registerCarTest() throws Exception {
-    HibernateUtil.getInstance().getSession().beginTransaction();
+    carDAO.getSession().beginTransaction();
 
     HashMap<String, String> parametresCar = new HashMap<String, String>();
     parametresCar.put("transmission", transTest.name());
@@ -74,7 +77,7 @@ public class CarServiceTest {
   }
 
   private void getAllCarsServiceTest() throws Exception {
-    HibernateUtil.getInstance().getSession().beginTransaction();
+    carDAO.getSession().beginTransaction();
     ArrayList<Car> carsList = carService.getAllCars();
     Assert.assertNotNull(carsList);
 
@@ -94,7 +97,7 @@ public class CarServiceTest {
     filterValues.put("page", "1");
     filterValues.put("recordsPerPage", "10");
 
-    HibernateUtil.getInstance().getSession().beginTransaction();
+    carDAO.getSession().beginTransaction();
     List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);
     Assert.assertNotNull(list);
 
@@ -109,8 +112,8 @@ public class CarServiceTest {
 
   @AfterClass
   public static void tearDown() throws Exception {
-    HibernateUtil.getInstance().getSession().beginTransaction();
+    carDAO.getSession().beginTransaction();
     carDAO.delete(testCar);
-    HibernateUtil.getInstance().getSession().getTransaction().commit();
+    carDAO.getSession().getTransaction().commit();
   }
 }

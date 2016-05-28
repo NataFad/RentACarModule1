@@ -4,7 +4,6 @@ package by.academy.it.rentacar.actions;
 import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
@@ -27,6 +26,11 @@ import java.util.List;
 public class CarService implements ICarService{
 
     private volatile static CarService instance;
+    private CarDAO carDAO;
+    private RatingDAO ratingDAO;
+    private FuelDAO fuelDAO;
+    private TypeDAO typeDAO;
+    private ModelAndMarkDAO modelAndMarkDAO;
     private static Logger log = Logger.getLogger(CarService.class);
 
     private CarService() {
@@ -52,7 +56,7 @@ public class CarService implements ICarService{
      */
     public Car registeredCar(HashMap<String, String> parametresCar) {
         Car car = null;
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = carDAO.getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }
@@ -70,7 +74,7 @@ public class CarService implements ICarService{
         // get ratecost by rating
         int ratingId = Integer.parseInt(parametresCar.get("ratingId"));
         BigDecimal ratecostByRating = new BigDecimal(0);
-        Rating rating = RatingDAO.getInstance().getById(ratingId);
+        Rating rating = ratingDAO.getById(ratingId);
         if (rating == null) {
             transaction.rollback();
             log.error("Rating is not set");
@@ -82,7 +86,7 @@ public class CarService implements ICarService{
         int typeId = Integer.parseInt(parametresCar.get("typeId"));
         BigDecimal ratecostByType = new BigDecimal(0);
         BigDecimal rateDiscountByType = new BigDecimal(0);
-        Type type = TypeDAO.getInstance().getById(typeId);
+        Type type = typeDAO.getById(typeId);
         if (type == null) {
             transaction.rollback();
             log.error("Type is not set");
@@ -93,7 +97,7 @@ public class CarService implements ICarService{
 
         // fuel
         int fuelId = Integer.parseInt(parametresCar.get("fuelId"));
-        Fuel fuel = FuelDAO.getInstance().getById(fuelId);
+        Fuel fuel = fuelDAO.getById(fuelId);
         if (fuel == null) {
             transaction.rollback();
             log.error("Fuel is not set");
@@ -128,7 +132,7 @@ public class CarService implements ICarService{
 
         // model and mark
         int modelId = Integer.parseInt(parametresCar.get("modelId"));
-        ModelAndMark model = ModelAndMarkDAO.getInstance().getById(modelId);
+        ModelAndMark model = modelAndMarkDAO.getById(modelId);
         if (model == null) {
             transaction.rollback();
             log.error("Model and mark is not set");
@@ -149,7 +153,7 @@ public class CarService implements ICarService{
         car.setDiscount(priceCar.getDiscount().multiply(rateDiscountByType).multiply(new BigDecimal(100)));
         log.error(car);
 //        try {
-            CarDAO.getInstance().saveOrUpdate(car);
+            carDAO.saveOrUpdate(car);
             if (!transaction.wasCommitted()) {
                 transaction.commit();
             }
@@ -167,9 +171,9 @@ public class CarService implements ICarService{
      */
     public ArrayList<Car> getAllCars() {
         ArrayList<Car> carList = null;
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = carDAO.getSession().getTransaction();
 //        try {
-            carList = (ArrayList<Car>) CarDAO.getInstance().getAll();
+            carList = (ArrayList<Car>) carDAO.getAll();
             if (!transaction.wasCommitted()) {
                 transaction.commit();
             }
@@ -181,7 +185,7 @@ public class CarService implements ICarService{
     }
 
     public List<CarViewObject> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
+        Transaction transaction = carDAO.getSession().getTransaction();
         if (!transaction.isActive()){
             transaction.begin();
         }
@@ -189,7 +193,7 @@ public class CarService implements ICarService{
         List<CarViewObject> carList = null;
         if (fromDate.compareTo(byDate) != -1) {
 //            try {
-                carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
+                carList = carDAO.searchCar(fromDate, byDate, filterValues);
                 if (!transaction.wasCommitted()) {
                     transaction.commit();
                 }

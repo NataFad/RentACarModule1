@@ -15,10 +15,9 @@ import java.math.BigDecimal;
  * @since 2016-05
  */
 public class RatingDAOTest {
-
+private static RatingDAO ratingDAO;
     @Test
     public void getByIdTest() throws Exception {
-        RatingDAO ratingDAO = RatingDAO.getInstance();
         Rating rating = new Rating("test", new BigDecimal(5).setScale(2, BigDecimal.ROUND_HALF_UP));
         ratingDAO.saveOrUpdate(rating);
 

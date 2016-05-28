@@ -22,7 +22,7 @@ import java.util.List;
 public class ModelAndMarkDAOTest {
 
     private static ModelAndMark testModel;
-    private static ModelAndMarkDAO modelDAO = ModelAndMarkDAO.getInstance();
+    private static ModelAndMarkDAO modelDAO;
 
     @BeforeClass
     public static void setUp() throws Exception {

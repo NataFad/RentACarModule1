@@ -4,9 +4,8 @@
 package by.academy.it.rentacar.actions.car;
 
 import by.academy.it.rentacar.actions.Action;
-import by.academy.it.rentacar.dao.CarDAO;
-import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.actions.CarService;
+import by.academy.it.rentacar.dao.CarDAO;
 import by.academy.it.rentacar.managers.ConfigurationManager;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 
@@ -28,6 +27,8 @@ import java.util.List;
  *
  */
 public class SearchCarAction extends Action {
+
+	private CarDAO carDAO;
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -75,12 +76,12 @@ public class SearchCarAction extends Action {
 		getListFilterCar(request, 0);
 
 		BigInteger count;
-		try {
-			count = CarDAO.getInstance().countCarByFilter(fromDate, byDate, filterValues);
+		//try {
+			count = carDAO.countCarByFilter(fromDate, byDate, filterValues);
 			request.getSession().setAttribute("errorFilterCarMassager", "Count by filter " + count);
-		} catch (DAOException e) {
-			request.getSession().setAttribute("errorFilterCarMassager", "Null count");
-		}
+//		} catch (DAOException e) {
+//			request.getSession().setAttribute("errorFilterCarMassager", "Null count");
+//		}
 
 		HashMap<String, Object> filterResponse = new HashMap<String, Object>();
 		List<CarViewObject> list = CarService.getInstance().getSearchCar(fromDate, byDate, filterValues);

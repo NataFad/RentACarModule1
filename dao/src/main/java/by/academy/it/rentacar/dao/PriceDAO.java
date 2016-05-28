@@ -8,7 +8,9 @@ import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.enums.Transmission;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -23,23 +25,24 @@ import org.springframework.stereotype.Repository;
 @Repository("priceDAO")
 public class PriceDAO extends DAO<Price> implements IPriceDAO {
 
-    private volatile static PriceDAO instance;
     private static Logger log = Logger.getLogger(PriceDAO.class);
 
-    private PriceDAO() {
+    @Autowired
+    public PriceDAO(SessionFactory sessionFactory) {
         super();
+        this.sessionFactory = sessionFactory;
     }
 
-    public static PriceDAO getInstance() {
-        if (instance == null) {
-            synchronized (PriceDAO.class) {
-                if (instance == null) {
-                    instance = new PriceDAO();
-                }
-            }
-        }
-        return instance;
-    }
+//    public static PriceDAO getInstance() {
+//        if (instance == null) {
+//            synchronized (PriceDAO.class) {
+//                if (instance == null) {
+//                    instance = new PriceDAO();
+//                }
+//            }
+//        }
+//        return instance;
+//    }
 
     @Override
     public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) {
