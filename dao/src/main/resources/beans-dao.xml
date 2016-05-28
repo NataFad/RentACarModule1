@@ -28,6 +28,8 @@
                 <value>by.academy.it.rentacar.enums</value>
             </list>
         </property>
+        <property name="configLocation" value="hibernate.cfg.xml"></property>
+        <!--
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">true</prop>
@@ -38,5 +40,6 @@
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
             </props>
         </property>
+        -->
     </bean>
 </beans>

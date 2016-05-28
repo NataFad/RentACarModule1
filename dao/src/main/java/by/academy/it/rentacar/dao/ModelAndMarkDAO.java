@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
  * table ModelsAndMarks.
  * 
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  * 
  */

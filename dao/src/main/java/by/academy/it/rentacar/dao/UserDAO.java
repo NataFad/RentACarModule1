@@ -18,8 +18,8 @@ import org.springframework.stereotype.Repository;
  * Class UserDAO creates object User and executes queries the table Users.
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.3
+ * @since 2016-05
  */
 @Repository("userDAO")
 public class UserDAO extends DAO<User> implements IUserDAO {
@@ -77,10 +77,9 @@ public class UserDAO extends DAO<User> implements IUserDAO {
 
     @Override
     public int getAccess(String id) {
-        Session session = sessionFactory.getCurrentSession();
         String hql = "SELECT U.access FROM User as U "
                 + "WHERE U.id = :id";
-        Query query = session.createQuery(hql);
+        Query query = getSession().createQuery(hql);
         query.setParameter("id", Integer.parseInt(id));
         int access = 0;
         access = (int) query.uniqueResult();

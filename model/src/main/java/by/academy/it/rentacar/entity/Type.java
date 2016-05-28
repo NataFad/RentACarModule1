@@ -1,5 +1,9 @@
 package by.academy.it.rentacar.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,6 +21,8 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "types")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "type")
+@Component
 public class Type implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;

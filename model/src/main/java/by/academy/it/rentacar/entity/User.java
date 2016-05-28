@@ -5,6 +5,7 @@ package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.TypeUser;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "users",  uniqueConstraints =  @UniqueConstraint(name = "login", columnNames = "login"))
+@Component
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;

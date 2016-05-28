@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Class RatingDAO creates object Rating and executes queries the table Ratings.
  * 
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  * 
  */

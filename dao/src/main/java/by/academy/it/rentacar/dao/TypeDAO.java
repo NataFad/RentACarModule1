@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Class TypeDAO creates object Type and executes queries the table types.
  * 
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  * 
  */

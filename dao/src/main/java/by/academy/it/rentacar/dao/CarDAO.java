@@ -21,7 +21,7 @@ import java.util.List;
  * Class CarDAO creates object Car and executes queries the table Cars.
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  */
 public class CarDAO extends DAO<Car> implements ICarDAO {

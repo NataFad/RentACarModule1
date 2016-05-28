@@ -14,7 +14,7 @@ import java.util.List;
  * Interface ICarDAO
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.1
  * @since 2016-05
  */
 public interface ICarDAO extends IDAO<Car> {

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  * Class PriceDAO creates object Price and executes queries the table price.
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  */
 @Repository("priceDAO")

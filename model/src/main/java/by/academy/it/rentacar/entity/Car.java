@@ -4,6 +4,7 @@
 package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.Transmission;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,12 +15,13 @@ import java.math.BigDecimal;
  * calculated amount per day and the discount.
  * 
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.3
+ * @since 2016-05
  *
  */
 @Entity
 @Table(name = "cars", uniqueConstraints = @UniqueConstraint(name = "regNumber", columnNames = "registrationNumber"))
+@Component
 public class Car implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;

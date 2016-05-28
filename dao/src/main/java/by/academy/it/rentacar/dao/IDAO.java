@@ -10,7 +10,7 @@ import java.util.List;
  * initializes methods add(), update(), delete(), getAll().
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  *
  */
