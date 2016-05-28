@@ -1,9 +1,9 @@
 package by.academy.it.rentacar.actions;
 
 
+import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.entity.Rating;
 import by.academy.it.rentacar.dao.RatingDAO;
-import by.academy.it.rentacar.exceptions.DAOException;
 
 import java.util.ArrayList;
 

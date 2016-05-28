@@ -1,8 +1,8 @@
 package by.academy.it.rentacar.actions;
 
+import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
-import by.academy.it.rentacar.enums.Transmission;
 
 import java.util.ArrayList;
 

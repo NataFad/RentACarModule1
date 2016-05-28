@@ -3,10 +3,10 @@
  */
 package by.academy.it.rentacar.dao;
 
+import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.exceptions.DAOException;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;

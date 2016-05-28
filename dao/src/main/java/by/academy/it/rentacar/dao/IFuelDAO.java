@@ -5,7 +5,7 @@ import by.academy.it.rentacar.entity.Fuel;
 import java.util.List;
 
 /**
- * Interface FuelDAO
+ * Interface IFuelDAO
  *
  * @author Fadeeva Natallia
  * @version 1.1

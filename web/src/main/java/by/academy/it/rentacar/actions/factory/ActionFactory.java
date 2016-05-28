@@ -1,6 +1,7 @@
 package by.academy.it.rentacar.actions.factory;
 
 import by.academy.it.rentacar.actions.Action;
+import by.academy.it.rentacar.actions.user.RegisterUserAction;
 import by.academy.it.rentacar.actions.InDeveloping;
 import by.academy.it.rentacar.actions.car.AddCarAction;
 import by.academy.it.rentacar.actions.car.GetAllCarsAction;
@@ -8,7 +9,6 @@ import by.academy.it.rentacar.actions.car.SearchCarAction;
 import by.academy.it.rentacar.actions.car.SetInfoCarAction;
 import by.academy.it.rentacar.actions.user.ExitUserAction;
 import by.academy.it.rentacar.actions.user.LoginUserAction;
-import by.academy.it.rentacar.actions.user.RegisterUserAction;
 import by.academy.it.rentacar.exceptions.ActionNotFoundException;
 import by.academy.it.rentacar.util.HibernateUtil;
 

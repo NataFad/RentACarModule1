@@ -5,8 +5,8 @@ import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.exceptions.DAOException;
-import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.viewobject.CarViewObject;
+import by.academy.it.rentacar.util.HibernateUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
 

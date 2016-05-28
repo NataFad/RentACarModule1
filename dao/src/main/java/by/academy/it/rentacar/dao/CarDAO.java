@@ -3,8 +3,8 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.exceptions.DAOException;
+import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.apache.log4j.Logger;

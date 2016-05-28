@@ -4,9 +4,9 @@
 package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.dao.UserDAO;
+import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
-import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.exceptions.EnumNotFindException;
 import by.academy.it.rentacar.managers.CoderManager;
 import by.academy.it.rentacar.util.HibernateUtil;

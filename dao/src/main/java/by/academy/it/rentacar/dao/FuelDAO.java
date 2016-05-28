@@ -17,7 +17,7 @@ import java.util.List;
  * @version 1.3
  * @since 2016-05
  */
-@Repository
+@Repository("fuelDAO")
 public class FuelDAO extends DAO<Fuel> implements IFuelDAO{
 
     private volatile static FuelDAO instance;

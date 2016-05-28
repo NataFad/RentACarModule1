@@ -4,7 +4,7 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Rating;
-import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 /**
  * Class RatingDAO
@@ -16,10 +16,10 @@ import org.apache.log4j.Logger;
  * @since 2016-05
  * 
  */
-public class RatingDAO extends DAO<Rating> {
+@Repository
+public class RatingDAO extends DAO<Rating> implements IRatingDAO{
 
 	private volatile static RatingDAO instance;
-	private static Logger log = Logger.getLogger(RatingDAO.class);
 
 	private RatingDAO() {
 		super();
@@ -36,10 +36,7 @@ public class RatingDAO extends DAO<Rating> {
 		return instance;
 	}
 
-	/**
-	 * Method getById() searches object rating by id
-	 *
-	 */
+	@Override
 	public Rating getById(int id){
 		return getByKey("id", id);
 	}
