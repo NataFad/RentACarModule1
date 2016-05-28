@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
  * @since 2016-05
  * 
  */
-@Repository
+@Repository("ratingDAO")
 public class RatingDAO extends DAO<Rating> implements IRatingDAO{
 
 	private volatile static RatingDAO instance;

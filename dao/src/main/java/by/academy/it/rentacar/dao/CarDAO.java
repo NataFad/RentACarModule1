@@ -3,20 +3,15 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.entity.Car;
-import by.academy.it.rentacar.util.HibernateUtil;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 
 import java.math.BigInteger;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,7 +24,7 @@ import java.util.List;
  * @version 1.2
  * @since 2016-05
  */
-public class CarDAO extends DAO<Car> {
+public class CarDAO extends DAO<Car> implements ICarDAO {
 
     private volatile static CarDAO instance;
     private static Logger log = Logger.getLogger(CarDAO.class);
@@ -49,15 +44,7 @@ public class CarDAO extends DAO<Car> {
         return instance;
     }
 
-    /**
-     * Method sqlQueryStringByFilter()
-     * returns string of sql-query based on the rental dates and defined filters
-     *
-     * @param fromDate
-     * @param byDate
-     * @param filterValues
-     * @return String
-     */
+    @Override
     public String sqlQueryStringByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
         String sqlQueryFromWhere = "FROM cars AS CarVO " +
                 "LEFT JOIN ratings AS R ON CarVO.ratings_id = R.id " +
@@ -82,27 +69,14 @@ public class CarDAO extends DAO<Car> {
         if (ratingId != null) {
             sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.ratings_id = " + Integer.parseInt(ratingId);
         }
-
         return sqlQueryFromWhere;
     }
 
-    /**
-     * Method searchCar()
-     * performs a search based on the rental dates and defined filters
-     *
-     * @param fromDate
-     * @param byDate
-     * @param filterValues
-     * @return list
-     * @throws HibernateException
-     */
-    public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
-        Session session = HibernateUtil.getInstance().getSession();
-
+    @Override
+    public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
         String orderBy = filterValues.get("orderBy");
         int page = Integer.parseInt(filterValues.get("page"));
         int recordsPerPage = Integer.parseInt(filterValues.get("recordsPerPage"));
-
         long difference = byDate.getTime() - fromDate.getTime();
         int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
         // query text writing
@@ -117,61 +91,41 @@ public class CarDAO extends DAO<Car> {
                 "CarVO.description AS description, " +
                 "ROUND(CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days - 1) + ")/100, 2) AS cost "
                 + sqlQueryStringByFilter(fromDate, byDate, filterValues);
-
         if (orderBy != null) {
             sqlQuery = sqlQuery + " ORDER BY " + orderBy;
         } else {
             sqlQuery = sqlQuery + " ORDER BY CarVO.transmission, F.name, T.name, R.name";
         }
-
+        log.debug("sqlQuery: " + sqlQuery);
         List<CarViewObject> list = null;
-        try {
-            list = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
-                    .addScalar("registrationNumber", StandardBasicTypes.STRING)
-                    .addScalar("transmission", StandardBasicTypes.STRING)
-                    .addScalar("rating", StandardBasicTypes.STRING)
-                    .addScalar("typeCar", StandardBasicTypes.STRING)
-                    .addScalar("model", StandardBasicTypes.STRING)
-                    .addScalar("marka", StandardBasicTypes.STRING)
-                    .addScalar("fuel", StandardBasicTypes.STRING)
-                    .addScalar("description", StandardBasicTypes.STRING)
-                    .addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
-                    .setResultTransformer(Transformers.aliasToBean(CarViewObject.class))
-                    .setFirstResult(page - 1)
-                    .setMaxResults(recordsPerPage).list();
-        } catch (HibernateException e) {
-            log.error("Error search cars in CarDAO " + e);
-            throw new DAOException(e.getMessage());
-        }
+        list = getSession().createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+                .addScalar("registrationNumber", StandardBasicTypes.STRING)
+                .addScalar("transmission", StandardBasicTypes.STRING)
+                .addScalar("rating", StandardBasicTypes.STRING)
+                .addScalar("typeCar", StandardBasicTypes.STRING)
+                .addScalar("model", StandardBasicTypes.STRING)
+                .addScalar("marka", StandardBasicTypes.STRING)
+                .addScalar("fuel", StandardBasicTypes.STRING)
+                .addScalar("description", StandardBasicTypes.STRING)
+                .addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
+                .setResultTransformer(Transformers.aliasToBean(CarViewObject.class))
+                .setFirstResult(page - 1)
+                .setMaxResults(recordsPerPage).list();
+        log.info("list: " + list);
         return list;
     }
 
-    /**
-     * Method countCarByFilter()
-     * performs a search based on the rental dates and defined filters
-     *
-     * @param fromDate
-     * @param byDate
-     * @param filterValues
-     * @return
-     * @throws SQLException
-     */
-    public BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) throws DAOException {
-        Session session = HibernateUtil.getInstance().getSession();
+    @Override
+    public BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
         // query text writing
         String sqlQuery = "SELECT count(*) "
                 + sqlQueryStringByFilter(fromDate, byDate, filterValues);
-
-        Query query = session.createSQLQuery(sqlQuery);
+        log.debug("sqlQuery: " + sqlQuery);
+        Query query = getSession().createSQLQuery(sqlQuery);
         BigInteger countCar = BigInteger.ZERO;
-
-        try {
-            List results = query.list();
-            countCar = (BigInteger) results.get(0);
-        } catch (HibernateException e) {
-            log.error("Error count of the cars by filter in CarDAO " + e);
-            throw new DAOException(e.getMessage());
-        }
+        List results = query.list();
+        countCar = (BigInteger) results.get(0);
+        log.info("Count of the cars b the filters: " + countCar);
         return countCar;
     }
 }

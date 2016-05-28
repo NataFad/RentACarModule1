@@ -1,0 +1,20 @@
+package by.academy.it.rentacar.dao;
+
+import by.academy.it.rentacar.entity.Type;
+
+/**
+ * Interface ITypeDAO
+ *
+ * @author Fadeeva Natallia
+ * @version 1.1
+ * @since 2016-05
+ *
+ */
+public interface ITypeDAO extends IDAO<Type> {
+
+    /**
+     * Method getById() searches object type by id
+     *
+     */
+    Type getById(int id);
+}

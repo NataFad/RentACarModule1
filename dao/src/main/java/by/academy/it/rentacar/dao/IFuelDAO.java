@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.1
  * @since 2016-05
  */
-public interface IFuelDAO {
+public interface IFuelDAO extends IDAO<Fuel>{
 
     /**
      * Method searchByName() searches all fuels by name

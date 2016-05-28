@@ -4,7 +4,7 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Type;
-import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 /**
  * Class TypeDAO
@@ -16,10 +16,10 @@ import org.apache.log4j.Logger;
  * @since 2016-05
  * 
  */
-public class TypeDAO extends DAO<Type> {
+@Repository("typeDAO")
+public class TypeDAO extends DAO<Type> implements ITypeDAO{
 
 	private volatile static TypeDAO instance;
-	private static Logger log = Logger.getLogger(TypeDAO.class);
 
 	private TypeDAO() {
 		super();
@@ -36,10 +36,7 @@ public class TypeDAO extends DAO<Type> {
 		return instance;
 	}
 
-	/**
-	 * Method getById() searches object type by id
-	 *
-	 */
+	@Override
 	public Type getById(int id) {
 		return getByKey("id", id);
 	}

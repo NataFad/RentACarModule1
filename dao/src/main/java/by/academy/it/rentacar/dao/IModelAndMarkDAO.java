@@ -10,7 +10,7 @@ import by.academy.it.rentacar.entity.ModelAndMark;
  * @since 2016-05
  *
  */
-public interface IModelAndMarkDAO {
+public interface IModelAndMarkDAO extends IDAO<ModelAndMark> {
 
     /**
      * Method getById() searches object model and mark by id

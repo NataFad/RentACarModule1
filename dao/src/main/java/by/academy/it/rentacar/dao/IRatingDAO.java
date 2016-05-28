@@ -10,7 +10,7 @@ import by.academy.it.rentacar.entity.Rating;
  * @since 2016-05
  *
  */
-public interface IRatingDAO {
+public interface IRatingDAO extends IDAO<Rating> {
 
     /**
      * Method getById() searches object rating by id

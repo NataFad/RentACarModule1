@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  * @since 2016-05
  * 
  */
-@Repository
+@Repository("modelAndMarkDAO")
 public class ModelAndMarkDAO extends DAO<ModelAndMark> implements IModelAndMarkDAO{
 
 	private volatile static ModelAndMarkDAO instance;

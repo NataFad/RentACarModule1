@@ -4,9 +4,8 @@ package by.academy.it.rentacar.actions;
 import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.exceptions.DAOException;
-import by.academy.it.rentacar.viewobject.CarViewObject;
 import by.academy.it.rentacar.util.HibernateUtil;
+import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
 
@@ -149,15 +148,15 @@ public class CarService implements ICarService{
         car.setCostOfDay(costOfDay);
         car.setDiscount(priceCar.getDiscount().multiply(rateDiscountByType).multiply(new BigDecimal(100)));
         log.error(car);
-        try {
+//        try {
             CarDAO.getInstance().saveOrUpdate(car);
             if (!transaction.wasCommitted()) {
                 transaction.commit();
             }
-        } catch (DAOException e) {
-            log.error(e.getMessage());
-            transaction.rollback();
-        }
+//        } catch (DAOException e) {
+//            log.error(e.getMessage());
+//            transaction.rollback();
+//        }
         return car;
     }
 
@@ -169,15 +168,15 @@ public class CarService implements ICarService{
     public ArrayList<Car> getAllCars() {
         ArrayList<Car> carList = null;
         Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
-        try {
+//        try {
             carList = (ArrayList<Car>) CarDAO.getInstance().getAll();
             if (!transaction.wasCommitted()) {
                 transaction.commit();
             }
-        } catch (DAOException e) {
-            log.error(e.getMessage());
-            transaction.rollback();
-        }
+//        } catch (DAOException e) {
+//            log.error(e.getMessage());
+//            transaction.rollback();
+//        }
         return carList;
     }
 
@@ -189,15 +188,15 @@ public class CarService implements ICarService{
 
         List<CarViewObject> carList = null;
         if (fromDate.compareTo(byDate) != -1) {
-            try {
+//            try {
                 carList = CarDAO.getInstance().searchCar(fromDate, byDate, filterValues);
                 if (!transaction.wasCommitted()) {
                     transaction.commit();
                 }
-            } catch (DAOException e) {
-                log.error(e.getMessage());
-                transaction.rollback();
-            }
+//            } catch (DAOException e) {
+//                log.error(e.getMessage());
+//                transaction.rollback();
+//            }
         } else {
             if (!transaction.wasCommitted()) {
                 transaction.commit();
