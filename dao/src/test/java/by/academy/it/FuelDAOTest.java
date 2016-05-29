@@ -3,7 +3,10 @@ package by.academy.it;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.exceptions.DAOException;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -17,13 +20,13 @@ import java.util.ArrayList;
  * @version 1.3
  * @since 2016-05
  */
-@Ignore
+//@Ignore
 //@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = HibernateConfiguration.class)
+////@ContextConfiguration(classes = HibernateConfiguration.class)
 //@ContextConfiguration("/testDaoContext.xml")
 //@Transactional
 //@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-//       // DirtiesContextTestExecutionListener.class,
+//        DirtiesContextTestExecutionListener.class,
 //        TransactionalTestExecutionListener.class
 //})
 public class FuelDAOTest {

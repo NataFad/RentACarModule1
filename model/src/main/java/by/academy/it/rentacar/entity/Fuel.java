@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @since 2016-05
  */
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "fuels")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "fuels")
 @Table(name = "fuels")
 @Component
 public class Fuel implements Serializable{

@@ -56,7 +56,7 @@ public class PriceDAO extends DAO<Price> implements IPriceDAO {
          */
         Criteria criteria = createEntityCriteria();
         criteria.add(Restrictions.and(Restrictions.eq("fuel", fuel), Restrictions.eq("transmission", transmission)));
-        price = (Price) criteria.setCacheable(true).uniqueResult();
+        price = (Price) criteria.uniqueResult();
         log.info("Price: " + price);
         return price;
     }
