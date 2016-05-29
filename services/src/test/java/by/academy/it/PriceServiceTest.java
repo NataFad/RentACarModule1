@@ -6,10 +6,7 @@ import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.enums.Transmission;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,6 +16,7 @@ import java.util.ArrayList;
  *
  * Created by Nata on 18.04.2016.
  */
+@Ignore
 public class PriceServiceTest {
 
   private static FuelDAO fuelDAO;

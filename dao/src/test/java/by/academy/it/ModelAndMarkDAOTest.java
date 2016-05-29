@@ -2,10 +2,7 @@ package by.academy.it;
 
 import by.academy.it.rentacar.dao.ModelAndMarkDAO;
 import by.academy.it.rentacar.entity.ModelAndMark;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +16,7 @@ import java.util.List;
  * @version 1.2
  * @since 2016-05
  */
+@Ignore
 public class ModelAndMarkDAOTest {
 
     private static ModelAndMark testModel;

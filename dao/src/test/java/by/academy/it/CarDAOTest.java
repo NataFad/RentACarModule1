@@ -5,6 +5,7 @@ import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigInteger;
@@ -20,6 +21,7 @@ import java.util.List;
  * @version 1.1
  * @since 2016-05
  */
+@Ignore
 public class CarDAOTest {
 
     private static CarDAO carDAO;

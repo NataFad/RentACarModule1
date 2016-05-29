@@ -4,10 +4,7 @@ import by.academy.it.rentacar.actions.UserService;
 import by.academy.it.rentacar.dao.UserDAO;
 import by.academy.it.rentacar.entity.User;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -15,6 +12,7 @@ import java.util.GregorianCalendar;
 /**
  * Created by Nata on 21.05.2016.
  */
+@Ignore
 public class UserServiceTest {
 
     private UserService userService = UserService.getInstance();

@@ -5,10 +5,7 @@ import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.enums.Transmission;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
@@ -22,6 +19,7 @@ import java.math.BigDecimal;
  * @version 1.2
  * @since 2016-05
  */
+@Ignore
 public class PriceDAOTest {
 
     @Autowired

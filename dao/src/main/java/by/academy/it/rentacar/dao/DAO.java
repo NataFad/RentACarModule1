@@ -25,12 +25,20 @@ import java.util.List;
  * @version 1.3
  * @since 2016-05
  */
-@Repository()
-public abstract class DAO<T> implements IDAO<T> {
+@Repository("DAO")
+public class DAO<T> implements IDAO<T> {
 
     private static Logger log = Logger.getLogger(DAO.class);
-    @Autowired
+
     protected SessionFactory sessionFactory;
+
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public DAO(){
+    }
 
     public Session getSession() {
         return sessionFactory.getCurrentSession();

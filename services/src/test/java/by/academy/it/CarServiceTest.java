@@ -5,10 +5,7 @@ import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.viewobject.CarViewObject;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -20,6 +17,7 @@ import java.util.List;
 /**
  * Created by Nata on 19.04.2016.
  */
+@Ignore
 public class CarServiceTest {
 
   private static CarService carService = CarService.getInstance();

@@ -6,6 +6,7 @@ import by.academy.it.rentacar.entity.ModelAndMark;
 import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.enums.Transmission;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
  *
  * Created by Nata on 18.04.2016.
  */
+@Ignore
 public class ActionServiceTest {
   private ActionService actionService = ActionService.getInstance();
   private FuelDAO fuelDAO;

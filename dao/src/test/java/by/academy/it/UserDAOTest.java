@@ -6,10 +6,7 @@ import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.CoderManager;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -21,6 +18,7 @@ import java.util.GregorianCalendar;
  * @version 1.1
  * @since 2016-05
  */
+@Ignore
 public class UserDAOTest {
 
     private static UserDAO userDAO;

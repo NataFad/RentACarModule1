@@ -3,8 +3,6 @@ package by.academy.it.rentacar.dao;
 import by.academy.it.rentacar.entity.Fuel;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -24,10 +22,8 @@ public class FuelDAO extends DAO<Fuel> implements IFuelDAO{
 
     private static Logger log = Logger.getLogger(FuelDAO.class);
 
-    @Autowired
-    public FuelDAO(SessionFactory sessionFactory) {
+    public FuelDAO() {
         super();
-        this.sessionFactory = sessionFactory;
     }
 
 /**
