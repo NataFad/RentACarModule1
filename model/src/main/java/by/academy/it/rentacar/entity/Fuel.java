@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @since 2016-05
  */
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "fuels")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "fuels")
 @Table(name = "fuels")
 public class Fuel implements Serializable{
     private static final long serialVersionUID = 1L;

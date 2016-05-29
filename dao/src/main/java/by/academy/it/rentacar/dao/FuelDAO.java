@@ -51,7 +51,7 @@ public class FuelDAO extends DAO<Fuel>{
         query.setParameter("nameFuel", nameSearch);
         List<Fuel> list = null;
         try{
-            list = (ArrayList<Fuel>) query.setCacheable(true).list();
+            list = (ArrayList<Fuel>) query.list();
         } catch (HibernateException e){
             log.error("Error of the search of fuel by name in FuelDAO " + e);
             throw new DAOException(e.getMessage());

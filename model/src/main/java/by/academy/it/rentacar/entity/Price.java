@@ -21,7 +21,7 @@ import java.math.BigDecimal;
  * @since 2016-05
  */
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "price")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "price")
 @Table(name = "price", uniqueConstraints = @UniqueConstraint(name = "search", columnNames = {"transmission", "Fuels_id"}))
 public class Price implements Serializable {
     private static final long serialVersionUID = 1L;
