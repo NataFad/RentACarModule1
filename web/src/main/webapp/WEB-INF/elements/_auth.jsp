@@ -23,7 +23,7 @@
 				<c:choose>
 					<c:when test="${sessionScope.access > 0}">
 						<a href="action?command=inDeveloping"> 
-						  <img src="../images/shop-cart.gif" style="position: relative; top: 12px; font-weight:600;" />Текущая заявка: <b>${not empty sessionScope.car ? sessionScope.car : ' не выбран автомобиль'}</b>
+						  <img src="../../images/shop-cart.gif" style="position: relative; top: 12px; font-weight:600;" />Текущая заявка: <b>${not empty sessionScope.car ? sessionScope.car : ' не выбран автомобиль'}</b>
 						</a>
 						<br />
 						<a href="action?command=inDeveloping" style="font-size: 14px; font-weight:600;">Ваши заявки</a>

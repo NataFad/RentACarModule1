@@ -3,7 +3,7 @@
   <display-name>RentACar</display-name>
   <servlet>
     <servlet-name>Controller</servlet-name>
-    <servlet-class>by.academy.it.rentacar.controller.Controller</servlet-class>
+    <servlet-class>by.academy.it.rentacar.controller.MainController</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
