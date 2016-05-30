@@ -47,36 +47,36 @@ public abstract class Action {
      */
     public void getListFilterCar(HttpServletRequest request, int getModels) {
         // List of transmission
-        ArrayList<Transmission> transList = ActionService.getInstance().getListTransmission();
+        ArrayList<Transmission> transList = new ActionService().getListTransmission();
         request.setAttribute("transList", transList);
         // List of fuels
-        ArrayList<Fuel> fuelsList = ActionService.getInstance().getListFuel();
+        ArrayList<Fuel> fuelsList = new ActionService().getListFuel();
         if (fuelsList.isEmpty()) {
             request.getSession().setAttribute("errorFilterCarMassager", errorManager.getProperty("search.error"));
         }
         request.setAttribute("fuelsList", fuelsList);
         // List of types
-        ArrayList<Type> typeList = TypeService.getInstance().getListType();
+        ArrayList<Type> typeList = new TypeService().getListType();
         if (typeList.isEmpty()) {
             request.getSession().setAttribute("errorFilterCarMassager", errorManager.getProperty("search.error"));
         }
         request.setAttribute("typeList", typeList);
         // List of ratings
-        ArrayList<Rating> ratingList = RatingService.getInstance().getListRating();
+        ArrayList<Rating> ratingList = new RatingService().getListRating();
         if (ratingList.isEmpty()) {
             request.getSession().setAttribute("errorFilterCarMassager", errorManager.getProperty("search.error"));
         }
         request.setAttribute("ratingList", ratingList);
         // List of models
         if (getModels == 1) {
-            ArrayList<ModelAndMark> modelList = ActionService.getInstance().getListModel();
+            ArrayList<ModelAndMark> modelList = new ActionService().getListModel();
             if (modelList.isEmpty()) {
                 request.getSession().setAttribute("errorFilterCarMassager", errorManager.getProperty("search.error"));
             }
             request.setAttribute("modelList", modelList);
         }
         // List of transmission
-        ArrayList<String> perPageList = ActionService.getInstance().getListPerPage();
+        ArrayList<String> perPageList = new ActionService().getListPerPage();
         request.setAttribute("perPageList", perPageList);
         request.setAttribute("recordPerPage", request.getParameter("recordPerPage"));
     }

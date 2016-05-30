@@ -1,7 +1,7 @@
 package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.entity.Car;
-import by.academy.it.rentacar.viewobject.CarViewObject;
+import by.academy.it.rentacar.viewobject.CarVO;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -14,6 +14,6 @@ import java.util.List;
  */
 public interface ICarService {
     Car registeredCar(HashMap<String, String> parametresCar);
-    List<CarViewObject> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues);
+    List<CarVO> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues);
     ArrayList<Car> getAllCars();
 }

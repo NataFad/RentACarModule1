@@ -2,19 +2,13 @@ package by.academy.it;
 
 import by.academy.it.rentacar.dao.ICarDAO;
 import by.academy.it.rentacar.entity.Car;
-import by.academy.it.rentacar.viewobject.CarViewObject;
-import org.junit.AfterClass;
+import by.academy.it.rentacar.viewobject.CarVO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
@@ -51,7 +45,7 @@ public class CarDAOTest {
         filterValues.put("page", "1");
         filterValues.put("recordsPerPage", "10");
 
-        List<CarViewObject> list = carDAO.searchCar(dateForTest, dateForTest, filterValues);
+        List<CarVO> list = carDAO.searchCar(dateForTest, dateForTest, filterValues);
         BigInteger countCar = carDAO.countCarByFilter(dateForTest, dateForTest, filterValues);
 
         Assert.assertNotNull(list);

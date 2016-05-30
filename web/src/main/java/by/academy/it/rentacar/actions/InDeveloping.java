@@ -4,11 +4,6 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.managers.ConfigurationManager;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * Class InDeveloping
  * 
@@ -19,12 +14,12 @@ import javax.servlet.http.HttpServletResponse;
  * @since 2016-04
  *
  */
-public class InDeveloping extends Action {
-
-	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
-		return ConfigurationManager.getProperty("page.inDeveloping");
-	}
-
-	
-}
+//public class InDeveloping extends Action {
+//
+//	@Override
+//	public String execute(HttpServletRequest request, HttpServletResponse response) {
+//		return ConfigurationManager.getProperty("page.inDeveloping");
+//	}
+//
+//
+//}

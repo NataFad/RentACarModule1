@@ -4,7 +4,7 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Car;
-import by.academy.it.rentacar.viewobject.CarViewObject;
+import by.academy.it.rentacar.viewobject.CarVO;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
@@ -63,7 +63,7 @@ public class CarDAO extends DAO<Car> implements ICarDAO {
     }
 
     @Override
-    public List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+    public List<CarVO> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
         String orderBy = filterValues.get("orderBy");
         int page = Integer.parseInt(filterValues.get("page"));
         int recordsPerPage = Integer.parseInt(filterValues.get("recordsPerPage"));
@@ -87,7 +87,7 @@ public class CarDAO extends DAO<Car> implements ICarDAO {
             sqlQuery = sqlQuery + " ORDER BY CarVO.transmission, F.name, T.name, R.name";
         }
         log.debug("sqlQuery: " + sqlQuery);
-        List<CarViewObject> list = null;
+        List<CarVO> list = null;
         list = getSession().createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
                 .addScalar("registrationNumber", StandardBasicTypes.STRING)
                 .addScalar("transmission", StandardBasicTypes.STRING)
@@ -98,7 +98,7 @@ public class CarDAO extends DAO<Car> implements ICarDAO {
                 .addScalar("fuel", StandardBasicTypes.STRING)
                 .addScalar("description", StandardBasicTypes.STRING)
                 .addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
-                .setResultTransformer(Transformers.aliasToBean(CarViewObject.class))
+                .setResultTransformer(Transformers.aliasToBean(CarVO.class))
                 .setFirstResult(page - 1)
                 .setMaxResults(recordsPerPage).list();
         log.info("list: " + list);

@@ -1,7 +1,6 @@
 package by.academy.it.rentacar.enums;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -9,7 +8,6 @@ import org.junit.Test;
  *
  * Created by Nata on 12.04.2016.
  */
-@Ignore
 public class StatusOrderTest {
     /** testStringToEnum()
      * receives a number and must return to the status of the order

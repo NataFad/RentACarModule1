@@ -12,7 +12,7 @@
 <!--
     <definition name="welcome" extends="default">
         <put-attribute name="title" value="Welcome user"/>
-        <put-attribute name="body" value="/index.jsp"/>
+        <put-attribute name="body" value="/login.jsp"/>
     </definition>
 
     <definition name="user/main" extends="default">
@@ -25,8 +25,8 @@
         <put-attribute name="body" value="/WEB-INF/view/person/main.jspx"/>
     </definition>
 
-    <definition name="login" template="/index.jsp">
-        <put-attribute name="header" value="/index.jsp"/>
+    <definition name="login" template="/login.jsp">
+        <put-attribute name="header" value="/login.jsp"/>
         <put-attribute name="title" value="Login page"/>
     </definition>
     -->

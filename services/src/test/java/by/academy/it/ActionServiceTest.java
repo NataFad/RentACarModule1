@@ -1,13 +1,14 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.actions.ActionService;
+import by.academy.it.rentacar.actions.IActionService;
+import by.academy.it.rentacar.dao.IFuelDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
-import by.academy.it.rentacar.dao.FuelDAO;
 import by.academy.it.rentacar.enums.Transmission;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 
@@ -15,11 +16,18 @@ import java.util.ArrayList;
  * Unit-test class ActionService
  *
  * Created by Nata on 18.04.2016.
+ *
+ * @author Fadeeva Natallia
+ * @version 1.3
+ * @since 2016-05
  */
 @Ignore
 public class ActionServiceTest {
-  private ActionService actionService = ActionService.getInstance();
-  private FuelDAO fuelDAO;
+
+  @Autowired
+  private IActionService actionService;
+  @Autowired
+  private IFuelDAO fuelDAO;
 
   @Test
   public void getListTransmissionTest() throws Exception {

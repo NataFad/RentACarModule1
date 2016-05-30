@@ -7,7 +7,7 @@
 	  <tr><td height="5"><br/></td></tr>
 		<tr>
 		  <td height="30">
-				<form action="../pages/main.jsp" method="post">
+				<form action="../WEB-INF/pages/login.jsp" method="post">
 				  <input type="submit" name="submit" size="15" value="На главную"/>
 				</form>
 			</td>
@@ -21,7 +21,7 @@
 			</td>
 		</tr>
 		<%-- Providing some administrator access --%>
-		<c:if test="${(not empty sessionScope.access) and (sessionScope.access == '2')}">
+		<c:if test="${(not empty access) and (access == '2')}">
 			<tr height="15">
 				<td>-Меню администратора-</td>
 			</tr>

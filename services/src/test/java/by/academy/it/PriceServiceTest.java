@@ -1,12 +1,13 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.actions.PriceService;
+import by.academy.it.rentacar.actions.IPriceService;
+import by.academy.it.rentacar.dao.IFuelDAO;
+import by.academy.it.rentacar.dao.IPriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
-import by.academy.it.rentacar.dao.FuelDAO;
-import by.academy.it.rentacar.dao.PriceDAO;
 import by.academy.it.rentacar.enums.Transmission;
 import org.junit.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,19 +16,28 @@ import java.util.ArrayList;
  * Unit-test class PriceDAO
  *
  * Created by Nata on 18.04.2016.
+ *
+ * @author Fadeeva Natallia
+ * @version 1.3
+ * @since 2016-05
  */
 @Ignore
 public class PriceServiceTest {
 
-  private static FuelDAO fuelDAO;
+  @Autowired
+  private IFuelDAO fuelDAO;
+
   private static Fuel testFuel;
   private static Price testPrice;
   private static Price expectedPrice;
-  private static PriceDAO priceDAO;
-  private static PriceService priceService = PriceService.getInstance();
 
-  @BeforeClass
-  public static void setUp() throws Exception {
+  @Autowired
+  private IPriceDAO priceDAO;
+  @Autowired
+  private IPriceService priceService;
+
+  @Before
+  public void setUp() throws Exception {
     // add new fuel
     testFuel = new Fuel();
     testFuel.setName("new test");
@@ -57,8 +67,8 @@ public class PriceServiceTest {
     testPrice.setId(expectedPrice.getId());
   }
 
-  @AfterClass
-  public static void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     priceDAO.delete(testPrice);
     fuelDAO.delete(testFuel);
   }

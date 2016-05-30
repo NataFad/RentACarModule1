@@ -1,7 +1,5 @@
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.exceptions.DAOException;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public interface IDAO<T> {
      *
      * @param entity
      */
-    void saveOrUpdate(T entity) throws DAOException;
+    void saveOrUpdate(T entity);
 
     /**
      * Method get() gets the object T by id from the table
@@ -29,7 +27,7 @@ public interface IDAO<T> {
      * @param id
      * @return entity
      */
-    T get(Serializable id) throws DAOException;
+    T get(Serializable id);
 
     /**
      * Method load() gets the object T by id from the table
@@ -37,30 +35,30 @@ public interface IDAO<T> {
      * @param id
      * @return entity
      */
-    T load(Serializable id) throws DAOException;
+    T load(Serializable id);
 
     /**
      * Method getByKey() searches by the value of the key
      */
-    T getByKey(String key, Serializable value) throws DAOException;
+    T getByKey(String key, Serializable value);
 
     /**
      * Method delete() deletes object T from the table
      *
      * @param entity
      */
-    void delete(T entity) throws DAOException;
+    void delete(T entity);
 
     /**
      * Method getAll() gets all objects T from the table
      *
      * @return results
      */
-    List<T> getAll() throws DAOException;
+    List<T> getAll();
 
     /**
      * Method count() gets count of entries in the table
      * <p>
      */
-    long count() throws DAOException;
+    long count();
 }

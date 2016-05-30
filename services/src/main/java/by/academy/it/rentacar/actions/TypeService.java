@@ -1,8 +1,11 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.dao.TypeDAO;
+import by.academy.it.rentacar.dao.ITypeDAO;
 import by.academy.it.rentacar.entity.Type;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -10,41 +13,24 @@ import java.util.ArrayList;
  * Class TypeService induces TypeDAO
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
- *
  */
-public class TypeService implements ITypeService{
+@Service("typeService")
+@Transactional(readOnly = true)
+public class TypeService implements ITypeService {
 
-    private volatile static TypeService instance;
-    private TypeDAO typeDAO;
-
-    private TypeService(){}
-
-    public static TypeService getInstance() {
-        if (instance == null) {
-            synchronized (TypeService.class) {
-                if (instance == null) {
-                    instance = new TypeService();
-                }
-            }
-        }
-        return instance;
-    }
+    @Autowired
+    private ITypeDAO typeDAO;
 
     /**
      * Method getListType() gets list of types
      *
      * @return ArrayList<Type>
      */
-    public ArrayList<Type> getListType(){
+    public ArrayList<Type> getListType() {
         // List of types
-        ArrayList<Type> typeList = new ArrayList<Type>();
-        //try {
-            typeList = (ArrayList<Type>) typeDAO.getAll();
-//        } catch (DAOException e) {
-//            e.printStackTrace();
-//        }
+        ArrayList<Type> typeList = (ArrayList<Type>) typeDAO.getAll();
         return typeList;
     }
 
@@ -54,13 +40,8 @@ public class TypeService implements ITypeService{
      * @param typeId
      * @return type
      */
-    public Type getTypeById(int typeId){
-        Type type = null;
-      //  try {
-            type = typeDAO.getByKey("id", typeId);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    public Type getTypeById(int typeId) {
+        Type type = typeDAO.getByKey("id", typeId);
         return type;
     }
 }

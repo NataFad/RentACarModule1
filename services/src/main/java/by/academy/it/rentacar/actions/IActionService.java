@@ -14,7 +14,10 @@ import java.util.ArrayList;
  * @since 2016-05
  */
 public interface IActionService {
+
     ArrayList<Transmission> getListTransmission();
+
     ArrayList<Fuel> getListFuel();
+
     ArrayList<ModelAndMark> getListModel();
 }

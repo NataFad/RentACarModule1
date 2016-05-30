@@ -3,5 +3,5 @@
 
 <!DOCTYPE html>		
 <p align="center">
-  <a href="../pages/test.jsp">О сайте</a>
+  <a href="../WEB-INF/pages/test.jsp">О сайте</a>
 </p>

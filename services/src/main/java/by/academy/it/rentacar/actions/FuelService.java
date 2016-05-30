@@ -1,8 +1,11 @@
 package by.academy.it.rentacar.actions;
 
 
-import by.academy.it.rentacar.dao.FuelDAO;
+import by.academy.it.rentacar.dao.IFuelDAO;
 import by.academy.it.rentacar.entity.Fuel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -10,41 +13,24 @@ import java.util.ArrayList;
  * Class RatingService induces RatingDAO
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
- *
  */
-public class FuelService implements IFuelService{
+@Service("fuelService")
+@Transactional(readOnly = true)
+public class FuelService implements IFuelService {
 
-    private volatile static FuelService instance;
-    private FuelDAO fuelDAO;
-
-    private FuelService(){}
-
-    public static FuelService getInstance() {
-        if (instance == null) {
-            synchronized (FuelService.class) {
-                if (instance == null) {
-                    instance = new FuelService();
-                }
-            }
-        }
-        return instance;
-    }
+    @Autowired
+    private IFuelDAO fuelDAO;
 
     /**
      * Method getListFuel() gets list of fuels
      *
      * @return ArrayList<Fuel>
      */
-    public ArrayList<Fuel> getListFuel(){
+    public ArrayList<Fuel> getListFuel() {
         // List of fuels
-        ArrayList<Fuel> fuelList = new ArrayList<Fuel>();
-        //try {
-            fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
-//        } catch (DAOException e) {
-//            e.printStackTrace();
-//        }
+        ArrayList<Fuel> fuelList = (ArrayList<Fuel>) fuelDAO.getAll();
         return fuelList;
     }
 
@@ -54,13 +40,8 @@ public class FuelService implements IFuelService{
      * @param fuelId
      * @return fuel
      */
-    public Fuel getFuelById(int fuelId){
-       Fuel fuel = null;
-       // try {
-            fuel = fuelDAO.getByKey("id", fuelId);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    public Fuel getFuelById(int fuelId) {
+        Fuel fuel = fuelDAO.getByKey("id", fuelId);
         return fuel;
     }
 }

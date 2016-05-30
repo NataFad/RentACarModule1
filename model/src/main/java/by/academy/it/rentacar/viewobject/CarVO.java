@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  * @since 2016-05
  *
  */
-public class CarViewObject implements Serializable{
+public class CarVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String registrationNumber;
@@ -31,7 +31,7 @@ public class CarViewObject implements Serializable{
 	/**
 	 *
 	 */
-	public CarViewObject() {
+	public CarVO() {
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class CarViewObject implements Serializable{
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
-		CarViewObject that = (CarViewObject) o;
+		CarVO that = (CarVO) o;
 
 		if (id != that.id) return false;
 		if (!registrationNumber.equals(that.registrationNumber)) return false;

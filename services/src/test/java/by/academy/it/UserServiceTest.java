@@ -1,22 +1,29 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.actions.UserService;
-import by.academy.it.rentacar.dao.UserDAO;
+import by.academy.it.rentacar.actions.IUserService;
+import by.academy.it.rentacar.dao.IUserDAO;
 import by.academy.it.rentacar.entity.User;
-import org.hibernate.Transaction;
 import org.junit.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
  * Created by Nata on 21.05.2016.
+ *
+ * @author Fadeeva Natallia
+ * @version 1.3
+ * @since 2016-05
  */
 @Ignore
 public class UserServiceTest {
 
-    private UserService userService = UserService.getInstance();
-    private static UserDAO userDAO;
+    @Autowired
+    private IUserService userService;
+    @Autowired
+    private IUserDAO userDAO;
+
     private static User userTest;
     private String password;
 
@@ -43,41 +50,23 @@ public class UserServiceTest {
 
     @After
     public void tearDown() throws Exception {
-        Transaction transaction = userDAO.getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
-        }
         userDAO.delete(userTest);
-        if (!transaction.wasCommitted()) {
-            transaction.commit();
-        }
     }
 
     public void registeredUserTest() throws Exception {
-        Transaction transaction = userDAO.getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
-        }
         password = userTest.getPassword();
         int registerSuccess = userService.registeredUser(userTest);
-
         Assert.assertEquals(registerSuccess, 1);
     }
 
     public void loginUserTest() throws Exception {
-        Transaction transaction = userDAO.getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
-        }
-        User userReg = UserService.getInstance().loginUser(userTest.getLogin(), password, userTest);
-
+        User userReg = userService.loginUser(userTest.getLogin(), password, userTest);
         Assert.assertNotNull(userReg);
         Assert.assertEquals(userTest, userReg);
     }
 
     public void exitUserTest() throws Exception {
-        User userGuest = UserService.getInstance().exitUser();
-
+        User userGuest = userService.exitUser();
         Assert.assertNotNull(userGuest);
         Assert.assertEquals("User guest, name:", userGuest.getName(), "Гость");
         Assert.assertEquals("User guest, access:", userGuest.getAccess(), 0);

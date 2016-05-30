@@ -1,7 +1,7 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Car;
-import by.academy.it.rentacar.viewobject.CarViewObject;
+import by.academy.it.rentacar.viewobject.CarVO;
 import org.hibernate.HibernateException;
 
 import java.math.BigInteger;
@@ -40,7 +40,7 @@ public interface ICarDAO extends IDAO<Car> {
      * @return list
      * @throws HibernateException
      */
-    List<CarViewObject> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues);
+    List<CarVO> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues);
 
     /**
      * Method countCarByFilter()
