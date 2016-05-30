@@ -32,11 +32,6 @@ import java.util.ArrayList;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/testDaoContext.xml")
 @Transactional
-@TransactionConfiguration(defaultRollback = true)
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
-})
 public class FuelDAOTest {
 
     @Autowired

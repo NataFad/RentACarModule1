@@ -32,10 +32,6 @@ import java.util.GregorianCalendar;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/testDaoContext.xml")
 @Transactional
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
-})
 public class UserDAOTest {
 
     @Autowired

@@ -33,11 +33,6 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/testDaoContext.xml")
 @Transactional
-@TransactionConfiguration(defaultRollback = true)
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
-})
 public class CarDAOTest {
 
     @Autowired

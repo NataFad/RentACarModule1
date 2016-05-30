@@ -27,11 +27,6 @@ import java.math.BigDecimal;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/testDaoContext.xml")
 @Transactional
-@TransactionConfiguration(defaultRollback = true)
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
-})
 public class RatingDAOTest {
 
     @Autowired
