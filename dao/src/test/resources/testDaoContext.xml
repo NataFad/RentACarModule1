@@ -25,34 +25,25 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
           p:dataSource-ref="dataSource"
-          p:packagesToScan="by.academy.it.rentacar.entity"
-          p:configLocation="classpath:hibernate.cfg.xml">
-        <!--property name="hibernateProperties">
+          p:packagesToScan="by.academy.it.rentacar.entity">
+        <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="debug">true</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="connection.isolation">2</prop>
-                <prop key="hibernate.cglib.use_reflection_optimizer">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                <prop key="hibernate.format_sql">true</prop>
             </props>
-        </property-->
+        </property>
     </bean>
 
-    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate"
-          p:sessionFactory-ref="sessionFactory"/>
-
     <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
-          p:sessionFactory-ref="sessionFactory"
-    />
+          p:sessionFactory-ref="sessionFactory"/>
 
     <tx:annotation-driven transaction-manager="txManager"/>
 
     <context:annotation-config/>
     <context:component-scan base-package="by.academy.it.rentacar.dao"/>
     <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="false"/>
-
-    <!--bean id="DAO" class="by.academy.it.rentacar.dao.DAO"/>
-    <bean id="fuelDao" class="by.academy.it.rentacar.dao.FuelDAO"/-->
 
 </beans>

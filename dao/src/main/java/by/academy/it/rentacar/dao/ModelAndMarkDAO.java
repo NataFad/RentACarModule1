@@ -4,8 +4,6 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.ModelAndMark;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -22,22 +20,9 @@ import org.springframework.stereotype.Repository;
 @Repository("modelAndMarkDAO")
 public class ModelAndMarkDAO extends DAO<ModelAndMark> implements IModelAndMarkDAO{
 
-	@Autowired
-	public ModelAndMarkDAO(SessionFactory sessionFactory) {
+	public ModelAndMarkDAO() {
 		super();
-		this.sessionFactory = sessionFactory;
 	}
-
-//	public static ModelAndMarkDAO getInstance() {
-//		if (instance == null) {
-//			synchronized (ModelAndMarkDAO.class) {
-//				if (instance == null) {
-//					instance = new ModelAndMarkDAO();
-//				}
-//			}
-//		}
-//		return instance;
-//	}
 
 	@Override
 	public ModelAndMark getById(int id){

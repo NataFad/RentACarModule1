@@ -1,10 +1,19 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.dao.RatingDAO;
+import by.academy.it.rentacar.dao.IRatingDAO;
 import by.academy.it.rentacar.entity.Rating;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -12,12 +21,22 @@ import java.math.BigDecimal;
  * Created by Nata on 08.05.2016.
  *
  * @author Fadeeva Natallia
- * @version 1.1
+ * @version 1.3
  * @since 2016-05
  */
-@Ignore
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/testDaoContext.xml")
+@Transactional
+@TransactionConfiguration(defaultRollback = true)
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
+})
 public class RatingDAOTest {
-private static RatingDAO ratingDAO;
+
+    @Autowired
+    private IRatingDAO ratingDAO;
+
     @Test
     public void getByIdTest() throws Exception {
         Rating rating = new Rating("test", new BigDecimal(5).setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -29,6 +48,5 @@ private static RatingDAO ratingDAO;
         Assert.assertEquals(ratingTest, rating);
 
         ratingDAO.delete(rating);
-        //HibernateUtil.getInstance().closeSession();
     }
 }

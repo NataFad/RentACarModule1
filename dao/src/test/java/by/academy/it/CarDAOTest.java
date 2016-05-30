@@ -1,12 +1,21 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.dao.CarDAO;
+import by.academy.it.rentacar.dao.ICarDAO;
 import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.sql.Date;
@@ -18,13 +27,22 @@ import java.util.List;
  * Created by Nata on 14.05.2016.
  *
  * @author Fadeeva Natallia
- * @version 1.1
+ * @version 1.3
  * @since 2016-05
  */
-@Ignore
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/testDaoContext.xml")
+@Transactional
+@TransactionConfiguration(defaultRollback = true)
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
+})
 public class CarDAOTest {
 
-    private static CarDAO carDAO;
+    @Autowired
+    private ICarDAO carDAO;
+
     @Test
     public void searchCarTest() throws Exception {
         Date dateForTest  =  Date.valueOf("2016-01-01");
@@ -54,10 +72,5 @@ public class CarDAOTest {
         Assert.assertNotNull(list);
         Assert.assertNotNull(count);
         Assert.assertEquals(list.size(), count);
-    }
-
-    @AfterClass
-    public static void tearDown() throws Exception {
-       // HibernateUtil.getInstance().closeSession();
     }
 }

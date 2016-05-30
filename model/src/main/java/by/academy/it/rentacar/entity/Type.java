@@ -21,7 +21,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "types")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "type")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "type")
 @Component
 public class Type implements Serializable {
 	private static final long serialVersionUID = 1L;

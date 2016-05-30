@@ -1,13 +1,22 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.dao.FuelDAO;
+import by.academy.it.rentacar.dao.IFuelDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.exceptions.DAOException;
-import org.junit.AfterClass;
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -20,20 +29,20 @@ import java.util.ArrayList;
  * @version 1.3
  * @since 2016-05
  */
-//@Ignore
-//@RunWith(SpringJUnit4ClassRunner.class)
-////@ContextConfiguration(classes = HibernateConfiguration.class)
-//@ContextConfiguration("/testDaoContext.xml")
-//@Transactional
-//@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-//        DirtiesContextTestExecutionListener.class,
-//        TransactionalTestExecutionListener.class
-//})
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/testDaoContext.xml")
+@Transactional
+@TransactionConfiguration(defaultRollback = true)
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
+})
 public class FuelDAOTest {
 
     @Autowired
-    public FuelDAO fuelDAO;
+    private IFuelDAO fuelDAO;
 
+    private static Logger log = Logger.getLogger(FuelDAOTest.class);
     private static Fuel testFuel;
     private static Fuel expectedFuel;
     private static ArrayList<Fuel> fuelList;
@@ -57,6 +66,7 @@ public class FuelDAOTest {
     }
 
     private void addFuelTest() throws Exception {
+
         fuelDAO.saveOrUpdate(testFuel);
     }
 
@@ -104,11 +114,6 @@ public class FuelDAOTest {
 
     private void deleteFuelTest() throws Exception {
         fuelDAO.delete(testFuel);
-    }
-
-    @AfterClass
-    public static void tearDown() throws Exception {
-        // HibernateUtil.getInstance().closeSession();
     }
 }
 

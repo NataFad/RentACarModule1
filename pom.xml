@@ -32,6 +32,18 @@
     </properties>
 
     <dependencies>
+        <!--javax.servlet-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
         <!--JSTL-->
         <dependency>
             <groupId>jstl</groupId>
@@ -78,7 +90,7 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
             <version>${hibernate.version}</version>
@@ -87,7 +99,7 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
             <version>2.6.11</version>
-        </dependency>
+        </dependency-->
 
         <!-- Spring -->
         <dependency>
@@ -241,7 +253,7 @@
                     <username>admin</username>
                     <password>admin</password>
                     <path>/${project.build.finalName}</path>
-                    <warfile>target/${project.build.finalName}</warfile>
+                    <warFile>target/${project.build.finalName}</warFile>
                 </configuration>
                 <executions>
                     <execution>

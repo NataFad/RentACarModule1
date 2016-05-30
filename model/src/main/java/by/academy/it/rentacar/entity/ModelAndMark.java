@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @since 2016-05
  */
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "model")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "model")
 @Table(name = "modelsandmarks")
 @Component
 public class ModelAndMark implements Serializable {

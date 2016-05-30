@@ -30,12 +30,8 @@ public class DAO<T> implements IDAO<T> {
 
     private static Logger log = Logger.getLogger(DAO.class);
 
-    protected SessionFactory sessionFactory;
-
     @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    protected SessionFactory sessionFactory;
 
     public DAO(){
     }

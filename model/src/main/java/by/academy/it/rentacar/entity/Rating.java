@@ -23,7 +23,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "ratings")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "rating")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "rating")
 @Component
 public class Rating implements Serializable{
     private static final long serialVersionUID = 1L;

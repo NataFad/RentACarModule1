@@ -26,18 +26,6 @@ public class FuelDAO extends DAO<Fuel> implements IFuelDAO{
         super();
     }
 
-/**
-    public static FuelDAO getInstance() {
-        if (instance == null) {
-            synchronized (FuelDAO.class) {
-                if (instance == null) {
-                    instance = new FuelDAO();
-                }
-            }
-        }
-        return instance;
-    }
-*/
     @Override
     public List<Fuel> searchByName(String nameSearch){
         String hql = "SELECT F FROM Fuel as F WHERE F.name = :nameFuel";

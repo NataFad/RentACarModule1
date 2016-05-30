@@ -8,10 +8,11 @@ import by.academy.it.rentacar.managers.CoderManager;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class UserDAO
@@ -27,22 +28,9 @@ public class UserDAO extends DAO<User> implements IUserDAO {
 
     private static Logger log = Logger.getLogger(UserDAO.class);
 
-    @Autowired
-    public UserDAO(SessionFactory sessionFactory) {
+    public UserDAO() {
         super();
-        this.sessionFactory = sessionFactory;
     }
-
-//    public static UserDAO getInstance() {
-//        if (instance == null) {
-//            synchronized (UserDAO.class) {
-//                if (instance == null) {
-//                    instance = new UserDAO();
-//                }
-//            }
-//        }
-//        return instance;
-//    }
 
     @Override
     public User getUser(String login, String password) {
@@ -55,7 +43,11 @@ public class UserDAO extends DAO<User> implements IUserDAO {
          Query query = session.createQuery(hql);
          query.setParameter("loginUser", login);
          */
-        user = (User) criteria.uniqueResult();
+        List<User> userList = (ArrayList<User>) criteria.list();
+        if (userList.isEmpty()){
+            log.info("User not found");
+            user = userList.get(0);
+        }
         log.info("User: " + user);
         return user;
     }

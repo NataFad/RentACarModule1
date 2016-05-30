@@ -7,10 +7,9 @@ import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.viewobject.CarViewObject;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
 import java.sql.Date;
@@ -26,26 +25,14 @@ import java.util.List;
  * @version 1.3
  * @since 2016-05
  */
+@Repository("carDAO")
 public class CarDAO extends DAO<Car> implements ICarDAO {
 
     private static Logger log = Logger.getLogger(CarDAO.class);
 
-    @Autowired
-    public CarDAO(SessionFactory sessionFactory) {
+    public CarDAO() {
         super();
-        this.sessionFactory = sessionFactory;
     }
-
-//    public static CarDAO getInstance() {
-//        if (instance == null) {
-//            synchronized (CarDAO.class) {
-//                if (instance == null) {
-//                    instance = new CarDAO();
-//                }
-//            }
-//        }
-//        return instance;
-//    }
 
     @Override
     public String sqlQueryStringByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {

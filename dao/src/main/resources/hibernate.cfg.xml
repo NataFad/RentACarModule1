@@ -22,7 +22,7 @@
         <property name="hibernate.cache.use_second_level_cache">true</property>
         <property name="hibernate.cache.use_query_cache">true</property>
         <property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property-->
-        <!-- Mapping class -->
+        <!-- Mapping class >
         <mapping class="by.academy.it.rentacar.entity.Fuel"/>
         <mapping class="by.academy.it.rentacar.entity.ModelAndMark"/>
         <mapping class="by.academy.it.rentacar.entity.Rating"/>
@@ -31,7 +31,7 @@
         <mapping class="by.academy.it.rentacar.entity.User"/>
         <mapping class="by.academy.it.rentacar.entity.Car"/>
         <mapping class="by.academy.it.rentacar.entity.Order"/>
-        <mapping class="by.academy.it.rentacar.entity.Bill"/>
+        <mapping class="by.academy.it.rentacar.entity.Bill"/-->
     </session-factory>
 </hibernate-configuration>
 
