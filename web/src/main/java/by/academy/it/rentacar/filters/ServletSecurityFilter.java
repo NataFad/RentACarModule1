@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/*"})
+@WebFilter(urlPatterns = {"/*", "/login", "/exit"})
 public class ServletSecurityFilter implements Filter {
     static Logger log = Logger.getLogger(ServletSecurityFilter.class);
 
