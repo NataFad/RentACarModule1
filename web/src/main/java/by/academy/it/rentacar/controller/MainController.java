@@ -1,9 +1,11 @@
 package by.academy.it.rentacar.controller;
 
 import by.academy.it.rentacar.actions.IUserService;
+import by.academy.it.rentacar.entity.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -15,15 +17,15 @@ public class MainController {
     private IUserService userService;
 
     @RequestMapping(value = "/login")
-    //public String mainPage(ModelMap modelMap) {
-    public String mainPage() {
+    public String mainPage(ModelMap modelMap) {
+    //public String mainPage() {
         page = "login";
         log.info("MainController mainPage used...");
-        //User user = (User) modelMap.get("user");
-        //if (user == null) {
-        //    user = userService.exitUser();
-        //}
-        //modelMap.put("user", user);
+        User user = (User) modelMap.get("user");
+        if (user == null) {
+            user = userService.exitUser();
+        }
+        modelMap.put("user", user);
         log.info("MainController mainPage returned: " + page + ".jsp");
         return page;
     }
