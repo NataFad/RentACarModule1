@@ -1,14 +1,12 @@
 package by.academy.it.rentacar.viewobject;
 
-import by.academy.it.rentacar.enums.TypeUser;
-
 public class UserVO {
     private int id;
-    private String name;
-    private String surName;
+    private int access;
+    private String firstname;
+    private String surname;
     private String login;
     private String password;
-    private TypeUser typeUser = TypeUser.GUEST;
 
     public UserVO() {
     }
@@ -21,20 +19,20 @@ public class UserVO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getSurName() {
-        return surName;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setSurName(String surName) {
-        this.surName = surName;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getLogin() {
@@ -53,23 +51,50 @@ public class UserVO {
         this.password = password;
     }
 
-    public TypeUser getTypeUser() {
-        return typeUser;
+    public int getAccess() {
+        return access;
     }
 
-    public void setTypeUser(TypeUser typeUser) {
-        this.typeUser = typeUser;
+    public void setAccess(int access) {
+        this.access = access;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserVO userVO = (UserVO) o;
+
+        if (id != userVO.id) return false;
+        if (access != userVO.access) return false;
+        if (!firstname.equals(userVO.firstname)) return false;
+        if (surname != null ? !surname.equals(userVO.surname) : userVO.surname != null) return false;
+        if (login != null ? !login.equals(userVO.login) : userVO.login != null) return false;
+        return password != null ? password.equals(userVO.password) : userVO.password == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + firstname.hashCode();
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + access;
+        return result;
     }
 
     @Override
     public String toString() {
         return "UserVO{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", surName='" + surName + '\'' +
+                ", access=" + access +
+                ", firstname='" + firstname + '\'' +
+                ", surname='" + surname + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", typeUser=" + typeUser +
                 '}';
     }
 }

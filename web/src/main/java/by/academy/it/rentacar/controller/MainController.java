@@ -1,12 +1,16 @@
 package by.academy.it.rentacar.controller;
 
 import by.academy.it.rentacar.actions.IUserService;
-import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.enums.TypeUser;
+import by.academy.it.rentacar.viewobject.UserVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class MainController {
@@ -16,19 +20,18 @@ public class MainController {
     @Autowired
     private IUserService userService;
 
-    @RequestMapping(value = "/login")
-    public String mainPage(ModelMap modelMap) {
-    //public String mainPage() {
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    public String mainPage(ModelMap modelMap, HttpSession httpSession) {
+        //public String mainPage() {
         page = "login";
         log.info("MainController mainPage used...");
-        User user = (User) modelMap.get("user");
+        UserVO user = (UserVO) modelMap.get("userVO");
         if (user == null) {
             user = userService.exitUser();
         }
-        modelMap.put("user", user);
+        modelMap.addAttribute("userVO", user);
+        httpSession.setAttribute("userType", TypeUser.fromValue(user.getAccess()));
         log.info("MainController mainPage returned: " + page + ".jsp");
         return page;
     }
-
-    //TODO: нужно ли будет где-то закрывать сессию или она 1 на транзакцию в нашем случае?
 }

@@ -4,8 +4,6 @@
 package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.Transmission;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;

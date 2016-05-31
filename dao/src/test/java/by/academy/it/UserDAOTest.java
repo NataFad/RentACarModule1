@@ -53,7 +53,6 @@ public class UserDAOTest {
         addUser();
         getByIdTest();
         getAccessTest(TypeUser.USER.getValue());
-       // getUserTest();
         updateAccessTest();
         deleteTest();
     }
@@ -85,12 +84,6 @@ public class UserDAOTest {
         userTest.setAccess(TypeUser.ADMINISTRATOR.getValue());
         userDAO.saveOrUpdate(userTest);
         getAccessTest(TypeUser.ADMINISTRATOR.getValue());
-    }
-
-    private void getUserTest() throws Exception {
-        User userExpected = userDAO.getUser(userTest.getLogin(), userTest.getPassword());
-        Assert.assertNotNull(userExpected);
-        Assert.assertEquals(userExpected, userTest);
     }
 
     private void deleteTest() throws DAOException {

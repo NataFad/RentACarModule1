@@ -24,9 +24,9 @@ import java.util.ArrayList;
 public class ActionService implements IActionService{
 
 	@Autowired
-	private IModelAndMarkDAO modelAndMarkDAO;
-	@Autowired
 	private IFuelService fuelService;
+	@Autowired
+	private IModelAndMarkDAO modelAndMarkDAO;
 
 	/**
 	 * Method getListTransmission() gets list of transmissions

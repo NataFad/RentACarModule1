@@ -44,8 +44,6 @@ public class UserServiceTest {
     @Test
     public void userServiceTest() throws Exception {
         registeredUserTest();
-        loginUserTest();
-        exitUserTest();
     }
 
     @After
@@ -57,18 +55,5 @@ public class UserServiceTest {
         password = userTest.getPassword();
         int registerSuccess = userService.registeredUser(userTest);
         Assert.assertEquals(registerSuccess, 1);
-    }
-
-    public void loginUserTest() throws Exception {
-        User userReg = userService.loginUser(userTest.getLogin(), password, userTest);
-        Assert.assertNotNull(userReg);
-        Assert.assertEquals(userTest, userReg);
-    }
-
-    public void exitUserTest() throws Exception {
-        User userGuest = userService.exitUser();
-        Assert.assertNotNull(userGuest);
-        Assert.assertEquals("User guest, name:", userGuest.getName(), "Гость");
-        Assert.assertEquals("User guest, access:", userGuest.getAccess(), 0);
     }
 }

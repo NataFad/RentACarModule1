@@ -7,44 +7,44 @@
 	  <tr><td height="5"><br/></td></tr>
 		<tr>
 		  <td height="30">
-				<form action="../WEB-INF/pages/login.jsp" method="post">
+				<form action="main" method="post">
 				  <input type="submit" name="submit" size="15" value="На главную"/>
 				</form>
 			</td>
 		</tr>
 		<tr>
 			<td height="30">
-				<form action="action" method="post">
-					 <input type="hidden" name="command" value="get_all_cars"/> 
+				<form action="get_all_cars" method="post">
+					 <!--input type="hidden" name="command" value="get_all_cars"/-->
 					 <input type="submit" name="submit" size="15" value="Страница поиска авто"/>
 				</form>
 			</td>
 		</tr>
 		<%-- Providing some administrator access --%>
-		<c:if test="${(not empty access) and (access == '2')}">
+		<c:if test="${(not empty userVO.access) and (userVO.access == 2)}">
 			<tr height="15">
 				<td>-Меню администратора-</td>
 			</tr>
 			<tr>
 				<td height="30">
 					<form action="addCar" method="post">
-					  <input type="hidden" name="command" value="setInfoCar"/>
+					  	<!--input type="hidden" name="command" value="setInfoCar"/-->
 						<input type="submit" name="submit" size="15" value="Добавить авто"/>
 					</form>
 				</td>
 			</tr>
 			<tr>
 				<td height="30">
-					<form action="action" method="post">
-						<input type="hidden" name="command" value="inDeveloping"/> 
+					<form action="inDeveloping" method="post">
+						<!--input type="hidden" name="command" value="inDeveloping"/-->
 						<input type="submit" name="submit" size="15" value="Зaявки и счета"/>
 					</form>
 				</td>
 			</tr>
 			<tr>
 				<td height="30">
-					<form action="action" method="post">
-						<input type="hidden" name="command" value="inDeveloping"/> 
+					<form action="inDeveloping" method="post">
+						<!--input type="hidden" name="command" value="inDeveloping"/-->
 						<input type="submit" name="submit" size="15" value="Пользователи"/>
 					</form>
 				</td>

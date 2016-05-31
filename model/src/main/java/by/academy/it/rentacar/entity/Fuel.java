@@ -3,8 +3,6 @@
  */
 package by.academy.it.rentacar.entity;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -17,11 +15,12 @@ import java.io.Serializable;
  * @version 1.2
  * @since 2016-05
  */
-@Entity
+@javax.persistence.Entity
 //@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "fuels")
 @Table(name = "fuels")
 @Component
-public class Fuel implements Serializable{
+//@org.springframework.cache.annotation.Cacheable
+public class Fuel implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
     private String name;

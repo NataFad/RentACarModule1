@@ -1,6 +1,5 @@
 package by.academy.it.rentacar.filters;
 
-import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import org.apache.log4j.Logger;
 
@@ -19,16 +18,12 @@ public class ServletSecurityFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        log.info("ServletSecurityFilter used...");
+        log.debug("ServletSecurityFilter used...");
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
         TypeUser type = (TypeUser) session.getAttribute("userType");
         if (type == null) {
             type = TypeUser.GUEST;
-            User userGuest = new User();
-            userGuest.setName("Гость");
-            userGuest.setAccess(type.getValue());
-            session.setAttribute("user", userGuest);
             session.setAttribute("userType", type);
         }
         chain.doFilter(request, response);

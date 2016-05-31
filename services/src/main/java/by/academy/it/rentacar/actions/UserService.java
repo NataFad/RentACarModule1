@@ -7,6 +7,7 @@ import by.academy.it.rentacar.dao.IUserDAO;
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.managers.CoderManager;
+import by.academy.it.rentacar.viewobject.UserVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2016-05
  */
 @Service("userService")
-@Transactional
 public class UserService implements IUserService {
 
     private Logger log = Logger.getLogger(UserService.class);
@@ -36,6 +36,7 @@ public class UserService implements IUserService {
      * @param user
      * @return successRegistrate
      */
+    @Transactional
     public int registeredUser(User user) {
         int successRegistrate = 1;
         if (!userDAO.checkLogin(user.getLogin().trim())) {
@@ -51,22 +52,16 @@ public class UserService implements IUserService {
     /**
      * Method loginUser() searches user by the login and the password
      *
-     * @param login
-     * @param password
+     * @param user
      * @return
      */
-    public User loginUser(String login, String password, User user) {
-        User userReg = null;
-        TypeUser type = null;
-        try {
-            type = TypeUser.stringToEnum(user.getAccess());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Transactional(readOnly = true)
+    public UserVO loginUser(UserVO user) {
+        UserVO userReg = null;
+        TypeUser type = TypeUser.fromValue(user.getAccess());
         // проверяем, не пытается ли пользователь повторно авторизоваться
         if (type == TypeUser.GUEST) {
-            userReg = userDAO.getUser(login, password);
-
+            userReg = userDAO.getUser(user.getLogin(), user.getPassword());
         } else if (type != null) {
             userReg = user;
         }
@@ -76,10 +71,10 @@ public class UserService implements IUserService {
     /**
      * Method exitUser() gets new user-guest
      */
-    public User exitUser() {
-        User userGuest = new User();
-        userGuest.setName("Гость");
-        userGuest.setAccess(0);
+    public UserVO exitUser() {
+        UserVO userGuest = new UserVO();
+        userGuest.setFirstname("Гость");
+        userGuest.setAccess(TypeUser.GUEST.getValue());
         return userGuest;
     }
 }

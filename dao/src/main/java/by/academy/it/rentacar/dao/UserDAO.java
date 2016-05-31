@@ -5,13 +5,15 @@ package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.managers.CoderManager;
+import by.academy.it.rentacar.viewobject.UserVO;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,23 +35,32 @@ public class UserDAO extends DAO<User> implements IUserDAO {
     }
 
     @Override
-    public User getUser(String login, String password) {
-        User user = null;
-        Criteria criteria = createEntityCriteria();
-        criteria.add(Restrictions.and(Restrictions.eq("login", login), Restrictions.eq("password", CoderManager.getHashCode(password))));
-        /**
-         String hql = "SELECT U FROM User as U "
-         + "WHERE U.password = '" + CoderManager.getHashCode(password) + "' and U.login = :loginUser";
-         Query query = session.createQuery(hql);
-         query.setParameter("loginUser", login);
-         */
-        List<User> userList = (ArrayList<User>) criteria.list();
-        if (userList.isEmpty()){
-            log.info("User not found");
-            user = userList.get(0);
+    public UserVO getUser(String login, String password) {
+        UserVO userVO = null;
+        String sqlQuery = "SELECT UserVO.id AS id, " +
+                "UserVO.access AS access, " +
+                "UserVO.name AS firstname, " +
+                "UserVO.surname AS surname, " +
+                "UserVO.login AS login, " +
+                "UserVO.password AS password," +
+                "true " +
+                "FROM users AS UserVO " +
+                "WHERE UserVO.password = '" + CoderManager.getHashCode(password) + "' " +
+                "and UserVO.login = '" + login + "'";
+        log.debug("sqlQuery: " + sqlQuery);
+        List<UserVO> userList = getSession().createSQLQuery(sqlQuery)
+                .addScalar("id", StandardBasicTypes.INTEGER)
+                .addScalar("access", StandardBasicTypes.INTEGER)
+                .addScalar("firstname", StandardBasicTypes.STRING)
+                .addScalar("surname", StandardBasicTypes.STRING)
+                .addScalar("login", StandardBasicTypes.STRING)
+                .addScalar("password", StandardBasicTypes.STRING)
+                .setResultTransformer(Transformers.aliasToBean(UserVO.class)).list();
+        if (!userList.isEmpty()){
+            userVO = userList.get(0);
         }
-        log.info("User: " + user);
-        return user;
+        log.info("userVO: " + userVO);
+        return userVO;
     }
 
     @Override
