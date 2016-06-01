@@ -4,6 +4,7 @@
 package by.academy.it.rentacar.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,11 +18,12 @@ import java.util.Date;
  * Class Bill: id, dateBill, orderId, description, cost, payment, dateReturn.
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.3
+ * @since 2016-05
  */
 @Entity
 @Table(name = "bills")
+@Component
 public class Bill implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;

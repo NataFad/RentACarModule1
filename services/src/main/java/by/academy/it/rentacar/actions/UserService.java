@@ -3,145 +3,90 @@
  */
 package by.academy.it.rentacar.actions;
 
-import by.academy.it.rentacar.dao.UserDAO;
-import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.dao.IUserDAO;
+import by.academy.it.rentacar.entity.UserEntity;
 import by.academy.it.rentacar.enums.TypeUser;
-import by.academy.it.rentacar.exceptions.DAOException;
-import by.academy.it.rentacar.exceptions.EnumNotFindException;
 import by.academy.it.rentacar.managers.CoderManager;
-import by.academy.it.rentacar.util.HibernateUtil;
+import by.academy.it.rentacar.viewobject.UserVO;
 import org.apache.log4j.Logger;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Class UserService
- *
+ * <p>
  * Class UserService responsible for user login to the site
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
- *
  */
-public class UserService implements IUserService{
+@Service("userService")
+public class UserService implements IUserService {
 
-	private volatile static UserService instance;
-	private Logger log = Logger.getLogger(UserService.class);
+    private Logger log = Logger.getLogger(UserService.class);
 
-	private UserService(){}
+    @Autowired
+    private IUserDAO userDAO;
 
-	public static UserService getInstance() {
-		if (instance == null) {
-			synchronized (UserService.class) {
-				if (instance == null) {
-					instance = new UserService();
-				}
-			}
-		}
-		return instance;
-	}
-
-	/**
-	 * Method registeredUser() registers user
-	 *
-	 * @param user
-	 * @return successRegistrate
+    /**
+     * Method registeredUser() registers user
+     *
+     * @param user
+     * @return successRegistrate
      */
-	public int registeredUser(User user) {
-		int successRegistrate = 1;
-		Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
+    @Transactional
+    public int registeredUser(UserEntity user) {
+        int successRegistrate = 1;
+        if (!userDAO.checkLogin(user.getLogin().trim())) {
+            successRegistrate = -1;
+            log.error("User has yet registeredCar with the login");
+        } else {
+            user.setPassword(CoderManager.getHashCode(user.getPassword()));
+            userDAO.saveOrUpdate(user);
         }
+        return successRegistrate;
+    }
 
-		UserDAO userDAO = UserDAO.getInstance();
-		try {
-			if (!userDAO.checkLogin(user.getLogin().trim())) {
-                successRegistrate = -1;
-                log.error("User has yet registeredCar with the login");
-                transaction.rollback();
-            } else {
-                try {
-                    user.setPassword(CoderManager.getHashCode(user.getPassword()));
-                    userDAO.saveOrUpdate(user);
-                    if (!transaction.wasCommitted()) {
-                        transaction.commit();
-                    }
-                } catch (DAOException e) {
-                    successRegistrate = -2;
-                    log.error("The registration has not been completed");
-                    transaction.rollback();
-                }
-            }
-		} catch (DAOException e) {
-			successRegistrate = -2;
-			log.error("The registration has not been completed");
-			transaction.rollback();
-		}
-		return successRegistrate;
-	}
-
-	/**
-	 * Method loginUser() searches user by the login and the password
-	 *
-	 * @param login
-	 * @param password
+    /**
+     * Method loginUser() searches user by the login and the password
+     *
+     * @param user
      * @return
      */
-	public User loginUser(String login, String password, User user){
-		User userReg = null;
-		TypeUser type = null;
-		Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
+    @Transactional(readOnly = true)
+    public UserVO loginUser(UserVO user) {
+        UserVO userReg = null;
+        TypeUser type = TypeUser.fromValue(user.getAccess());
+        // проверяем, не пытается ли пользователь повторно авторизоваться
+        if (type == TypeUser.GUEST) {
+            userReg = userDAO.getUser(user.getLogin(), user.getPassword());
+        } else if (type != null) {
+            userReg = user;
         }
+        return userReg;
+    }
 
-		try {
-			type = TypeUser.stringToEnum(user.getAccess());
-		} catch (EnumNotFindException e) {
-			log.error(e.getMessage());
-			transaction.rollback();
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			transaction.rollback();
-		}
-		// проверяем, не пытается ли пользователь повторно авторизоваться
-		if (type == TypeUser.GUEST) {
-			try {
-				userReg = UserDAO.getInstance().getUser(login, password);
-				if (!transaction.wasCommitted()) {
-					if (!transaction.wasCommitted()) {
-						transaction.commit();
-					}
-				}
-			} catch (DAOException ex) {
-				log.error(ex.getMessage());
-				transaction.rollback();
-			}
-		} else if (type != null) {
-			userReg = user;
-			if (!transaction.wasCommitted()) {
-				transaction.commit();
-			}
-		}
-		return userReg;
-	}
+    /**
+     * Method getUserByName() searches user by the login
+     *
+     * @param login
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public UserEntity getUserByLogin(String login){
+        UserEntity user = userDAO.getByKey("login", login);
+        return user;
+    }
 
-	/**
-	 * Method exitUser() gets new user-guest
-	 *
-	 */
-	public User exitUser(){
-		Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
-        }
-		User userGuest = new User();
-		userGuest.setName("Гость");
-		userGuest.setAccess(0);
-		if (!transaction.wasCommitted()) {
-			transaction.commit();
-		}
-		return userGuest;
-	}
+    /**
+     * Method exitUser() gets new user-guest
+     */
+    public UserVO exitUser() {
+        UserVO userGuest = new UserVO();
+        userGuest.setFirstname("Гость");
+        userGuest.setAccess(TypeUser.GUEST.getValue());
+        return userGuest;
+    }
 }

@@ -1,35 +1,26 @@
 package by.academy.it.rentacar.actions;
 
-import by.academy.it.rentacar.dao.PriceDAO;
+import by.academy.it.rentacar.dao.IPriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.exceptions.DAOException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Class PriceService induces PriceDAO
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
- *
  */
-public class PriceService implements IPriceService{
+@Service("priceService")
+@Transactional(readOnly = true)
+public class PriceService implements IPriceService {
 
-    private volatile static PriceService instance;
-
-    private PriceService(){}
-
-    public static PriceService getInstance() {
-        if (instance == null) {
-            synchronized (PriceService.class) {
-                if (instance == null) {
-                    instance = new PriceService();
-                }
-            }
-        }
-        return instance;
-    }
+    @Autowired
+    private IPriceDAO priceDAO;
 
     /**
      * Method getByTransmissionAndFuel() calls the method in PriceDAO
@@ -39,12 +30,7 @@ public class PriceService implements IPriceService{
      * @return
      */
     public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) {
-        Price price = null;
-        try {
-            price = PriceDAO.getInstance().getByTransmissionAndFuel(transmission, fuel);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
+        Price price = priceDAO.getByTransmissionAndFuel(transmission, fuel);
         return price;
     }
 }

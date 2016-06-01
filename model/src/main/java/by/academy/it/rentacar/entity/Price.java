@@ -4,8 +4,7 @@
 package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.Transmission;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,12 +16,13 @@ import java.math.BigDecimal;
  * The cost and discount is depending on the the transmission and the fuel
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  */
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "price")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "price")
 @Table(name = "price", uniqueConstraints = @UniqueConstraint(name = "search", columnNames = {"transmission", "Fuels_id"}))
+@Component
 public class Price implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;

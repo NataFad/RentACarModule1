@@ -1,12 +1,9 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Fuel;
-import by.academy.it.rentacar.exceptions.DAOException;
-import by.academy.it.rentacar.util.HibernateUtil;
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,52 +14,30 @@ import java.util.List;
  * Class FuelDAO creates object Fuel and executes queries the table Fuels.
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  */
-public class FuelDAO extends DAO<Fuel>{
+@Repository("fuelDAO")
+public class FuelDAO extends DAO<Fuel> implements IFuelDAO{
 
-    private volatile static FuelDAO instance;
     private static Logger log = Logger.getLogger(FuelDAO.class);
 
-    private FuelDAO() {
+    public FuelDAO() {
         super();
     }
 
-    public static FuelDAO getInstance() {
-        if (instance == null) {
-            synchronized (FuelDAO.class) {
-                if (instance == null) {
-                    instance = new FuelDAO();
-                }
-            }
-        }
-        return instance;
-    }
-
-    /**
-     * Method searchByName() searches all fuels by name
-     *
-     */
-    public List<Fuel> searchByName(String nameSearch) throws DAOException {
-        Session session = HibernateUtil.getInstance().getSession();
+    @Override
+    public List<Fuel> searchByName(String nameSearch){
         String hql = "SELECT F FROM Fuel as F WHERE F.name = :nameFuel";
-        Query query = session.createQuery(hql);
+        Query query = getSession().createQuery(hql);
         query.setParameter("nameFuel", nameSearch);
         List<Fuel> list = null;
-        try{
-            list = (ArrayList<Fuel>) query.setCacheable(true).list();
-        } catch (HibernateException e){
-            log.error("Error of the search of fuel by name in FuelDAO " + e);
-            throw new DAOException(e.getMessage());
-        }
+        list = (ArrayList<Fuel>) query.list();
+        log.info("Results:" + list);
         return list;
     }
 
-    /**
-     * Method getById() searches object fuel by id
-     *
-     */
+    @Override
     public Fuel getById(int id){
         return getByKey("id", id);
     }

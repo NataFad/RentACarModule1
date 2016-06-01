@@ -1,16 +1,18 @@
 package by.academy.it;
 
-import by.academy.it.rentacar.dao.UserDAO;
-import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.dao.IUserDAO;
+import by.academy.it.rentacar.entity.UserEntity;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.CoderManager;
-import by.academy.it.rentacar.util.HibernateUtil;
-import org.hibernate.Transaction;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -19,18 +21,22 @@ import java.util.GregorianCalendar;
  * Created by Nata on 13.05.2016.
  *
  * @author Fadeeva Natallia
- * @version 1.1
+ * @version 1.3
  * @since 2016-05
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/testDaoContext.xml")
+@Transactional
 public class UserDAOTest {
 
-    private static UserDAO userDAO = UserDAO.getInstance();
-    private static User userTest;
+    @Autowired
+    private IUserDAO userDAO;
+    private static UserEntity userTest;
 
     @Before
     public void setUp() throws Exception {
         Calendar calendar = new GregorianCalendar(1975, 0, 25);
-        userTest = new User();
+        userTest = new UserEntity();
         userTest.setName("test");
         userTest.setAccess(1);
         userTest.setBirthday(calendar.getTime());
@@ -41,48 +47,31 @@ public class UserDAOTest {
         userTest.setSurname("test");
     }
 
-    @After
-    public void tearDown() throws Exception {
-        // HibernateUtil.getInstance().closeSession();
-    }
-
     @Test
     public void userDAOTest() throws Exception {
         checkLoginTest();
         addUser();
         getByIdTest();
         getAccessTest(TypeUser.USER.getValue());
-        getUserTest();
         updateAccessTest();
         deleteTest();
     }
 
-    private void addUser() {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
-        }
+    private void addUser() throws Exception {
         String password = userTest.getPassword();
         userTest.setPassword(CoderManager.getHashCode(password));
-        try {
-            userDAO.saveOrUpdate(userTest);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-        if (!transaction.wasCommitted()) {
-            transaction.commit();
-        }
+        userDAO.saveOrUpdate(userTest);
         userTest.setPassword(password);
     }
 
     private void getByIdTest() throws Exception {
-        User userExpected = userDAO.getById(userTest.getId());
+        UserEntity userExpected = userDAO.getById(userTest.getId());
         Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }
 
     private void checkLoginTest() throws Exception {
-        boolean check = userDAO.checkLogin("testfil");
+        boolean check = userDAO.checkLogin(userTest.getLogin());
         Assert.assertTrue(check);
     }
 
@@ -92,36 +81,12 @@ public class UserDAOTest {
     }
 
     private void updateAccessTest() throws Exception {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
-        }
         userTest.setAccess(TypeUser.ADMINISTRATOR.getValue());
         userDAO.saveOrUpdate(userTest);
-        if (!transaction.wasCommitted()) {
-            transaction.commit();
-        }
         getAccessTest(TypeUser.ADMINISTRATOR.getValue());
     }
 
-    private void getUserTest() throws Exception {
-        User userExpected = userDAO.getUser("testNata", "filimon");
-        Assert.assertNotNull(userExpected);
-        Assert.assertEquals(userExpected, userTest);
-    }
-
     private void deleteTest() throws DAOException {
-        Transaction transaction = HibernateUtil.getInstance().getSession().getTransaction();
-        if (!transaction.isActive()){
-            transaction.begin();
-        }
-        try {
-            userDAO.delete(userTest);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-        if (!transaction.wasCommitted()) {
-            transaction.commit();
-        }
+        userDAO.delete(userTest);
     }
 }

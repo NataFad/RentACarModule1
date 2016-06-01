@@ -3,6 +3,10 @@
  */
 package by.academy.it.rentacar.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,6 +23,8 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "ratings")
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "rating")
+@Component
 public class Rating implements Serializable{
     private static final long serialVersionUID = 1L;
     private int id;

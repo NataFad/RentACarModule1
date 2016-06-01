@@ -4,6 +4,7 @@
 package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.ModelAndMark;
+import org.springframework.stereotype.Repository;
 
 /**
  * Class ModelAndMarkDAO
@@ -12,33 +13,18 @@ import by.academy.it.rentacar.entity.ModelAndMark;
  * table ModelsAndMarks.
  * 
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  * 
  */
-public class ModelAndMarkDAO extends DAO<ModelAndMark>{
+@Repository("modelAndMarkDAO")
+public class ModelAndMarkDAO extends DAO<ModelAndMark> implements IModelAndMarkDAO{
 
-	private volatile static ModelAndMarkDAO instance;
-
-	private ModelAndMarkDAO() {
+	public ModelAndMarkDAO() {
 		super();
 	}
 
-	public static ModelAndMarkDAO getInstance() {
-		if (instance == null) {
-			synchronized (ModelAndMarkDAO.class) {
-				if (instance == null) {
-					instance = new ModelAndMarkDAO();
-				}
-			}
-		}
-		return instance;
-	}
-
-	/**
-	 * Method getById() searches object model and mark by id
-	 *
-	 */
+	@Override
 	public ModelAndMark getById(int id){
 		return getByKey("id", id);
 	}

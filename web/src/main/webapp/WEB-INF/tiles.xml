@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="default" template="/WEB-INF/layouts/default.jspx">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="header" value=""/>
+        <put-attribute name="body" value=""/>
+        <put-attribute name="footer" value="/WEB-INF/elements/_footer.jsp"/>
+    </definition>
+<!--
+    <definition name="welcome" extends="default">
+        <put-attribute name="title" value="Welcome user"/>
+        <put-attribute name="body" value="/login.jsp"/>
+    </definition>
+
+    <definition name="user/main" extends="default">
+        <put-attribute name="title" value="Main page"/>
+        <put-attribute name="body" value="/WEB-INF/view/user/main.jspx"/>
+    </definition>
+
+    <definition name="persons/main" extends="default">
+        <put-attribute name="title" value="page.title"/>
+        <put-attribute name="body" value="/WEB-INF/view/person/main.jspx"/>
+    </definition>
+
+    <definition name="login" template="/login.jsp">
+        <put-attribute name="header" value="/login.jsp"/>
+        <put-attribute name="title" value="Login page"/>
+    </definition>
+    -->
+</tiles-definitions>
+

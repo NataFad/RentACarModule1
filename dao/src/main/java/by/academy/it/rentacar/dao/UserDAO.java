@@ -3,16 +3,18 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.entity.User;
-import by.academy.it.rentacar.exceptions.DAOException;
+import by.academy.it.rentacar.entity.UserEntity;
 import by.academy.it.rentacar.managers.CoderManager;
-import by.academy.it.rentacar.util.HibernateUtil;
+import by.academy.it.rentacar.viewobject.UserVO;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Class UserDAO
@@ -20,101 +22,73 @@ import org.hibernate.criterion.Restrictions;
  * Class UserDAO creates object User and executes queries the table Users.
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.3
+ * @since 2016-05
  */
-public class UserDAO extends DAO<User> {
+@Repository("userDAO")
+public class UserDAO extends DAO<UserEntity> implements IUserDAO {
 
-    private volatile static UserDAO instance;
     private static Logger log = Logger.getLogger(UserDAO.class);
 
-    private UserDAO() {
+    public UserDAO() {
         super();
     }
 
-    public static UserDAO getInstance() {
-        if (instance == null) {
-            synchronized (UserDAO.class) {
-                if (instance == null) {
-                    instance = new UserDAO();
-                }
-            }
+    @Override
+    public UserVO getUser(String login, String password) {
+        UserVO userVO = null;
+        String sqlQuery = "SELECT UserVO.id AS id, " +
+                "UserVO.access AS access, " +
+                "UserVO.name AS firstname, " +
+                "UserVO.surname AS surname, " +
+                "UserVO.login AS login, " +
+                "UserVO.password AS password," +
+                "true " +
+                "FROM users AS UserVO " +
+                "WHERE UserVO.password = '" + CoderManager.getHashCode(password) + "' " +
+                "and UserVO.login = '" + login + "'";
+        log.debug("sqlQuery: " + sqlQuery);
+        List<UserVO> userList = getSession().createSQLQuery(sqlQuery)
+                .addScalar("id", StandardBasicTypes.INTEGER)
+                .addScalar("access", StandardBasicTypes.INTEGER)
+                .addScalar("firstname", StandardBasicTypes.STRING)
+                .addScalar("surname", StandardBasicTypes.STRING)
+                .addScalar("login", StandardBasicTypes.STRING)
+                .addScalar("password", StandardBasicTypes.STRING)
+                .setResultTransformer(Transformers.aliasToBean(UserVO.class)).list();
+        if (!userList.isEmpty()){
+            userVO = userList.get(0);
         }
-        return instance;
+        log.info("userVO: " + userVO);
+        return userVO;
     }
 
-    /**
-     * Method getUser() searches user by login and password
-     */
-    public User getUser(String login, String password) throws DAOException {
-        //Session session = HibernateUtil.getInstance().getSession();
-        User user = null;
-
-        Criteria criteria = createEntityCriteria();
-        criteria.add(Restrictions.and(Restrictions.eq("login", login), Restrictions.eq("password", CoderManager.getHashCode(password))));
-
-        /**
-        String hql = "SELECT U FROM User as U "
-                + "WHERE U.password = '" + CoderManager.getHashCode(password) + "' and U.login = :loginUser";
-        Query query = session.createQuery(hql);
-        query.setParameter("loginUser", login);
-        */
-         try {
-           user = (User) criteria.uniqueResult();
-           //  user = (User) query.uniqueResult();
-        } catch (HibernateException e) {
-            log.error("Error get the user in UserDAO " + e);
-            throw new DAOException(e.getMessage());
-        }
-        return user;
-    }
-
-    /**
-     * Method getById() searches object user by id
-     */
-    public User getById(int id) {
+    @Override
+    public UserEntity getById(int id) {
         return getByKey("id", id);
     }
 
-    /**
-     * Method checkLogin() checks for entry to the entered login
-     */
-    public boolean checkLogin(String login) throws DAOException {
+    @Override
+    public boolean checkLogin(String login) {
         boolean checkResult = false;
-
         Criteria criteria = createEntityCriteria();
         criteria.add(Restrictions.eq("login", login));
-
-        try {
-            if (criteria.list().isEmpty()) {
-                checkResult = true;
-            }
-        } catch (HibernateException e) {
-            log.error("Error check the login in UserDAO " + e);
-            throw new DAOException(e.getMessage());
+        if (criteria.list().isEmpty()) {
+            checkResult = true;
         }
+        log.info("Results: " + checkResult);
         return checkResult;
     }
 
-    /**
-     * Method getAccess() gets the type of user access
-     */
-    public int getAccess(String id) throws DAOException {
-        Session session = HibernateUtil.getInstance().getSession();
+    @Override
+    public int getAccess(String id) {
         String hql = "SELECT U.access FROM User as U "
                 + "WHERE U.id = :id";
-        Query query = session.createQuery(hql);
+        Query query = getSession().createQuery(hql);
         query.setParameter("id", Integer.parseInt(id));
-
         int access = 0;
-
-        try {
-            access = (int) query.uniqueResult();
-        } catch (HibernateException e) {
-            log.error("Error get access in UserDAO " + e);
-            throw new DAOException(e.getMessage());
-        }
-
+        access = (int) query.uniqueResult();
+        log.info("Access: " + access);
         return access;
     }
 }

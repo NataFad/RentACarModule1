@@ -1,11 +1,13 @@
 
 package by.academy.it.rentacar.actions;
 
-import by.academy.it.rentacar.dao.ModelAndMarkDAO;
+import by.academy.it.rentacar.dao.IModelAndMarkDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.exceptions.DAOException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -13,26 +15,18 @@ import java.util.ArrayList;
  * Class Action makes requests to the DAO to create filter lists on the form
  * 
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  * 
  */
+@Service("actionService")
+@Transactional(readOnly = true)
 public class ActionService implements IActionService{
 
-	private volatile static ActionService instance;
-
-	private ActionService(){}
-
-	public static ActionService getInstance() {
-		if (instance == null) {
-			synchronized (ActionService.class) {
-				if (instance == null) {
-					instance = new ActionService();
-				}
-			}
-		}
-		return instance;
-	}
+	@Autowired
+	private IFuelService fuelService;
+	@Autowired
+	private IModelAndMarkDAO modelAndMarkDAO;
 
 	/**
 	 * Method getListTransmission() gets list of transmissions
@@ -54,7 +48,7 @@ public class ActionService implements IActionService{
 	 */
 	public ArrayList<Fuel> getListFuel(){
 		// List of fuels
-		ArrayList<Fuel> fuelsList = FuelService.getInstance().getListFuel();
+		ArrayList<Fuel> fuelsList = fuelService.getListFuel();
 		return fuelsList;
 	}
 
@@ -65,11 +59,7 @@ public class ActionService implements IActionService{
 	 */
 	public ArrayList<ModelAndMark> getListModel(){
 		ArrayList<ModelAndMark> modelList = null;
-		try {
-			modelList = (ArrayList<ModelAndMark>) ModelAndMarkDAO.getInstance().getAll();
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+		modelList = (ArrayList<ModelAndMark>) modelAndMarkDAO.getAll();
 		return modelList;
 	}
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+        "http://www.hibernate.org/xsd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
@@ -17,12 +17,12 @@
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.bytecode.use_reflection_optimizer">true</property>
         <!-- Ehcache configuration -->
-        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
+        <!--property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
         </property>
         <property name="hibernate.cache.use_second_level_cache">true</property>
         <property name="hibernate.cache.use_query_cache">true</property>
-        <property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property>
-        <!-- Mapping class -->
+        <property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property-->
+        <!-- Mapping class >
         <mapping class="by.academy.it.rentacar.entity.Fuel"/>
         <mapping class="by.academy.it.rentacar.entity.ModelAndMark"/>
         <mapping class="by.academy.it.rentacar.entity.Rating"/>
@@ -31,7 +31,7 @@
         <mapping class="by.academy.it.rentacar.entity.User"/>
         <mapping class="by.academy.it.rentacar.entity.Car"/>
         <mapping class="by.academy.it.rentacar.entity.Order"/>
-        <mapping class="by.academy.it.rentacar.entity.Bill"/>
+        <mapping class="by.academy.it.rentacar.entity.Bill"/-->
     </session-factory>
 </hibernate-configuration>
 

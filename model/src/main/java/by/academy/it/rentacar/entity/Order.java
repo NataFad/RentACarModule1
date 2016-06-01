@@ -4,6 +4,7 @@
 package by.academy.it.rentacar.entity;
 
 import by.academy.it.rentacar.enums.StatusOrder;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,16 +17,17 @@ import java.util.Date;
  * Class Order contains complete information about the order with the calculated amount per rent and his status.
  *
  * @author Fadeeva Natallia
- * @version 1.1
- * @since 2016-04
+ * @version 1.3
+ * @since 2016-05
  */
 @Entity
 @Table(name = "orders")
+@Component
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
     private Date dateOrder;
-    private User user;
+    private UserEntity user;
     private Car car;
     private Date fromDate;
     private Date byDate;
@@ -81,14 +83,14 @@ public class Order implements Serializable {
      */
     @ManyToOne
     @JoinColumn(name = "users_id", nullable = false)
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
     /**
      * @param user
      */
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 

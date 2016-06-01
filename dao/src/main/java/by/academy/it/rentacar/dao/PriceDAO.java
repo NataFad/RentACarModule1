@@ -6,11 +6,10 @@ package by.academy.it.rentacar.dao;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.enums.Transmission;
-import by.academy.it.rentacar.exceptions.DAOException;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 /**
  * Class PriceDAO
@@ -18,34 +17,20 @@ import org.hibernate.criterion.Restrictions;
  * Class PriceDAO creates object Price and executes queries the table price.
  *
  * @author Fadeeva Natallia
- * @version 1.2
+ * @version 1.3
  * @since 2016-05
  */
-public class PriceDAO extends DAO<Price> {
+@Repository("priceDAO")
+public class PriceDAO extends DAO<Price> implements IPriceDAO {
 
-    private volatile static PriceDAO instance;
     private static Logger log = Logger.getLogger(PriceDAO.class);
 
-    private PriceDAO() {
+    public PriceDAO() {
         super();
     }
 
-    public static PriceDAO getInstance() {
-        if (instance == null) {
-            synchronized (PriceDAO.class) {
-                if (instance == null) {
-                    instance = new PriceDAO();
-                }
-            }
-        }
-        return instance;
-    }
-
-    /**
-     * Method getByTransmissionAndFuel()
-     * searches object price by transmission and fuel
-     */
-    public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) throws DAOException {
+    @Override
+    public Price getByTransmissionAndFuel(Transmission transmission, Fuel fuel) {
         Price price = null;
         /**String hql = "SELECT P FROM Price as P "
          + "WHERE P.transmission = '"+ transmission.getValue() +"' and P.fuel = :fuel";
@@ -54,16 +39,10 @@ public class PriceDAO extends DAO<Price> {
          query.getQueryString();
          price = (Price) query.uniqueResult();
          */
-
         Criteria criteria = createEntityCriteria();
         criteria.add(Restrictions.and(Restrictions.eq("fuel", fuel), Restrictions.eq("transmission", transmission)));
-
-        try {
-            price = (Price) criteria.setCacheable(true).uniqueResult();
-        } catch (HibernateException e) {
-            log.error("Error get by transmission and fuel in PriceDAO " + e);
-            throw new DAOException(e.getMessage());
-        }
+        price = (Price) criteria.uniqueResult();
+        log.info("Price: " + price);
         return price;
     }
 }
