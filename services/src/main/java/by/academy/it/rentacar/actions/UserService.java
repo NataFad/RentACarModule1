@@ -4,7 +4,7 @@
 package by.academy.it.rentacar.actions;
 
 import by.academy.it.rentacar.dao.IUserDAO;
-import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.entity.UserEntity;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.managers.CoderManager;
 import by.academy.it.rentacar.viewobject.UserVO;
@@ -37,7 +37,7 @@ public class UserService implements IUserService {
      * @return successRegistrate
      */
     @Transactional
-    public int registeredUser(User user) {
+    public int registeredUser(UserEntity user) {
         int successRegistrate = 1;
         if (!userDAO.checkLogin(user.getLogin().trim())) {
             successRegistrate = -1;
@@ -66,6 +66,18 @@ public class UserService implements IUserService {
             userReg = user;
         }
         return userReg;
+    }
+
+    /**
+     * Method getUserByName() searches user by the login
+     *
+     * @param login
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public UserEntity getUserByLogin(String login){
+        UserEntity user = userDAO.getByKey("login", login);
+        return user;
     }
 
     /**

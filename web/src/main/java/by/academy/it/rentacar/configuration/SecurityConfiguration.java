@@ -28,7 +28,7 @@
 //	  	.antMatchers("/", "/home").permitAll()
 //	  	.antMatchers("/admin/**").access("hasRole('ADMIN')")
 //	  	.and().formLogin().loginPage("/login")
-//	  	.usernameParameter("userName").passwordParameter("password")
+//	  	.usernameParameter("login").passwordParameter("password")
 //	  	.and().csrf()
 //	  	.and().exceptionHandling().accessDeniedPage("/access_denied");
 //	}

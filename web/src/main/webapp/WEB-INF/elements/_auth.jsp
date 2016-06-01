@@ -1,6 +1,5 @@
-<%@ page contentType="text/html; charset=utf-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=utf-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="s" %>
 
 <!DOCTYPE html>
 <div align="center">
@@ -19,17 +18,18 @@
                            placeholder="Пароль" pattern="[A-Za-z0-9]{5,20}" autocomplete="off" required/> <br/>
                         ${errorLoginPassMessage} <br/>
                     <input type="submit" value="Log in"/><br/>
-                    <a href="../registration" style="font-size:15px;color:#0000ff;font-weight:600;">Регистрация</a>
+                    <a href="${pageContext.request.contextPath}/WEB-INF/pages/registration" style="font-size:15px;color:#0000ff;font-weight:600;">Регистрация</a>
                 </fieldset>
             </form>
         </c:when>
         <c:otherwise>
             <div>
                 <c:choose>
-                    <c:when test="${userVO.access gt 0}">
+
+                    <c:when test="${(userVO.access == 1) or (userVO.access == 2)}">
                         <form method="post" action="inDeveloping">
                             <!--a href="action?command=inDeveloping"-->
-                            <a><img src="../../images/shop-cart.gif"
+                            <a><img src="${pageContext.request.contextPath}/images/shop-cart.gif"
                                     style="position: relative; top: 12px; font-weight:600;"/>
                                 Текущая заявка: <b>${not empty carVO ? carVO : ' не выбран автомобиль'}</b>
                             </a>
@@ -44,7 +44,7 @@
                 <br/>
                 <form method="post" action="exit">
                     <br/>
-                    <c:when test="${userVO.access gt 0}">
+                    <c:when test="${(userVO.access == 1) or (userVO.access == 2)}">
                         <a style="font-size: 15px; font-weight:600;">Выход</a>
                     </c:when>
                 </form>

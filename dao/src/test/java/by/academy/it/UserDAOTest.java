@@ -1,7 +1,7 @@
 package by.academy.it;
 
 import by.academy.it.rentacar.dao.IUserDAO;
-import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.entity.UserEntity;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.CoderManager;
@@ -31,12 +31,12 @@ public class UserDAOTest {
 
     @Autowired
     private IUserDAO userDAO;
-    private static User userTest;
+    private static UserEntity userTest;
 
     @Before
     public void setUp() throws Exception {
         Calendar calendar = new GregorianCalendar(1975, 0, 25);
-        userTest = new User();
+        userTest = new UserEntity();
         userTest.setName("test");
         userTest.setAccess(1);
         userTest.setBirthday(calendar.getTime());
@@ -65,7 +65,7 @@ public class UserDAOTest {
     }
 
     private void getByIdTest() throws Exception {
-        User userExpected = userDAO.getById(userTest.getId());
+        UserEntity userExpected = userDAO.getById(userTest.getId());
         Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }

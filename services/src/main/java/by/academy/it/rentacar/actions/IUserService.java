@@ -1,6 +1,6 @@
 package by.academy.it.rentacar.actions;
 
-import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.entity.UserEntity;
 import by.academy.it.rentacar.viewobject.UserVO;
 
 /**
@@ -8,7 +8,8 @@ import by.academy.it.rentacar.viewobject.UserVO;
  */
 public interface IUserService {
 
-    int registeredUser(User user);
+    int registeredUser(UserEntity user);
     UserVO loginUser(UserVO user);
+    UserEntity getUserByLogin(String login);
     UserVO exitUser();
 }

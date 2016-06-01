@@ -1,12 +1,16 @@
 package by.academy.it;
 
 import by.academy.it.rentacar.actions.IFuelService;
+import by.academy.it.rentacar.configuration.HibernateConfiguration;
 import by.academy.it.rentacar.dao.IFuelDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +21,9 @@ import java.util.List;
  * @version 1.3
  * @since 2016-05
  */
-@Ignore
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HibernateConfiguration.class)
+@Transactional
 public class FuelServiceTest {
 
     @Autowired

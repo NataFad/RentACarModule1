@@ -1,10 +1,15 @@
 package by.academy.it;
 
 import by.academy.it.rentacar.actions.IUserService;
+import by.academy.it.rentacar.configuration.HibernateConfiguration;
 import by.academy.it.rentacar.dao.IUserDAO;
-import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.entity.UserEntity;
 import org.junit.*;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -16,7 +21,9 @@ import java.util.GregorianCalendar;
  * @version 1.3
  * @since 2016-05
  */
-@Ignore
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HibernateConfiguration.class)
+@Transactional
 public class UserServiceTest {
 
     @Autowired
@@ -24,13 +31,13 @@ public class UserServiceTest {
     @Autowired
     private IUserDAO userDAO;
 
-    private static User userTest;
+    private static UserEntity userTest;
     private String password;
 
     @Before
     public void setUp() throws Exception {
         Calendar calendar = new GregorianCalendar(1971, 1, 21);
-        userTest = new User();
+        userTest = new UserEntity();
         userTest.setName("test");
         userTest.setAccess(0);
         userTest.setBirthday(calendar.getTime());

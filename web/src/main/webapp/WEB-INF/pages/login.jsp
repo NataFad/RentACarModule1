@@ -15,7 +15,7 @@
 				<!-- начало таблицы "шапка"  №2-->
 				<table width="100%" height="150" bgcolor="#5dcec6" cellpadding="0" cellspacing="0" border="0">
 					<tr>
-						<td valign="top" width="15%"><img src="../images/Avtologo.png" width="100%" height="100%"></td>
+						<td valign="top" width="15%"><img src="${pageContext.request.contextPath}/images/Avtologo.png" width="100%" height="100%"></td>
 						<td width="85%" style="font-size: 24px; text-align: center"><i>Проект	3-го модуля Фадеевой Натальи: Rent a car</i></td>
 					</tr>
 				</table>
@@ -33,7 +33,7 @@
 
 				   <!-- начало правой колонки вложенной средней таблицы  №3-->
 				   <td valign="top" width="85%">
-				      <img src="../images/Avto.jpg" width="100%" height="100%">
+				      <img src="${pageContext.request.contextPath}/images/Avto.jpg" width="100%" height="100%">
 				   </td>
 				   <!-- конец левой колонки вложенной средней таблицы  №3-->
 			 </tr>

@@ -3,7 +3,7 @@
  */
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.entity.User;
+import by.academy.it.rentacar.entity.UserEntity;
 import by.academy.it.rentacar.managers.CoderManager;
 import by.academy.it.rentacar.viewobject.UserVO;
 import org.apache.log4j.Logger;
@@ -26,7 +26,7 @@ import java.util.List;
  * @since 2016-05
  */
 @Repository("userDAO")
-public class UserDAO extends DAO<User> implements IUserDAO {
+public class UserDAO extends DAO<UserEntity> implements IUserDAO {
 
     private static Logger log = Logger.getLogger(UserDAO.class);
 
@@ -64,7 +64,7 @@ public class UserDAO extends DAO<User> implements IUserDAO {
     }
 
     @Override
-    public User getById(int id) {
+    public UserEntity getById(int id) {
         return getByKey("id", id);
     }
 
