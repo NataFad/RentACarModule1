@@ -1,5 +1,6 @@
 package by.academy.it.rentacar.filters;
 
+import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import org.apache.log4j.Logger;
 
@@ -24,6 +25,10 @@ public class ServletSecurityFilter implements Filter {
         TypeUser type = (TypeUser) session.getAttribute("userType");
         if (type == null) {
             type = TypeUser.GUEST;
+            User userVO = new User();
+            userVO.setAccess(type.getValue());
+            userVO.setName("Гость");
+            session.setAttribute("userVO", userVO);
             session.setAttribute("userType", type);
         }
         chain.doFilter(request, response);

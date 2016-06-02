@@ -1,13 +1,13 @@
 /**
  *
  */
-package by.academy.it.rentacar.actions.user;
+package by.academy.it.rentacar.controller.user;
 
 import by.academy.it.rentacar.actions.IUserService;
 import by.academy.it.rentacar.controller.MainController;
+import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.managers.ErrorManager;
-import by.academy.it.rentacar.viewobject.UserVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,25 +37,17 @@ public class LoginController {
     private IUserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String checkLogin(ModelMap modelMap, @ModelAttribute UserVO userVO, HttpSession httpSession) {
+    public String checkLogin(ModelMap modelMap, @ModelAttribute User userVO, HttpSession httpSession) {
         log.debug("MainController checkLogin used...");
         log.debug("Processing client: " + userVO);
-        UserVO userReg = userService.loginUser(userVO);
+        User userReg = userService.loginUser(userVO);
         modelMap.remove("userVO");
         if (userReg == null) {
             modelMap.addAttribute("errorLoginPassMessage", ErrorManager.getInstance().getProperty("error.login"));
             userReg = userService.exitUser();
         }
-//        else {
-//            // Если авторизация выполнена, то присваиваем сессии соответствующие атрибуты
-////            int access = userReg.getAccess();
-////            user = userReg;
-//            modelMap.remove("userVO");
-//            modelMap.addAttribute("userVO");
-//        }
         log.debug("regUser: " + userReg);
-       // modelMap.put("userVO", user);
-        modelMap.addAttribute("userVO", userReg);
+        httpSession.setAttribute("userVO", userReg);
         httpSession.setAttribute("carVO", null);
         httpSession.setAttribute("userType", TypeUser.fromValue(userReg.getAccess()));
         page = "login";

@@ -16,7 +16,7 @@
 				<!-- начало таблицы "шапка"  №2-->
 				<table width="100%" height="150" bgcolor="#5dcec6" cellpadding="0" cellspacing="0" border="0">
 					<tr>
-						<td valign="top" width="15%"><img src="../images/Avtologo.png" width="100%" height="100%"></td>
+						<td valign="top" width="15%"><img src="${pageContext.request.contextPath}/images/Avtologo.png" width="100%" height="100%"></td>
 						<td width="85%" style="font-size: 24px; text-align: center"><i>Проект	3-го модуля Фадеевой Натальи: Rent a car</i></td>
 					</tr>
 				</table> 
@@ -37,13 +37,13 @@
               <i>Данный функционал находится в разработке</i><br />
               <c:choose>
                 <c:when test="${empty sessionScope.user}">
-                    <img src="../images/inDevelopingGuest.jpg" width="100%" height="95%">
+                    <img src="${pageContext.request.contextPath}/images/inDevelopingGuest.jpg" width="100%" height="95%">
                 </c:when>
                 <c:when test="${(not empty sessionScope.access) and (sessionScope.access == '2')}">
-                  <img src="../images/inDevelopingAdmin.jpg" width="100%" height="95%">
+                  <img src="${pageContext.request.contextPath}/images/inDevelopingAdmin.jpg" width="100%" height="95%">
                 </c:when>
                 <c:otherwise>
-                  <img src="../images/inDevelopingUser.jpg" width="100%" height="95%">
+                  <img src="${pageContext.request.contextPath}/images/inDevelopingUser.jpg" width="100%" height="95%">
                 </c:otherwise>
               </c:choose> 
             </td>

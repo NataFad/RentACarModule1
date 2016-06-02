@@ -1,5 +1,6 @@
-package by.academy.it.rentacar.dao;
+package by.academy.it.rentacar.dao.impl;
 
+import by.academy.it.rentacar.dao.IFuelDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -18,7 +19,7 @@ import java.util.List;
  * @since 2016-05
  */
 @Repository("fuelDAO")
-public class FuelDAO extends DAO<Fuel> implements IFuelDAO{
+public class FuelDAO extends DAO<Fuel> implements IFuelDAO {
 
     private static Logger log = Logger.getLogger(FuelDAO.class);
 

@@ -1,6 +1,7 @@
-package by.academy.it.rentacar.actions;
+package by.academy.it.rentacar.actions.impl;
 
 
+import by.academy.it.rentacar.actions.ITypeService;
 import by.academy.it.rentacar.dao.ITypeDAO;
 import by.academy.it.rentacar.entity.Type;
 import org.springframework.beans.factory.annotation.Autowired;

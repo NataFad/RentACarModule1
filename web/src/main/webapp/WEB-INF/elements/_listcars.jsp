@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <div>
     <c:choose>
-        <c:when test="${empty requestScope.search_result}">
+        <c:when test="${empty search_result}">
             <p>${errorSearchCarMessage}</p>
         </c:when>
         <c:otherwise>
@@ -17,7 +17,7 @@
                     <td width="10%">Submit</td>
                 </tr>
 
-                <c:forEach var="car" items="${requestScope.search_result}">
+                <c:forEach var="car" items="${search_result}">
                     <tr>
                         <td align="center"><c:out value="${car.registrationNumber}"/></td>
                         <td>

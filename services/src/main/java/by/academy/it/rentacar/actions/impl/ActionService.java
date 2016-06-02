@@ -1,6 +1,8 @@
 
-package by.academy.it.rentacar.actions;
+package by.academy.it.rentacar.actions.impl;
 
+import by.academy.it.rentacar.actions.IActionService;
+import by.academy.it.rentacar.actions.IFuelService;
 import by.academy.it.rentacar.dao.IModelAndMarkDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
  */
 @Service("actionService")
 @Transactional(readOnly = true)
-public class ActionService implements IActionService{
+public class ActionService implements IActionService {
 
 	@Autowired
 	private IFuelService fuelService;

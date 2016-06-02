@@ -20,4 +20,6 @@ public interface IActionService {
     ArrayList<Fuel> getListFuel();
 
     ArrayList<ModelAndMark> getListModel();
+
+    ArrayList<String> getListPerPage();
 }

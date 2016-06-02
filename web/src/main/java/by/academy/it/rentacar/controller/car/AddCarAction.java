@@ -1,7 +1,7 @@
 /**
  * 
  */
-package by.academy.it.rentacar.actions.car;
+package by.academy.it.rentacar.controller.car;
 
 /**
  * Class addCarAction

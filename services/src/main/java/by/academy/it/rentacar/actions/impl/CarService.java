@@ -1,6 +1,8 @@
-package by.academy.it.rentacar.actions;
+package by.academy.it.rentacar.actions.impl;
 
 
+import by.academy.it.rentacar.actions.ICarService;
+import by.academy.it.rentacar.actions.IPriceService;
 import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,4 +154,19 @@ public class CarService implements ICarService {
         }
         return carList;
     }
+
+    public int countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues){
+        BigInteger countCar = carDAO.countCarByFilter(fromDate, byDate, filterValues);
+        return countCar.intValue();
+    }
+
+    public int calculateMaxPages(Date fromDate, Date byDate, HashMap<String, String> filterValues, int carPerPage){
+        int count = countCarByFilter(fromDate, byDate, filterValues);
+        int maxPage = (count % carPerPage == 0) ?
+                (count / carPerPage) :
+                (count / carPerPage + 1);
+
+        return maxPage;
+    }
+
 }

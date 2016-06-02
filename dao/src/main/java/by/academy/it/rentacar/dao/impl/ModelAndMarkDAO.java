@@ -1,8 +1,10 @@
 /**
  * 
  */
-package by.academy.it.rentacar.dao;
+package by.academy.it.rentacar.dao.impl;
 
+import by.academy.it.rentacar.dao.IModelAndMarkDAO;
+import by.academy.it.rentacar.dao.impl.DAO;
 import by.academy.it.rentacar.entity.ModelAndMark;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository("modelAndMarkDAO")
-public class ModelAndMarkDAO extends DAO<ModelAndMark> implements IModelAndMarkDAO{
+public class ModelAndMarkDAO extends DAO<ModelAndMark> implements IModelAndMarkDAO {
 
 	public ModelAndMarkDAO() {
 		super();

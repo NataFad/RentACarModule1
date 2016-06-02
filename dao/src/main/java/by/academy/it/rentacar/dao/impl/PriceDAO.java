@@ -1,8 +1,9 @@
 /**
  *
  */
-package by.academy.it.rentacar.dao;
+package by.academy.it.rentacar.dao.impl;
 
+import by.academy.it.rentacar.dao.IPriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
 import by.academy.it.rentacar.enums.Transmission;

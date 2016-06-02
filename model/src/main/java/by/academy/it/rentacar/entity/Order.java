@@ -27,7 +27,7 @@ public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
     private Date dateOrder;
-    private UserEntity user;
+    private User user;
     private Car car;
     private Date fromDate;
     private Date byDate;
@@ -83,14 +83,14 @@ public class Order implements Serializable {
      */
     @ManyToOne
     @JoinColumn(name = "users_id", nullable = false)
-    public UserEntity getUser() {
+    public User getUser() {
         return user;
     }
 
     /**
      * @param user
      */
-    public void setUser(UserEntity user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

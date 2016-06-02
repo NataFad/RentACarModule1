@@ -1,21 +1,17 @@
 package by.academy.it.rentacar.controller;
 
 import by.academy.it.rentacar.actions.IUserService;
-import by.academy.it.rentacar.entity.UserEntity;
+import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
-import by.academy.it.rentacar.viewobject.UserVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
-import java.security.Principal;
+import javax.validation.Valid;
 
 @Controller
 public class MainController {
@@ -25,69 +21,47 @@ public class MainController {
     @Autowired
     private IUserService userService;
 
-    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    @RequestMapping(value = "/main")
     public String mainPage(ModelMap modelMap, HttpSession httpSession) {
         //public String mainPage() {
         log.info("MainController mainPage used...");
-        UserVO user = (UserVO) modelMap.get("userVO");
+        User user = (User) httpSession.getAttribute("userVO");
         if (user == null) {
             user = userService.exitUser();
         }
-        modelMap.addAttribute("userVO", user);
+        httpSession.setAttribute("userVO", user);
         httpSession.setAttribute("userType", TypeUser.fromValue(user.getAccess()));
         return "login";
     }
 
     /**
      * return form for add user
-     * @param user
+     *
      * @return
      */
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String form(@ModelAttribute UserVO user) {
-        return "addUser";
+    @RequestMapping(value = "/registration")
+    public String form(ModelMap model) {
+        return "registration";
     }
 
     /**
      * create new user
+     *
      * @param model
-     * @param user
-     * @param session
+     * @param userReg
      * @return
      */
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String add(ModelMap model, @Validated UserEntity user, BindingResult br, HttpSession session) {
+    @RequestMapping(value = "/addUser")
+    public String add(ModelMap model, @Valid User userReg, BindingResult br, HttpSession httpSession) {
         if (br.hasErrors()) {
-            return "addUser";
+            return "registration";
         }
-        int success = userService.registeredUser(user);
+        int success = userService.registeredUser(userReg);
         if (success == 1) {
-            UserVO userVO = new UserVO();
-            userVO.setLogin(user.getLogin());
-            userVO.setPassword(user.getPassword());
-            userVO = userService.loginUser(userVO);
-            model.put("userVO", userVO);
+            httpSession.setAttribute("userVO", userReg);
+            httpSession.setAttribute("userType", TypeUser.fromValue(userReg.getAccess()));
             return "login";
         }
         return "main";
     }
-
-    /**
-     * after login page
-     * @param session
-     * @return
-     */
-    @RequestMapping(value = "/afterLogin", method = RequestMethod.GET)
-    public String login(HttpSession session, Principal principal) {
-        String login = principal.getName();
-        UserEntity userdb = null;
-        if (login != null) {
-            userdb = userService.getUserByLogin(login);
-        }
-        session.setAttribute("user", userdb);
-        log.info("user:" + userdb);
-        return "login";
-    }
-
-
 }

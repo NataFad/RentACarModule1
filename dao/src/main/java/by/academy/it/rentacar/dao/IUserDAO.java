@@ -1,7 +1,6 @@
 package by.academy.it.rentacar.dao;
 
-import by.academy.it.rentacar.entity.UserEntity;
-import by.academy.it.rentacar.viewobject.UserVO;
+import by.academy.it.rentacar.entity.User;
 
 /**
  * Interface IUserDAO
@@ -10,17 +9,17 @@ import by.academy.it.rentacar.viewobject.UserVO;
  * @version 1.1
  * @since 2016-05
  */
-public interface IUserDAO extends IDAO<UserEntity> {
+public interface IUserDAO extends IDAO<User> {
 
     /**
      * Method getUser() searches user by login and password
      */
-    UserVO getUser(String login, String password);
+    User getUser(String login, String password);
 
     /**
      * Method getById() searches object user by id
      */
-    UserEntity getById(int id);
+    User getById(int id);
 
     /**
      * Method checkLogin() checks for entry to the entered login

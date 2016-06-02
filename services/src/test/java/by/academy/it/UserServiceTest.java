@@ -3,7 +3,7 @@ package by.academy.it;
 import by.academy.it.rentacar.actions.IUserService;
 import by.academy.it.rentacar.configuration.HibernateConfiguration;
 import by.academy.it.rentacar.dao.IUserDAO;
-import by.academy.it.rentacar.entity.UserEntity;
+import by.academy.it.rentacar.entity.User;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +31,13 @@ public class UserServiceTest {
     @Autowired
     private IUserDAO userDAO;
 
-    private static UserEntity userTest;
+    private static User userTest;
     private String password;
 
     @Before
     public void setUp() throws Exception {
         Calendar calendar = new GregorianCalendar(1971, 1, 21);
-        userTest = new UserEntity();
+        userTest = new User();
         userTest.setName("test");
         userTest.setAccess(0);
         userTest.setBirthday(calendar.getTime());

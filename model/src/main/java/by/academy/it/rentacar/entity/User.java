@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users",  uniqueConstraints =  @UniqueConstraint(name = "login", columnNames = "login"))
 @Component
-public class UserEntity implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private int id;
@@ -41,7 +41,7 @@ public class UserEntity implements Serializable {
     /**
      *
      */
-    public UserEntity() {
+    public User() {
     }
 
     /**
@@ -250,7 +250,7 @@ public class UserEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserEntity user = (UserEntity) o;
+        User user = (User) o;
 
         if (id != user.id) return false;
         if (access != user.access) return false;

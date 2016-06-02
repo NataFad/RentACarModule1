@@ -1,7 +1,8 @@
 package by.academy.it;
 
+import by.academy.it.rentacar.configuration.HibernateConfiguration;
 import by.academy.it.rentacar.dao.IUserDAO;
-import by.academy.it.rentacar.entity.UserEntity;
+import by.academy.it.rentacar.entity.User;
 import by.academy.it.rentacar.enums.TypeUser;
 import by.academy.it.rentacar.exceptions.DAOException;
 import by.academy.it.rentacar.managers.CoderManager;
@@ -25,18 +26,18 @@ import java.util.GregorianCalendar;
  * @since 2016-05
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/testDaoContext.xml")
+@ContextConfiguration(classes = HibernateConfiguration.class)
 @Transactional
 public class UserDAOTest {
 
     @Autowired
     private IUserDAO userDAO;
-    private static UserEntity userTest;
+    private static User userTest;
 
     @Before
     public void setUp() throws Exception {
         Calendar calendar = new GregorianCalendar(1975, 0, 25);
-        userTest = new UserEntity();
+        userTest = new User();
         userTest.setName("test");
         userTest.setAccess(1);
         userTest.setBirthday(calendar.getTime());
@@ -65,7 +66,7 @@ public class UserDAOTest {
     }
 
     private void getByIdTest() throws Exception {
-        UserEntity userExpected = userDAO.getById(userTest.getId());
+        User userExpected = userDAO.getById(userTest.getId());
         Assert.assertNotNull(userExpected);
         Assert.assertEquals(userExpected, userTest);
     }

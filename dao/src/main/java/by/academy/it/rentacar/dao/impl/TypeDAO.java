@@ -1,8 +1,10 @@
 /**
  * 
  */
-package by.academy.it.rentacar.dao;
+package by.academy.it.rentacar.dao.impl;
 
+import by.academy.it.rentacar.dao.ITypeDAO;
+import by.academy.it.rentacar.dao.impl.DAO;
 import by.academy.it.rentacar.entity.Type;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository("typeDAO")
-public class TypeDAO extends DAO<Type> implements ITypeDAO{
+public class TypeDAO extends DAO<Type> implements ITypeDAO {
 
 	public TypeDAO() {
 		super();

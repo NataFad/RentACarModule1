@@ -1,4 +1,4 @@
-package by.academy.it.rentacar.actions.user;
+package by.academy.it.rentacar.controller.user;
 
 /** Class RegisterUserAction
  * 

@@ -16,4 +16,6 @@ public interface ICarService {
     Car registeredCar(HashMap<String, String> parametresCar);
     List<CarVO> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues);
     ArrayList<Car> getAllCars();
+    int countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues);
+    int calculateMaxPages(Date fromDate, Date byDate, HashMap<String, String> filterValues, int carPerPage);
 }

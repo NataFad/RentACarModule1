@@ -1,5 +1,6 @@
-package by.academy.it.rentacar.actions;
+package by.academy.it.rentacar.actions.impl;
 
+import by.academy.it.rentacar.actions.IPriceService;
 import by.academy.it.rentacar.dao.IPriceDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.Price;
