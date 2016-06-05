@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @since 2016-05
  */
 @javax.persistence.Entity
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "fuels")
+//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "fuels")
 @Component
 //@org.springframework.cache.annotation.Cacheable

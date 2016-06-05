@@ -112,15 +112,3 @@ function showDate(formID){
     return document.getElementById(formID).value=new Date();
 }
 
-function clearField(msg,formID) {
-    var str = document.getElementById(formID).value;
-    if(str == msg)
-        document.getElementById(formID).value='';
-}
-
-function restoreField(msg,formID) {
-    var str = document.getElementById(formID).value;
-    if(str == '')
-        document.getElementById(formID).value=msg;
-}
-

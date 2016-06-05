@@ -11,21 +11,25 @@ import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
 import by.academy.it.rentacar.entity.Rating;
 import by.academy.it.rentacar.entity.Type;
+import by.academy.it.rentacar.enums.ElementsPerPage;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.managers.ErrorManager;
 import by.academy.it.rentacar.viewobject.CarVO;
+import by.academy.it.rentacar.viewobject.FilterVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Class GetAllCarsAction
@@ -50,17 +54,6 @@ public class CarController {
     private IRatingService ratingService;
 
     private ErrorManager errorManager = ErrorManager.getInstance();
-
-    /**
-     * Method formateDate() transforms date into "yyyy-MM-dd"
-     *
-     * @param toDate
-     * @return string
-     */
-    public String formateDate(java.util.Date toDate) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        return dateFormat.format(toDate);
-    }
 
     /**
      * Method getListFilterCar() generates lists of filters for search of car
@@ -99,109 +92,114 @@ public class CarController {
             modelMap.addAttribute("modelList", modelList);
         }
         // List of transmission
-        ArrayList<String> perPageList = actionService.getListPerPage();
+        ArrayList<ElementsPerPage> perPageList = actionService.getListPerPage();
         modelMap.addAttribute("perPageList", perPageList);
-        modelMap.addAttribute("recordPerPage", "3");
+    }
+
+    @InitBinder
+    public final void initBinderUsuariosFormValidator(final WebDataBinder binder, final Locale locale) {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", locale);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+
+    public java.sql.Date trasformToSQLDate(Date utilDate) {
+        return new java.sql.Date(utilDate.getTime());
     }
 
     @RequestMapping(value = "/allCars")
-    public String showCars(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") Integer page, HttpSession httpSession) {
+    public String showCars(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") Integer page, HttpSession httpSession){
         // period
-        java.sql.Date fromDate = new java.sql.Date(new java.util.Date().getTime());
-        modelMap.addAttribute("fromDate", formateDate(fromDate));
-        modelMap.addAttribute("byDate", formateDate(fromDate));
+        Date dateNow = new Date();
+        FilterVO filterVO = new FilterVO();
+        filterVO.setFromDate(dateNow);
+        filterVO.setByDate(dateNow);
+        filterVO.setTransmission("");
+        filterVO.setRecordPerPage(ElementsPerPage.FIVE.getValue());
 
         getListFilterCar(modelMap, 0);
 
-        int recordsPerPage = 10;
-        HashMap<String, String> filterValues = new HashMap<String, String>();
-        filterValues.put("page", Integer.toString(page));
-        filterValues.put("recordsPerPage", Integer.toString(recordsPerPage));
-
-        List<CarVO> list = carService.getSearchCar(fromDate, fromDate, filterValues);
+        List<CarVO> list = carService.getSearchCar(filterVO, page);
         if (list.isEmpty()) {
             list = null;
             modelMap.addAttribute("search_result", list);
             modelMap.addAttribute("errorSearchCarMessage", errorManager.getProperty("search.nullsearch"));
         }
         modelMap.addAttribute("search_result", list);
-
+        modelMap.addAttribute("filter", filterVO);
         modelMap.addAttribute("currentPage", page);
-        modelMap.addAttribute("maxPages", carService.calculateMaxPages(fromDate, fromDate, filterValues, recordsPerPage));
-
+        modelMap.addAttribute("maxPages", carService.calculateMaxPages(filterVO));
+        modelMap.addAttribute("dateFrom", trasformToSQLDate(dateNow).toString());
+        modelMap.addAttribute("dateBy", trasformToSQLDate(dateNow).toString());
+        httpSession.setAttribute("filter", filterVO);
+        log.debug("Filter: " + filterVO);
+        log.debug("ModelMap: " + modelMap);
         return "searchcar";
     }
 
-    @RequestMapping(value = "/search_cars")
-    public String searchCars(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") Integer page,
-                             @ModelAttribute HashMap<String, String> filterList, HttpSession httpSession) {
-
-        Iterator it = filterList.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            log.debug(pair.getKey() + " = " + pair.getValue());
+    public FilterVO checkFilter(FilterVO filter, Date dateFrom, Date dateBy){
+        if (dateFrom != null) {
+            filter.setFromDate(dateFrom);
         }
+        if (dateBy != null) {
+            filter.setByDate(dateBy);
+        }
+        String transmission = null;
+        try {
+            transmission = filter.getTransmission();
+        } catch (Exception e) {
+            filter.setTransmission("");
+        }
+        if (transmission == null) {
+            filter.setTransmission("");
+        }
+        return filter;
+    }
 
+    public ModelMap searchCars(ModelMap modelMap, FilterVO filter, Date dateFrom, Date dateBy, int page) {
+        checkFilter(filter, dateFrom, dateBy);
         modelMap.clear();
-        // period
-        Date fromDate = Date.valueOf(filterList.get("fromDate").trim());
-        Date byDate = Date.valueOf(filterList.get("byDate").trim());
-        HashMap<String, String> filterValues = new HashMap<String, String>();
-        // Transmission
-        String transmission = filterList.get("transmission").trim();
-        if (!transmission.equals("")) {
-            filterValues.put("transmission", transmission);
-            modelMap.addAttribute("transmission", transmission);
-        }
-        // Fuels
-        String fuelId = filterList.get("fuelId").trim();
-        if (!fuelId.equals("0")) {
-            filterValues.put("fuelId", fuelId);
-            modelMap.addAttribute("fuelId", Integer.parseInt(fuelId));
-        }
-
-        // Type
-        String typeId = filterList.get("typeId").trim();
-        if (!typeId.equals("0")) {
-            filterValues.put("typeId", typeId);
-            modelMap.addAttribute("typeId", Integer.parseInt(typeId));
-        }
-
-        // Rating
-        String ratingId = filterList.get("ratingId");
-        if (!ratingId.equals("0")) {
-            filterValues.put("ratingId", ratingId);
-            modelMap.addAttribute("ratingId", Integer.parseInt(ratingId));
-        }
-
-        // recordsPerPage
-        String recordPerPage = filterList.get("recordPerPage");
-        filterValues.put("recordsPerPage", recordPerPage);
-        int carPerPage = Integer.parseInt(recordPerPage);
-        modelMap.addAttribute("recordPerPage", carPerPage);
-        filterValues.put("page", "1");
-        modelMap.addAttribute("page", 1);
-
-        // period
-        modelMap.addAttribute("fromDate", formateDate(fromDate));
-        modelMap.addAttribute("byDate", formateDate(byDate));
         getListFilterCar(modelMap, 0);
 
-        int count = carService.countCarByFilter(fromDate, byDate, filterValues);
+        int count = carService.countCarByFilter(filter);
         modelMap.addAttribute("errorFilterCarMassager", "Count by filter " + count);
 
-        HashMap<String, Object> filterResponse = new HashMap<String, Object>();
-        List<CarVO> list = carService.getSearchCar(fromDate, byDate, filterValues);
+        List<CarVO> list = carService.getSearchCar(filter, page);
         if (list.isEmpty()) {
             list = null;
             modelMap.addAttribute("search_result", list);
             modelMap.addAttribute("errorSearchCarMessage", errorManager.getProperty("search.nullsearch"));
         }
+        filter.setRecordPerPage(ElementsPerPage.FIVE.getValue());
         modelMap.addAttribute("search_result", list);
-
+        modelMap.addAttribute("filter", filter);
         modelMap.addAttribute("currentPage", page);
-        modelMap.addAttribute("maxPages", carService.calculateMaxPages(fromDate, byDate, filterValues, carPerPage));
+        modelMap.addAttribute("maxPages", carService.calculateMaxPages(filter));
+        modelMap.addAttribute("dateFrom", trasformToSQLDate(dateFrom).toString());
+        modelMap.addAttribute("dateBy", trasformToSQLDate(dateBy).toString());
+        return modelMap;
+    }
 
+    @RequestMapping(value = "/search_cars", method = RequestMethod.POST)
+    public String searchCarsPost(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") Integer page,
+                             @ModelAttribute(value = "filter") FilterVO filter, Date dateFrom, Date dateBy, HttpSession httpSession) {
+        log.debug("Filter: " + filter);
+        log.debug("ModelMap: " + modelMap);
+        modelMap = searchCars(modelMap, filter, dateFrom, dateBy, page);
+        httpSession.setAttribute("filter", filter);
+        return "searchcar";
+    }
+
+    @RequestMapping(value = "/search_cars", method = RequestMethod.GET)
+    public String searchCarsGet(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") Integer page,
+                             HttpSession httpSession) {
+        FilterVO filter;
+        filter = (FilterVO) httpSession.getAttribute("filter");
+        log.debug("Filter: " + filter);
+        log.debug("ModelMap: " + modelMap);
+        Date dateFrom = filter.getFromDate();
+        Date dateBy = filter.getByDate();
+        modelMap = searchCars(modelMap, filter, dateFrom, dateBy, page);
+        httpSession.setAttribute("filter", filter);
         return "searchcar";
     }
 }

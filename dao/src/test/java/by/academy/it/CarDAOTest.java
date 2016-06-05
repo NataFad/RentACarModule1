@@ -2,7 +2,10 @@ package by.academy.it;
 
 import by.academy.it.rentacar.dao.ICarDAO;
 import by.academy.it.rentacar.entity.Car;
+import by.academy.it.rentacar.enums.ElementsPerPage;
+import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.viewobject.CarVO;
+import by.academy.it.rentacar.viewobject.FilterVO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,10 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,23 +36,25 @@ public class CarDAOTest {
 
     @Test
     public void searchCarTest() throws Exception {
-        Date dateForTest  =  Date.valueOf("2016-01-01");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateForTest = sdf.parse(sdf.format(new Date()));
         // the list of the filter
-        HashMap<String, String> filterValues = new HashMap<String, String>();
-        filterValues.put("transmission", "auto");
-        filterValues.put("fuelId", "1");
-        filterValues.put("typeId", "1");
-        filterValues.put("ratingId", "1");
-        filterValues.put("orderBy", "F.name ASC, MAndM.mark ASC");
-        filterValues.put("page", "1");
-        filterValues.put("recordsPerPage", "10");
+        int foreignKey = 1;
+        FilterVO filterVO = new FilterVO();
+        filterVO.setRecordPerPage(ElementsPerPage.FIVE.getValue());
+        filterVO.setByDate(dateForTest);
+        filterVO.setFromDate(dateForTest);
+        filterVO.setTransmission(Transmission.AUTO.getName());
+        filterVO.setFuelId(foreignKey);
+        filterVO.setTypeId(foreignKey);
+        filterVO.setRatingId(foreignKey);
 
-        List<CarVO> list = carDAO.searchCar(dateForTest, dateForTest, filterValues);
-        BigInteger countCar = carDAO.countCarByFilter(dateForTest, dateForTest, filterValues);
+        List<CarVO> list = carDAO.searchCar(filterVO, 1);
+        int countCar = carDAO.countCarByFilter(filterVO);
 
         Assert.assertNotNull(list);
         Assert.assertNotNull(countCar);
-        Assert.assertEquals(BigInteger.valueOf(list.size()), countCar);
+        Assert.assertEquals(list.size(), countCar);
     }
 
     @Test

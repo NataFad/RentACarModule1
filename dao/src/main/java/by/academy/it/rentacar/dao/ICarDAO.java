@@ -2,12 +2,10 @@ package by.academy.it.rentacar.dao;
 
 import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.viewobject.CarVO;
+import by.academy.it.rentacar.viewobject.FilterVO;
 import org.hibernate.HibernateException;
 
-import java.math.BigInteger;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,36 +21,30 @@ public interface ICarDAO extends IDAO<Car> {
      * Method sqlQueryStringByFilter()
      * returns string of sql-query based on the rental dates and defined filters
      *
-     * @param fromDate
-     * @param byDate
-     * @param filterValues
+    * @param filterVO
      * @return String
      */
-    String sqlQueryStringByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues);
+    String sqlQueryStringByFilter(FilterVO filterVO);
 
     /**
      * Method searchCar()
      * performs a search based on the rental dates and defined filters
      *
-     * @param fromDate
-     * @param byDate
-     * @param filterValues
+     * @param filterVO
      * @return list
      * @throws HibernateException
      */
-    List<CarVO> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues);
+    List<CarVO> searchCar(FilterVO filterVO, int page);
 
     /**
      * Method countCarByFilter()
      * performs a search based on the rental dates and defined filters
      *
-     * @param fromDate
-     * @param byDate
-     * @param filterValues
+     * @param filterVO
      * @return
      * @throws SQLException
      */
-    BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues);
+    int countCarByFilter(FilterVO filterVO);
 
 
 }

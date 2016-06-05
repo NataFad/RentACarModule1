@@ -7,14 +7,13 @@ import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.viewobject.CarVO;
+import by.academy.it.rentacar.viewobject.FilterVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.List;
  * @since 2016-05
  */
 @Service("carService")
-@Transactional
+@Transactional(readOnly = true)
 public class CarService implements ICarService {
 
     @Autowired
@@ -54,6 +53,7 @@ public class CarService implements ICarService {
      * @param parametresCar
      * @return successReg
      */
+    @Transactional(readOnly = false)
     public Car registeredCar(HashMap<String, String> parametresCar) {
         Car car = null;
         Transmission transmission = null;
@@ -138,30 +138,31 @@ public class CarService implements ICarService {
     /**
      * Metod getAllCars() calls method getAll() in CarDAO
      *
-     * @return
+     * @return carList
      */
     public ArrayList<Car> getAllCars() {
         ArrayList<Car> carList = (ArrayList<Car>) carDAO.getAll();
         return carList;
     }
 
-    public List<CarVO> getSearchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+    public List<CarVO> getSearchCar(FilterVO filterVO, int page) {
         List<CarVO> carList = null;
-        if (fromDate.compareTo(byDate) != -1) {
-            carList = carDAO.searchCar(fromDate, byDate, filterValues);
+        if (filterVO.getFromDate().compareTo(filterVO.getByDate()) != -1) {
+            carList = carDAO.searchCar(filterVO, page);
         } else {
             log.error("Incorrectly stated the date");
         }
         return carList;
     }
 
-    public int countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues){
-        BigInteger countCar = carDAO.countCarByFilter(fromDate, byDate, filterValues);
-        return countCar.intValue();
+    public int countCarByFilter(FilterVO filterVO){
+        int countCar = carDAO.countCarByFilter(filterVO);
+        return countCar;
     }
 
-    public int calculateMaxPages(Date fromDate, Date byDate, HashMap<String, String> filterValues, int carPerPage){
-        int count = countCarByFilter(fromDate, byDate, filterValues);
+    public int calculateMaxPages(FilterVO filterVO){
+        int count = countCarByFilter(filterVO);
+        int carPerPage = filterVO.getRecordPerPage();
         int maxPage = (count % carPerPage == 0) ?
                 (count / carPerPage) :
                 (count / carPerPage + 1);

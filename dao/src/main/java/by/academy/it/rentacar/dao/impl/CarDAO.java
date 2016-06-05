@@ -6,6 +6,7 @@ package by.academy.it.rentacar.dao.impl;
 import by.academy.it.rentacar.dao.ICarDAO;
 import by.academy.it.rentacar.entity.Car;
 import by.academy.it.rentacar.viewobject.CarVO;
+import by.academy.it.rentacar.viewobject.FilterVO;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
@@ -13,8 +14,6 @@ import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
-import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,39 +35,38 @@ public class CarDAO extends DAO<Car> implements ICarDAO {
     }
 
     @Override
-    public String sqlQueryStringByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+    public String sqlQueryStringByFilter(FilterVO filterVO) {
         String sqlQueryFromWhere = "FROM cars AS CarVO " +
                 "LEFT JOIN ratings AS R ON CarVO.ratings_id = R.id " +
                 "LEFT JOIN types AS T ON CarVO.types_id = T.id " +
                 "LEFT JOIN modelsandmarks AS MAndM ON CarVO.ModelsAndMarks_id = MAndM.id " +
                 "LEFT JOIN fuels AS F ON CarVO.Fuels_id = F.id "
                 + "WHERE NOT EXISTS (SELECT O.cars_id FROM orders AS O "
-                + "WHERE NOT (O.fromdate >= '" + byDate + "' OR O.bydate <= '" + fromDate + "') AND O.cars_id = CarVO.id)";
-        String transmission = filterValues.get("transmission");
-        if (transmission != null) {
-            sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.transmission= '" + transmission.toLowerCase() + "'";
+                + "WHERE NOT (O.fromdate >= '" + trasformToSQLDate(filterVO.getByDate()) + "' " +
+                " OR O.bydate <= '" + trasformToSQLDate(filterVO.getFromDate()) + "') AND O.cars_id = CarVO.id)";
+        String transmission = filterVO.getTransmission();
+        if (!transmission.equals("")) {
+            sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.transmission= '" + transmission + "'";
         }
-        String fuelId = filterValues.get("fuelId");
-        if (fuelId != null) {
-            sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.fuels_id= " + Integer.parseInt(fuelId);
+        int fuelId = filterVO.getFuelId();
+        if (fuelId != 0) {
+            sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.fuels_id= " + fuelId;
         }
-        String typeId = filterValues.get("typeId");
-        if (typeId != null) {
-            sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.types_id = " + Integer.parseInt(typeId);
+        int typeId = filterVO.getTypeId();
+        if (typeId != 0) {
+            sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.types_id = " + typeId;
         }
-        String ratingId = filterValues.get("ratingId");
-        if (ratingId != null) {
-            sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.ratings_id = " + Integer.parseInt(ratingId);
+        int ratingId = filterVO.getRatingId();
+        if (ratingId != 0) {
+            sqlQueryFromWhere = sqlQueryFromWhere + " AND CarVO.ratings_id = " + ratingId;
         }
         return sqlQueryFromWhere;
     }
 
     @Override
-    public List<CarVO> searchCar(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
-        String orderBy = filterValues.get("orderBy");
-        int page = Integer.parseInt(filterValues.get("page"));
-        int recordsPerPage = Integer.parseInt(filterValues.get("recordsPerPage"));
-        long difference = byDate.getTime() - fromDate.getTime();
+    public List<CarVO> searchCar(FilterVO filterVO, int page) {
+        int recordsPerPage = filterVO.getRecordPerPage();
+        long difference = filterVO.getByDate().getTime() - filterVO.getFromDate().getTime();
         int days = (int) (difference / (24 * 60 * 60 * 1000) + 1);
         // query text writing
         String sqlQuery = "SELECT CarVO.id AS id, " +
@@ -81,12 +79,8 @@ public class CarDAO extends DAO<Car> implements ICarDAO {
                 "F.name AS fuel," +
                 "CarVO.description AS description, " +
                 "ROUND(CarVO.costofday * " + days + " * (100 - CarVO.discount*" + (days - 1) + ")/100, 2) AS cost "
-                + sqlQueryStringByFilter(fromDate, byDate, filterValues);
-        if (orderBy != null) {
-            sqlQuery = sqlQuery + " ORDER BY " + orderBy;
-        } else {
-            sqlQuery = sqlQuery + " ORDER BY CarVO.transmission, F.name, T.name, R.name";
-        }
+                + sqlQueryStringByFilter(filterVO);
+        sqlQuery = sqlQuery + " ORDER BY CarVO.transmission, F.name, T.name, R.name";
         log.debug("sqlQuery: " + sqlQuery);
         List<CarVO> list = null;
         list = getSession().createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
@@ -100,22 +94,25 @@ public class CarDAO extends DAO<Car> implements ICarDAO {
                 .addScalar("description", StandardBasicTypes.STRING)
                 .addScalar("cost", StandardBasicTypes.BIG_DECIMAL)
                 .setResultTransformer(Transformers.aliasToBean(CarVO.class))
-                .setFirstResult(page - 1)
+                .setFirstResult((page-1)*recordsPerPage)
                 .setMaxResults(recordsPerPage).list();
         log.info("list: " + list);
         return list;
     }
 
     @Override
-    public BigInteger countCarByFilter(Date fromDate, Date byDate, HashMap<String, String> filterValues) {
+    public int countCarByFilter(FilterVO filterVO) {
         // query text writing
         String sqlQuery = "SELECT count(*) "
-                + sqlQueryStringByFilter(fromDate, byDate, filterValues);
+                + sqlQueryStringByFilter(filterVO);
         log.debug("sqlQuery: " + sqlQuery);
         Query query = getSession().createSQLQuery(sqlQuery);
-        BigInteger countCar = BigInteger.ZERO;
+        int countCar = 0;
         List results = query.list();
-        countCar = (BigInteger) results.get(0);
+        if (!results.isEmpty()) {
+            BigInteger count = (BigInteger) results.get(0);
+            countCar = count.intValue();
+        }
         log.info("Count of the cars b the filters: " + countCar);
         return countCar;
     }

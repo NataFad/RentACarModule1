@@ -4,10 +4,11 @@ import by.academy.it.rentacar.actions.ICarService;
 import by.academy.it.rentacar.configuration.HibernateConfiguration;
 import by.academy.it.rentacar.dao.*;
 import by.academy.it.rentacar.entity.*;
+import by.academy.it.rentacar.enums.ElementsPerPage;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.viewobject.CarVO;
+import by.academy.it.rentacar.viewobject.FilterVO;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,22 +99,19 @@ public class CarServiceTest {
         ArrayList<Car> carsList = carService.getAllCars();
         Assert.assertNotNull(carsList);
         // period
-        Date fromDate = Date.valueOf("2016-01-01");
-        Date byDate = Date.valueOf("2016-01-01");
-        HashMap<String, String> filterValues = new HashMap<String, String>();
-        // Transmission
-        filterValues.put("transmission", transTest.toString());
-        // Fuels
-        String foreign_id = "1";
-        filterValues.put("fuelId", foreign_id);
-        // Type
-        filterValues.put("typeId", foreign_id);
-        // Rating
-        filterValues.put("ratingId", foreign_id);
-        filterValues.put("page", "1");
-        filterValues.put("recordsPerPage", "10");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateForTest = sdf.parse(sdf.format(new Date()));
+       int foreignKey = 1;
+        FilterVO filterVO = new FilterVO();
+        filterVO.setRecordPerPage(ElementsPerPage.FIVE.getValue());
+        filterVO.setByDate(dateForTest);
+        filterVO.setFromDate(dateForTest);
+        filterVO.setTransmission(Transmission.AUTO.getName());
+        filterVO.setFuelId(foreignKey);
+        filterVO.setTypeId(foreignKey);
+        filterVO.setRatingId(foreignKey);
 
-        List<CarVO> list = carService.getSearchCar(fromDate, byDate, filterValues);
+        List<CarVO> list = carService.getSearchCar(filterVO, 1);
         Assert.assertNotNull(list);
 
         CarVO carVO = list.get(list.size() - 1);

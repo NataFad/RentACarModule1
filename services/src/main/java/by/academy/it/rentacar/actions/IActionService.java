@@ -1,5 +1,6 @@
 package by.academy.it.rentacar.actions;
 
+import by.academy.it.rentacar.enums.ElementsPerPage;
 import by.academy.it.rentacar.enums.Transmission;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
@@ -21,5 +22,5 @@ public interface IActionService {
 
     ArrayList<ModelAndMark> getListModel();
 
-    ArrayList<String> getListPerPage();
+    ArrayList<ElementsPerPage> getListPerPage();
 }

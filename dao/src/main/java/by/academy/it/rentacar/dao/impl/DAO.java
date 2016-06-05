@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -113,5 +114,9 @@ public class DAO<T> implements IDAO<T> {
      */
     private Class getPersistentClass() {
         return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    protected java.sql.Date trasformToSQLDate(Date utilDate) {
+        return new java.sql.Date(utilDate.getTime());
     }
 }

@@ -6,6 +6,7 @@ import by.academy.it.rentacar.actions.IFuelService;
 import by.academy.it.rentacar.dao.IModelAndMarkDAO;
 import by.academy.it.rentacar.entity.Fuel;
 import by.academy.it.rentacar.entity.ModelAndMark;
+import by.academy.it.rentacar.enums.ElementsPerPage;
 import by.academy.it.rentacar.enums.Transmission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,9 @@ public class ActionService implements IActionService {
 	public ArrayList<Transmission> getListTransmission(){
 		// List of transmission
 		ArrayList<Transmission> transList = new ArrayList<Transmission>();
-		transList.add(Transmission.AUTO);
-		transList.add(Transmission.MANUAL);
+		for (Transmission transmissions : Transmission.values()){
+			transList.add(transmissions);
+		}
 		return transList;
 	}
 
@@ -70,12 +72,12 @@ public class ActionService implements IActionService {
 	 *
 	 * @return ArrayList<String>
 	 */
-	public ArrayList<String> getListPerPage(){
+	public ArrayList<ElementsPerPage> getListPerPage(){
 		// List per page
-		ArrayList<String> perPageList = new ArrayList<String>();
-		perPageList.add("3");
-		perPageList.add("5");
-		perPageList.add("10");
+		ArrayList<ElementsPerPage> perPageList = new ArrayList<ElementsPerPage>();
+		for (ElementsPerPage elements : ElementsPerPage.values()){
+			perPageList.add(elements);
+		}
 		return perPageList;
 	}
 }
